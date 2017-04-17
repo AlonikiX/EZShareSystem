@@ -5,7 +5,7 @@ package CommonLibs;
  */
 public class ResourceCommand extends Command {
     protected Resource resource;
-    protected void toResourceCommand(String json){
+    protected void toResourceCommand(String json) {
 
     }
 }
