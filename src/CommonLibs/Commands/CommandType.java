@@ -1,4 +1,4 @@
-package CommonLibs;
+package CommonLibs.Commands;
 
 /**
  * Created by apple on 17/04/2017.
