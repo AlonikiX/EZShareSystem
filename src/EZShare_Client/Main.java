@@ -1,5 +1,5 @@
 package EZShare_Client;
-
+import CommonLibs.CliManager;
 
 public class Main {
     private static String name = "";

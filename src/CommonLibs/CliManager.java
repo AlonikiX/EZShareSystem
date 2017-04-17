@@ -1,4 +1,4 @@
-package EZShare_Client;
+package CommonLibs;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;

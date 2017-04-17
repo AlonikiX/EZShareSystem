@@ -77,8 +77,8 @@ public class EZShareClient {
 
     public void writeData(String data) {
         try {
-            output.writeUTF(data);
-            output.flush();
+            this.output.writeUTF(data);
+            this.output.flush();
             System.out.println(data);
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,8 +88,8 @@ public class EZShareClient {
     public void readData() {
         try {
             while(true){
-                if(input.available() > 0) {
-                    String data = input.readUTF();
+                if(this.input.available() > 0) {
+                    String data = this.input.readUTF();
                     System.out.println(data);
                 }
             }

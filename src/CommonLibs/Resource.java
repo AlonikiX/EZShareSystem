@@ -1,4 +1,4 @@
-package EZShare_Client;
+package CommonLibs;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
