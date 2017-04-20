@@ -5,12 +5,12 @@ package EZShare_Server;
  */
 public class EZShareServer {
 
-    ResourceList resourceList = new ResourceList();
-    ServerList serverList = new ServerList();
-
-    public EZShareServer(){
-
-    }
+//    ResourceList resourceList = new ResourceList();
+//    ServerList serverList = new ServerList();
+//
+//    public EZShareServer(){
+//
+//    }
 
 
 }

@@ -65,6 +65,10 @@ public class CliManager {
 //        System.out.println("student name: "+ name+" email:"+email);
     }
 
+    public boolean hasOption(String option) {
+        return this.cmd.hasOption(option);
+    }
+
     public String getOptionValue(String option) {
         if (this.cmd.hasOption(option)) {
             return this.cmd.getOptionValue(option);

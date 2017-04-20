@@ -1,5 +1,8 @@
 package CommonLibs;
 
+import java.lang.reflect.Array;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -17,8 +20,9 @@ public class Resource {
 
     private String name;
     private String description;
-    private String[] tags;
+    private ArrayList<String> tags;
     private String uri;
+    private String channel;
     private String owner;
     private String ezserver;
 
@@ -48,11 +52,11 @@ public class Resource {
         rwlock.writeLock().unlock();
     }
 
-    public String[] getTags() {
+    public ArrayList<String> getTags() {
         return tags;
     }
 
-    public void setTags(String[] tags) {
+    public void setTags(ArrayList<String> tags) {
         rwlock.writeLock().lock();
         this.tags = tags;
         rwlock.writeLock().unlock();
@@ -86,5 +90,13 @@ public class Resource {
         rwlock.writeLock().lock();
         this.ezserver = ezserver;
         rwlock.writeLock().unlock();
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
     }
 }

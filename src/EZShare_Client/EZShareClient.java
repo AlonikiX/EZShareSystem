@@ -11,17 +11,21 @@ import java.net.UnknownHostException;
  */
 
 public class EZShareClient {
-    private static String localHost= "sunrise.cis.unimelb.edu.au";
-    private static int localPort= 3780;
+
+    private ClientSetting clientSetting;
 
     private Socket socket;
     private DataInputStream input;
     private DataOutputStream output;
 
+    public EZShareClient() {
+        this.clientSetting = ClientSetting.sharedClientSetting();
+    }
+
     public int connectToServer(){
         try {
             //new socket
-            this.socket = new Socket(localHost, localPort);
+            this.socket = new Socket(clientSetting.getHost(), clientSetting.getPort());
             //create data input and output stream
             this.input = new DataInputStream(this.socket.getInputStream());
             this.output = new DataOutputStream(this.socket.getOutputStream());
