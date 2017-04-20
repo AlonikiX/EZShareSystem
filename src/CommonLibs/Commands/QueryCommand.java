@@ -1,6 +1,7 @@
 package CommonLibs.Commands;
 
-import CommonLibs.CliManager;
+import CommonLibs.CommandLine.CliManager;
+import CommonLibs.CommandLine.OptionField;
 import org.json.JSONObject;
 
 import java.io.StringWriter;
@@ -10,7 +11,7 @@ import java.io.StringWriter;
  */
 public class QueryCommand extends ResourceCommand {
     public QueryCommand(CliManager cli) {
-        this.commonType = CommandType.QUERY;
+        this.commandType = CommandType.QUERY;
         this.toResource(cli);
     }
 
@@ -18,8 +19,8 @@ public class QueryCommand extends ResourceCommand {
     public String toJSON() {
 
         JSONObject obj = new JSONObject();
-        obj.put("command", this.commonType.getValue());
-        obj.put("resourceTemplate", this.toResourceJSONObject());
+        obj.put(OptionField.command.getValue(), this.commandType.getValue());
+        obj.put(OptionField.resourceTemplate.getValue(), this.toResourceJSONObject());
 
         StringWriter out = new StringWriter();
         obj.write(out);

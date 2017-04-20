@@ -1,7 +1,8 @@
 package CommonLibs.Commands;
 
 
-import CommonLibs.CliManager;
+import CommonLibs.CommandLine.CliManager;
+import CommonLibs.CommandLine.OptionField;
 import EZShare_Client.ClientSetting;
 
 /**
@@ -9,7 +10,7 @@ import EZShare_Client.ClientSetting;
  */
 public abstract class Command {
     protected ClientSetting clientSetting = ClientSetting.sharedClientSetting();
-    protected CommandType commonType;
+    protected CommandType commandType;
 
 
     /**
@@ -18,22 +19,22 @@ public abstract class Command {
      * @return
      */
     public static Command commandFactory(CliManager cli) {
-        if (cli.hasOption("publish")) {
+        if (cli.hasOption(OptionField.publish.getValue())) {
             return new PublishCommand(cli);
         }
-        if (cli.hasOption("query")) {
+        if (cli.hasOption(OptionField.query.getValue())) {
             return new QueryCommand(cli);
         }
-        if (cli.hasOption("remove")) {
+        if (cli.hasOption(OptionField.remove.getValue())) {
             return new RemoveCommand(cli);
         }
-        if (cli.hasOption("share")) {
+        if (cli.hasOption(OptionField.share.getValue())) {
             return new ShareCommand(cli);
         }
-        if (cli.hasOption("fetch")) {
+        if (cli.hasOption(OptionField.fetch.getValue())) {
             return new FetchCommand(cli);
         }
-        if (cli.hasOption("exchange")) {
+        if (cli.hasOption(OptionField.exchange.getValue())) {
             return new ExchangeCommand(cli);
         }
         return null;

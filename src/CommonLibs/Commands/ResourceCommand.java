@@ -1,11 +1,11 @@
 package CommonLibs.Commands;
 
-import CommonLibs.CliManager;
-import CommonLibs.Resource;
+import CommonLibs.CommandLine.CliManager;
+import CommonLibs.CommandLine.OptionField;
+import CommonLibs.DataStructure.Resource;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -39,39 +39,39 @@ public abstract class ResourceCommand extends Command {
         //initial
         initResourceCommand();
         //parse to resource
-        if (cli.hasOption("name")) {
-            String name = cli.getOptionValue("name");
+        if (cli.hasOption(OptionField.name.getValue())) {
+            String name = cli.getOptionValue(OptionField.name.getValue());
             if (null != name) {
                 resource.setName(name);
             }
         }
-        if (cli.hasOption("description")) {
-            String description = cli.getOptionValue("description");
+        if (cli.hasOption(OptionField.description.getValue())) {
+            String description = cli.getOptionValue(OptionField.description.getValue());
             if (null != description) {
                 resource.setDescription(description);
             }
         }
-        if (cli.hasOption("tags")) {
-            String tagString = cli.getOptionValue("tags");
+        if (cli.hasOption(OptionField.tags.getValue())) {
+            String tagString = cli.getOptionValue(OptionField.tags.getValue());
             if (null != tagString) {
                 String[] tags = tagString.split(",");
                 resource.setTags(new ArrayList<>(Arrays.asList(tags)));
             }
         }
-        if (cli.hasOption("uri")) {
-            String uri = cli.getOptionValue("uri");
+        if (cli.hasOption(OptionField.uri.getValue())) {
+            String uri = cli.getOptionValue(OptionField.uri.getValue());
             if (null != uri) {
                 resource.setUri(uri);
             }
         }
-        if (cli.hasOption("channel")) {
-            String channel = cli.getOptionValue("channel");
+        if (cli.hasOption(OptionField.channel.getValue())) {
+            String channel = cli.getOptionValue(OptionField.channel.getValue());
             if (null != channel) {
                 resource.setDescription(channel);
             }
         }
-        if (cli.hasOption("owner")) {
-            String owner = cli.getOptionValue("owner");
+        if (cli.hasOption(OptionField.owner.getValue())) {
+            String owner = cli.getOptionValue(OptionField.owner.getValue());
             if (null != owner) {
                 resource.setDescription(owner);
             }
@@ -85,19 +85,19 @@ public abstract class ResourceCommand extends Command {
      */
     protected JSONObject toResourceJSONObject() {
         JSONObject obj = new JSONObject();
-        obj.put("name", resource.getName());
-        obj.put("description", resource.getDescription());
+        obj.put(OptionField.name.getValue(), resource.getName());
+        obj.put(OptionField.description.getValue(), resource.getDescription());
 
         JSONArray arr = new JSONArray();
         for (String tag : resource.getTags()) {
             arr.put(tag);
         }
-        obj.put("tags", arr);
+        obj.put(OptionField.tags.getValue(), arr);
 
-        obj.put("uri", resource.getUri());
-        obj.put("channel", resource.getChannel());
-        obj.put("owner", resource.getOwner());
-        obj.put("ezserver", resource.getEzserver());
+        obj.put(OptionField.uri.getValue(), resource.getUri());
+        obj.put(OptionField.channel.getValue(), resource.getChannel());
+        obj.put(OptionField.owner.getValue(), resource.getOwner());
+        obj.put(OptionField.ezserver.getValue(), resource.getEzserver());
 
         return obj;
     }

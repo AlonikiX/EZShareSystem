@@ -1,6 +1,7 @@
 package EZShare_Client;
 
-import CommonLibs.CliManager;
+import CommonLibs.CommandLine.CliManager;
+import CommonLibs.CommandLine.OptionField;
 
 /**
  * Created by apple on 20/04/2017.
@@ -25,19 +26,19 @@ public class ClientSetting {
     }
 
     public void initClientSetting(CliManager cli) {
-        if (cli.hasOption("host")) {
-            String hostString = cli.getOptionValue("host");
+        if (cli.hasOption(OptionField.host.getValue())) {
+            String hostString = cli.getOptionValue(OptionField.host.getValue());
             if (null != hostString) {
                 this.host = hostString;
             }
         }
-        if (cli.hasOption("port")) {
-            String portString = cli.getOptionValue("port");
+        if (cli.hasOption(OptionField.port.getValue())) {
+            String portString = cli.getOptionValue(OptionField.port.getValue());
             if (null != portString) {
                 this.port = Integer.parseInt(portString);
             }
         }
-        if (cli.hasOption("debug")) {
+        if (cli.hasOption(OptionField.debug.getValue())) {
             this.isDebugModel = true;
         }
     }

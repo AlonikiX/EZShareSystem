@@ -1,6 +1,7 @@
 package CommonLibs.Commands;
 
-import CommonLibs.CliManager;
+import CommonLibs.CommandLine.CliManager;
+import CommonLibs.CommandLine.OptionField;
 import org.json.JSONObject;
 
 import java.io.StringWriter;
@@ -16,9 +17,9 @@ public class ShareCommand extends ResourceCommand {
     }
 
     public ShareCommand(CliManager cli) {
-        this.commonType = CommandType.SHARE;
-        if (cli.hasOption("secret")) {
-            String secret = cli.getOptionValue("secret");
+        this.commandType = CommandType.SHARE;
+        if (cli.hasOption(OptionField.secret.getValue())) {
+            String secret = cli.getOptionValue(OptionField.secret.getValue());
             if (null != secret) {
                 this.secret = secret;
             }
@@ -29,9 +30,9 @@ public class ShareCommand extends ResourceCommand {
     @Override
     public String toJSON() {
         JSONObject obj = new JSONObject();
-        obj.put("command", this.commonType.getValue());
-        obj.put("secret", this.secret);
-        obj.put("resource", this.toResourceJSONObject());
+        obj.put(OptionField.command.getValue(), this.commandType.getValue());
+        obj.put(OptionField.secret.getValue(), this.secret);
+        obj.put(OptionField.resource.getValue(), this.toResourceJSONObject());
 
         StringWriter out = new StringWriter();
         obj.write(out);

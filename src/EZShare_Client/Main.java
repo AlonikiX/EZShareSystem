@@ -1,5 +1,5 @@
 package EZShare_Client;
-import CommonLibs.CliManager;
+import CommonLibs.CommandLine.CliManager;
 import CommonLibs.Commands.Command;
 
 public class Main {

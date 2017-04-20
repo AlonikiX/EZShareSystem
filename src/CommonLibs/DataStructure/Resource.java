@@ -1,4 +1,4 @@
-package CommonLibs;
+package CommonLibs.DataStructure;
 
 import java.lang.reflect.Array;
 import java.net.URI;

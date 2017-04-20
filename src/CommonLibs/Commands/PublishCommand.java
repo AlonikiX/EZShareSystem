@@ -1,6 +1,7 @@
 package CommonLibs.Commands;
 
-import CommonLibs.CliManager;
+import CommonLibs.CommandLine.CliManager;
+import CommonLibs.CommandLine.OptionField;
 import org.json.JSONObject;
 
 import java.io.StringWriter;
@@ -11,15 +12,15 @@ import java.io.StringWriter;
 public class PublishCommand extends ResourceCommand {
 
     public PublishCommand(CliManager cli) {
-        this.commonType = CommandType.PUBLISH;
+        this.commandType = CommandType.PUBLISH;
         this.toResource(cli);
     }
 
     @Override
     public String toJSON() {
         JSONObject obj = new JSONObject();
-        obj.put("command", this.commonType.getValue());
-        obj.put("resource", this.toResourceJSONObject());
+        obj.put(OptionField.command.getValue(), this.commandType.getValue());
+        obj.put(OptionField.resource.getValue(), this.toResourceJSONObject());
 
         StringWriter out = new StringWriter();
         obj.write(out);

@@ -1,10 +1,10 @@
 package CommonLibs.Commands;
 
-import CommonLibs.CliManager;
+import CommonLibs.CommandLine.CliManager;
+import CommonLibs.CommandLine.OptionField;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by apple on 17/04/2017.
@@ -26,16 +26,16 @@ public class ExchangeCommand extends Command {
      * @param cli, an instance of CliManager
      */
     private void toServerList(CliManager cli) {
-        if (cli.hasOption("servers")) {
-            String serverString = cli.getOptionValue("servers");
+        if (cli.hasOption(OptionField.servers.getValue())) {
+            String serverString = cli.getOptionValue(OptionField.servers.getValue());
             if (null != serverString) {
-                this.serverList = new HashSet<String>(Arrays.asList(serverString.split(",")));
+                this.serverList = new HashSet<>(Arrays.asList(serverString.split(",")));
             }
         }
     }
 
     public ExchangeCommand(CliManager cli) {
-        this.commonType = CommandType.EXCHANGE;
+        this.commandType = CommandType.EXCHANGE;
         this.toServerList(cli);
     }
 
