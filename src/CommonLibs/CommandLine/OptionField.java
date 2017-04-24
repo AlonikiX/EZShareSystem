@@ -25,6 +25,13 @@ public enum OptionField {
     secret("secret"),
     servers("servers"),
 
+    //result
+    resultSize("resultSize"),
+    response("response"),
+    success("success"),
+    error("error"),
+    errorMessage("errorMessage"),
+
     //server options
     advertisedhostname("advertisedhostname"),
     connectionintervallimit("connectionintervallimit"),
@@ -32,6 +39,9 @@ public enum OptionField {
 
     //json
     command("command"),
+    relay("relay"),
+    yes("true"),
+    no("false"),
     ezserver("ezserver"),
     resource("resource"),
     resourceTemplate("resourceTemplate"),

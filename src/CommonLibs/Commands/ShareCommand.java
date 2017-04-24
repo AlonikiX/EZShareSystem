@@ -27,6 +27,17 @@ public class ShareCommand extends ResourceCommand {
         this.toResource(cli);
     }
 
+    public ShareCommand(JSONObject obj) {
+        this.commandType = CommandType.SHARE;
+        if (obj.has(OptionField.secret.getValue())) {
+            String secret = obj.getString(OptionField.secret.getValue());
+            if (null != secret) {
+                this.secret = secret;
+            }
+        }
+        this.toResource(obj);
+    }
+
     @Override
     public String toJSON() {
         JSONObject obj = new JSONObject();

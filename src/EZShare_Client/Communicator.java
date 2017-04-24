@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
  * Created by apple on 16/04/2017.
  */
 
-public class EZShareClient {
+public class Communicator {
 
     private ClientSetting clientSetting;
 
@@ -18,7 +18,7 @@ public class EZShareClient {
     private DataInputStream input;
     private DataOutputStream output;
 
-    public EZShareClient() {
+    public Communicator() {
         this.clientSetting = ClientSetting.sharedClientSetting();
     }
 
@@ -83,24 +83,32 @@ public class EZShareClient {
         try {
             this.output.writeUTF(data);
             this.output.flush();
-            System.out.println("system information:");
+            System.out.println("Send:");
             System.out.println(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void readData() {
+    public String readData() {
         try {
-            while(true){
-                if(this.input.available() > 0) {
-                    String data = this.input.readUTF();
-                    System.out.println(data);
-                }
-            }
+            String data = this.input.readUTF();
+            System.out.println("Receive:");
+            System.out.println(data);
+            return data;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    public int readableData() {
+        try {
+            return this.input.available();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
 }

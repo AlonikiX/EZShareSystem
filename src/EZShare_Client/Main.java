@@ -1,11 +1,9 @@
 package EZShare_Client;
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.Commands.Command;
+import EZShare_Client.Processor.Processor;
 
 public class Main {
-    private static String name = "";
-    private static String email = "";
-
     public static void main(String[] args) {
         //initial command line options
         CliManager cliManager = new CliManager();
@@ -16,11 +14,12 @@ public class Main {
 
         //initial client setting
         ClientSetting.sharedClientSetting().initClientSetting(cliManager);
-        EZShareClient client = new EZShareClient();
+//        Communicator client = new Communicator();
+        Processor processor = Processor.processorFactory(command);
+        processor.process();
         //connect to the server and start communication
-        client.connectToServer();
-//        client.writeData("{\"command\": \"QUERY\",\"relay\": false,\"resourceTemplate\": {\"name\": \"Mar\",\"tags\": [],\"description\": \"\",\"uri\": \"\",\"channel\": \"\",\"owner\": \"\",\"ezserver\": null}}");
-        client.writeData(command.toJSON());
-        client.readData();
+//        client.connectToServer();
+//        client.writeData(command.toJSON());
+//        client.readData();
     }
 }

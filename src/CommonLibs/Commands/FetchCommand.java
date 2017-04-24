@@ -16,6 +16,11 @@ public class FetchCommand extends ResourceCommand{
         this.toResource(cli);
     }
 
+    public FetchCommand(JSONObject obj) {
+        this.commandType = CommandType.FETCH;
+        this.toResource(obj);
+    }
+
     @Override
     public String toJSON() {
         JSONObject obj = new JSONObject();

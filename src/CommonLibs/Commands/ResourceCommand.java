@@ -3,6 +3,7 @@ package CommonLibs.Commands;
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.DataStructure.Resource;
+import org.apache.commons.cli.Options;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -30,6 +31,44 @@ public abstract class ResourceCommand extends Command {
         resource.setEzserver(null);
     }
 
+    protected void toResource(JSONObject obj) {
+        if (obj.has(OptionField.name.getValue())) {
+            String name = obj.getString(OptionField.name.getValue());
+                if (null != name) {
+                    resource.setName(name);
+                }
+        }
+        if (obj.has(OptionField.description.getValue())) {
+            String description = obj.getString(OptionField.description.getValue());
+            if (null != description) {
+                resource.setDescription(description);
+            }
+        }
+        if (obj.has(OptionField.tags.getValue())) {
+            JSONArray arr = obj.getJSONArray(OptionField.tags.getValue());
+            for (int i = 0; i < arr.length(); i++) {
+                resource.getTags().add(arr.getString(i));
+            }
+        }
+        if (obj.has(OptionField.channel.getValue())) {
+            String channel = obj.getString(OptionField.channel.getValue());
+            if (null != channel) {
+                resource.setChannel(channel);
+            }
+        }
+        if (obj.has(OptionField.owner.getValue())) {
+            String owner = obj.getString(OptionField.owner.getValue());
+            if (null != owner) {
+                resource.setOwner(owner);
+            }
+        }
+        if (obj.has(OptionField.ezserver.getValue())) {
+            String ezserver = obj.getString(OptionField.ezserver.getValue());
+            if (null != ezserver) {
+                resource.setEzserver(ezserver);
+            }
+        }
+    }
 
     /**
      * @description parse cli to resource

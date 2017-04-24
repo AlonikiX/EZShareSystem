@@ -16,6 +16,11 @@ public class PublishCommand extends ResourceCommand {
         this.toResource(cli);
     }
 
+    public PublishCommand(JSONObject obj) {
+        this.commandType = CommandType.PUBLISH;
+        this.toResource(obj);
+    }
+
     @Override
     public String toJSON() {
         JSONObject obj = new JSONObject();

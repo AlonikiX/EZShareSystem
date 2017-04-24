@@ -21,4 +21,20 @@ public enum CommandType {
         this.value = value;
     }
 
+    static CommandType getEnum(String value) {
+        switch (value) {
+            case "QUERY":
+                return QUERY;
+            case "PUBLISH":
+                return PUBLISH;
+            case "SHARE":
+                return SHARE;
+            case "FETCH":
+                return FETCH;
+            case "EXCHANGE":
+                return EXCHANGE;
+        }
+        return null;
+    }
+
 }

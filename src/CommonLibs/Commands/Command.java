@@ -4,6 +4,7 @@ package CommonLibs.Commands;
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
 import EZShare_Client.ClientSetting;
+import org.json.JSONObject;
 
 /**
  * Created by apple on 17/04/2017.
@@ -11,6 +12,10 @@ import EZShare_Client.ClientSetting;
 public abstract class Command {
     protected ClientSetting clientSetting = ClientSetting.sharedClientSetting();
     protected CommandType commandType;
+
+    public CommandType getCommandType() {
+        return this.commandType;
+    }
 
 
     /**
@@ -36,6 +41,28 @@ public abstract class Command {
         }
         if (cli.hasOption(OptionField.exchange.getValue())) {
             return new ExchangeCommand(cli);
+        }
+        return null;
+    }
+
+    public static Command commandFactory(String json) {
+        JSONObject obj = new JSONObject(json);
+        if (obj.has(OptionField.command.getValue())) {
+           CommandType commandType = CommandType.getEnum(obj.getString(OptionField.command.getValue()));
+           switch (commandType) {
+               case PUBLISH:
+                   return new PublishCommand(obj);
+               case QUERY:
+                   return new QueryCommand(obj);
+               case REMOVE:
+                   return new RemoveCommand(obj);
+               case SHARE:
+                   return new ShareCommand(obj);
+               case FETCH:
+                   return new FetchCommand(obj);
+               case EXCHANGE:
+                   return new ExchangeCommand(obj);
+           }
         }
         return null;
     }

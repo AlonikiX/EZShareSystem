@@ -15,6 +15,11 @@ public class RemoveCommand extends ResourceCommand {
         this.toResource(cli);
     }
 
+    public RemoveCommand(JSONObject obj) {
+        this.commandType = CommandType.REMOVE;
+        this.toResource(obj);
+    }
+
     @Override
     public String toJSON() {
         JSONObject obj = new JSONObject();
