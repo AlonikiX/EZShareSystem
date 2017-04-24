@@ -1,5 +1,7 @@
 package CommonLibs.CommandLine;
 
+import com.sun.net.httpserver.Authenticator;
+
 /**
  * Created by apple on 20/04/2017.
  */
@@ -40,8 +42,8 @@ public enum OptionField {
     //json
     command("command"),
     relay("relay"),
-    yes("true"),
-    no("false"),
+//    yes("true"),
+//    no("false"),
     ezserver("ezserver"),
     resource("resource"),
     resourceTemplate("resourceTemplate"),

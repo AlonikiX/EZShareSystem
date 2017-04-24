@@ -50,5 +50,6 @@ public class ShareCommand extends ResourceCommand {
 
         return out.toString();
     }
+
 }
 

@@ -140,4 +140,9 @@ public abstract class ResourceCommand extends Command {
 
         return obj;
     }
+
+
+    public Resource getResource(){
+        return resource;
+    }
 }

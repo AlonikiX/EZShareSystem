@@ -1,5 +1,6 @@
 package CommonLibs.CommandLine;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
@@ -37,6 +38,7 @@ public class CliManager {
             options.addOption(OptionField.channel.getValue(),true,"channel");
             options.addOption(OptionField.secret.getValue(),true, "secret of the server");
             options.addOption(OptionField.servers.getValue(),true, "server list");
+            options.addOption(OptionField.relay.getValue(), true, "relay");
         }else if (ROLE == "SERVER") {
             options.addOption(OptionField.debug.getValue(),true, "print debug information");
             options.addOption(OptionField.port.getValue(),true,"server port, an integer");
@@ -75,4 +77,5 @@ public class CliManager {
         }
         return null;
     }
+
 }

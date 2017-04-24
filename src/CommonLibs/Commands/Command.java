@@ -18,6 +18,7 @@ public abstract class Command {
     }
 
 
+
     /**
      * @description return a specific command based on the cli value
      * @param cli, an instance of CliManager
@@ -48,21 +49,21 @@ public abstract class Command {
     public static Command commandFactory(String json) {
         JSONObject obj = new JSONObject(json);
         if (obj.has(OptionField.command.getValue())) {
-           CommandType commandType = CommandType.getEnum(obj.getString(OptionField.command.getValue()));
-           switch (commandType) {
-               case PUBLISH:
-                   return new PublishCommand(obj);
-               case QUERY:
-                   return new QueryCommand(obj);
-               case REMOVE:
-                   return new RemoveCommand(obj);
-               case SHARE:
-                   return new ShareCommand(obj);
-               case FETCH:
-                   return new FetchCommand(obj);
-               case EXCHANGE:
-                   return new ExchangeCommand(obj);
-           }
+            CommandType commandType = CommandType.getEnum(obj.getString(OptionField.command.getValue()));
+            switch (commandType) {
+                case PUBLISH:
+                    return new PublishCommand(obj);
+                case QUERY:
+                    return new QueryCommand(obj);
+                case REMOVE:
+                    return new RemoveCommand(obj);
+                case SHARE:
+                    return new ShareCommand(obj);
+                case FETCH:
+                    return new FetchCommand(obj);
+                case EXCHANGE:
+                    return new ExchangeCommand(obj);
+            }
         }
         return null;
     }

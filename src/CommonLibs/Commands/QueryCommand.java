@@ -10,17 +10,23 @@ import java.io.StringWriter;
  * Created by apple on 17/04/2017.
  */
 public class QueryCommand extends ResourceCommand {
-    private String relay;
+    private boolean relay;
+
+    public boolean relay(){
+        return relay;
+    }
 
     public QueryCommand(CliManager cli) {
         this.commandType = CommandType.QUERY;
-        this.relay = OptionField.no.getValue();
+        this.relay = cli.hasOption(OptionField.relay.getValue()) ?
+                (Boolean.parseBoolean(cli.getOptionValue(OptionField.relay.getValue()))) : false;
         this.toResource(cli);
     }
 
     public QueryCommand(JSONObject obj) {
         this.commandType = CommandType.QUERY;
-        this.relay = OptionField.no.getValue();
+        this.relay = obj.has(OptionField.relay.getValue()) ?
+                (obj.getBoolean(OptionField.relay.getValue())):false;
         this.toResource(obj);
     }
 
