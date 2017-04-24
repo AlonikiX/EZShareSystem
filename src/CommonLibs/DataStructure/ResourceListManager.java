@@ -26,7 +26,7 @@ public class ResourceListManager {
     }
 
     public void newResource(Resource resource) {
-        this.rwlock.writeLock().lock();
+        this.rwlock.readLock().lock();
         Resource temp = null;
         //find existed resource
         for (Resource re : resourceList) {
@@ -39,6 +39,9 @@ public class ResourceListManager {
                 }
             }
         }
+        this.rwlock.readLock().unlock();
+        //update
+        this.rwlock.writeLock().lock();
         this.resourceList.remove(temp);
         this.resourceList.add(resource);
         this.rwlock.writeLock().unlock();
@@ -53,6 +56,7 @@ public class ResourceListManager {
     public Resource findResource(Resource resource) {
         this.rwlock.readLock().lock();
         //TODO find target resource based on the value of argument resource
+
         this.rwlock.readLock().unlock();
 
         return null;
