@@ -83,6 +83,7 @@ public class EZShareClient {
         try {
             this.output.writeUTF(data);
             this.output.flush();
+            System.out.println("system information:");
             System.out.println(data);
         } catch (IOException e) {
             e.printStackTrace();

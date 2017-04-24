@@ -67,13 +67,13 @@ public abstract class ResourceCommand extends Command {
         if (cli.hasOption(OptionField.channel.getValue())) {
             String channel = cli.getOptionValue(OptionField.channel.getValue());
             if (null != channel) {
-                resource.setDescription(channel);
+                resource.setChannel(channel);
             }
         }
         if (cli.hasOption(OptionField.owner.getValue())) {
             String owner = cli.getOptionValue(OptionField.owner.getValue());
             if (null != owner) {
-                resource.setDescription(owner);
+                resource.setOwner(owner);
             }
         }
     }
