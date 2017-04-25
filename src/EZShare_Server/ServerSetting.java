@@ -2,70 +2,75 @@ package EZShare_Server;
 
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
-import EZShare_Client.ClientSetting;
+import CommonLibs.Setting.Setting;
 
 /**
  * Created by Anson Chen on 2017/4/24.
  */
-public class ServerSetting {
-    private static ServerSetting serverSetting;
-    private String host;
-    private int port;
+public class ServerSetting extends Setting {
+    private static ServerSetting setting;
     private String secret;
-    private boolean isDebugModel;
+    private String advertisedHostName;
+    private int connectionIntervalLimit;
+    private int exchangeInterval;
 
     private ServerSetting() {
-        this.host = "sunrise.cis.unimelb.edu.au";
-        this.port = 3781;
-        this.isDebugModel = false;
         this.secret = "";
+        this.advertisedHostName = "EZServer";
+        this.connectionIntervalLimit = 1000;
+        this.exchangeInterval = 1000;
     }
 
-    public static ServerSetting sharedServerSetting(){
-        if (null == serverSetting) {
-            serverSetting = new ServerSetting();
+    public static ServerSetting sharedSetting(){
+        if (null == setting) {
+            setting = new ServerSetting();
         }
-        return serverSetting;
+        return setting;
     }
 
-    public void initClientSetting(CliManager cli) {
-        if (cli.hasOption(OptionField.host.getValue())) {
-            String hostString = cli.getOptionValue(OptionField.host.getValue());
-            if (null != hostString) {
-                this.host = hostString;
-            }
-        }
-        if (cli.hasOption(OptionField.port.getValue())) {
-            String portString = cli.getOptionValue(OptionField.port.getValue());
-            if (null != portString) {
-                this.port = Integer.parseInt(portString);
-            }
-        }
+    @Override
+    public void initSetting(CliManager cli) {
+        super.initSetting(cli);
+
         if (cli.hasOption(OptionField.secret.getValue())) {
-            String portString = cli.getOptionValue(OptionField.secret.getValue());
-            if (null != portString) {
-                this.secret = portString;
+            String secret = cli.getOptionValue(OptionField.secret.getValue());
+            if (null != secret) {
+                this.secret = secret;
             }
         }
-        if (cli.hasOption(OptionField.debug.getValue())) {
-            this.isDebugModel = true;
+        if (cli.hasOption(OptionField.advertisedhostname.getValue())) {
+            String advertisedHostName = cli.getOptionValue(OptionField.advertisedhostname.getValue());
+            if (null != advertisedHostName) {
+                this.advertisedHostName = advertisedHostName;
+            }
         }
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public int getPort() {
-        return port;
+        if (cli.hasOption(OptionField.connectionintervallimit.getValue())) {
+            String connectionIntervalLimit = cli.getOptionValue(OptionField.connectionintervallimit.getValue());
+            if (null != connectionIntervalLimit) {
+                this.connectionIntervalLimit = Integer.parseInt(connectionIntervalLimit);
+            }
+        }
+        if (cli.hasOption(OptionField.exchangeinterval.getValue())) {
+            String exchangeInterval = cli.getOptionValue(OptionField.exchangeinterval.getValue());
+            if (null != exchangeInterval) {
+                this.exchangeInterval = Integer.parseInt(exchangeInterval);
+            }
+        }
     }
 
     public String getSecret(){
         return secret;
     }
 
-    public boolean isDebugModel() {
-        return isDebugModel;
+    public String getAdvertisedHostName() {
+        return advertisedHostName;
     }
 
+    public int getConnectionIntervalLimit() {
+        return connectionIntervalLimit;
+    }
+
+    public int getExchangeInterval() {
+        return exchangeInterval;
+    }
 }

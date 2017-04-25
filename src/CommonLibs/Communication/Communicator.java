@@ -1,10 +1,12 @@
-package EZShare_Client;
+package CommonLibs.Communication;
+
+import CommonLibs.Setting.Setting;
+import EZShare_Client.ClientSetting;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 /**
  * Created by apple on 16/04/2017.
@@ -12,20 +14,20 @@ import java.net.UnknownHostException;
 
 public class Communicator {
 
-    private ClientSetting clientSetting;
+    private Setting setting;
 
     private Socket socket;
     private DataInputStream input;
     private DataOutputStream output;
 
-    public Communicator() {
-        this.clientSetting = ClientSetting.sharedClientSetting();
+    public Communicator(Setting setting) {
+        this.setting = setting;
     }
 
     public int connectToServer(){
         try {
             //new socket
-            this.socket = new Socket(clientSetting.getHost(), clientSetting.getPort());
+            this.socket = new Socket(setting.getHost(), setting.getPort());
             //create data input and output stream
             this.input = new DataInputStream(this.socket.getInputStream());
             this.output = new DataOutputStream(this.socket.getOutputStream());

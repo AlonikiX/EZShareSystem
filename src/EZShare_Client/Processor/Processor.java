@@ -1,7 +1,8 @@
 package EZShare_Client.Processor;
 
 import CommonLibs.Commands.Command;
-import EZShare_Client.Communicator;
+import CommonLibs.Communication.Communicator;
+import EZShare_Client.ClientSetting;
 
 /**
  * Created by apple on 24/04/2017.
@@ -12,7 +13,7 @@ public abstract class Processor {
 
     protected Processor(Command command){
         this.command = command;
-        this.communicator = new Communicator();
+        this.communicator = new Communicator(ClientSetting.sharedSetting());
     }
 
     public static Processor processorFactory(Command command) {

@@ -28,7 +28,7 @@ public class ShareHandler extends Handler{
         // remove white space
         // resource not given
 
-        if (((ShareCommand)command).getSecret() == ServerSetting.sharedServerSetting().getSecret()){
+        if (((ShareCommand)command).getSecret() == ServerSetting.sharedSetting().getSecret()){
 
             // if the secret is correct, attempt to share the resource
             boolean handleResult = resourceListManager.addResource(((ShareCommand)command).getResource());

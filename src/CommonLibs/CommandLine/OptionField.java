@@ -10,6 +10,7 @@ public enum OptionField {
     debug("debug"),
     host("host"),
     port("port"),
+    timeout("timeout"),
     //commands
     query("query"),
     publish("publish"),

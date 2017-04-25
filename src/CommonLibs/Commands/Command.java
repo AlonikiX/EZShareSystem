@@ -3,6 +3,7 @@ package CommonLibs.Commands;
 
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
+import CommonLibs.Setting.Setting;
 import EZShare_Client.ClientSetting;
 import org.json.JSONObject;
 
@@ -10,13 +11,11 @@ import org.json.JSONObject;
  * Created by apple on 17/04/2017.
  */
 public abstract class Command {
-    protected ClientSetting clientSetting = ClientSetting.sharedClientSetting();
     protected CommandType commandType;
 
     public CommandType getCommandType() {
         return this.commandType;
     }
-
 
 
     /**
