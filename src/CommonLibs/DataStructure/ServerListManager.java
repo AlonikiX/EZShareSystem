@@ -1,7 +1,6 @@
 package CommonLibs.DataStructure;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -9,22 +8,22 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * Created by apple on 20/04/2017.
  */
-public class SeverListManager {
-    private static SeverListManager severListManager;
+public class ServerListManager {
+    private static ServerListManager severListManager;
     private int exchangeInterval;
 
     private ArrayList<String> serverList;
     private ReadWriteLock rwlock;
 
-    private SeverListManager() {
+    private ServerListManager() {
         this.serverList = new ArrayList<>();
         this.rwlock = new ReentrantReadWriteLock();
         exchangeInterval = 10000;
     }
 
-    public static SeverListManager sharedServerListManager() {
+    public static ServerListManager sharedServerListManager() {
         if (null == severListManager) {
-            severListManager = new SeverListManager();
+            severListManager = new ServerListManager();
         }
         return severListManager;
     }

@@ -20,6 +20,10 @@ public class RemoveHandler extends Handler{
 
         JSONObject obj = new JSONObject();
 
+        //TODO if need to handle invalid resource,
+        // remove white space
+        // resource not given
+
         // handle and get response
         boolean handleResult = resourceListManager.removeResource(((RemoveCommand)command).getResource());
 

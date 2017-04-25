@@ -8,11 +8,17 @@ import CommonLibs.Commands.Command;
 public class FetchHandler extends Handler{
 
     public FetchHandler(Command cmd){
-        // TODO
         super(cmd);
     }
 
     public void handle(){
-        // TODO
+        //TODO if need to handle invalid resource,
+        // e.g. validate channel
+        // validate uri
+        // resource template exists
+        // resource structure is valid
+
+
+
     }
 }

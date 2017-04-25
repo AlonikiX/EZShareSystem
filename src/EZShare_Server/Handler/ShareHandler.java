@@ -21,6 +21,13 @@ public class ShareHandler extends Handler{
 
         JSONObject obj = new JSONObject();
 
+        //TODO if need to handle invalid resource,
+        // e.g. name != "*",
+        // resource.rui != doc,
+        // resource.rui != null
+        // remove white space
+        // resource not given
+
         if (((ShareCommand)command).getSecret() == ServerSetting.sharedServerSetting().getSecret()){
 
             // if the secret is correct, attempt to share the resource

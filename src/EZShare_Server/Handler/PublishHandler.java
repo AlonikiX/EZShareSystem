@@ -2,12 +2,7 @@ package EZShare_Server.Handler;
 
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
-import CommonLibs.Commands.CommandType;
 import CommonLibs.Commands.PublishCommand;
-import CommonLibs.Commands.ResourceCommand;
-import CommonLibs.DataStructure.*;
-import EZShare_Server.EZShareServer;
-import EZShare_Server.ResourceList;
 import org.json.JSONObject;
 
 /**
@@ -26,6 +21,13 @@ public class PublishHandler extends Handler{
 
         JSONObject obj = new JSONObject();
 
+        //TODO if need to handle invalid resource,
+        // e.g. name != "*",
+        // resource.rui != doc,
+        // resource.rui != null
+        // remove white space
+        // resource not given
+
         // handle and get response
         boolean handleResult = resourceListManager.addResource(((PublishCommand)command).getResource());
 
@@ -42,9 +44,6 @@ public class PublishHandler extends Handler{
         // TODO connect to client and send message
         // or otherwise, change this method to String, and return the msg
 
-
     }
-
-
 
 }
