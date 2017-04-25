@@ -1,12 +1,15 @@
 package CommonLibs.Communication;
 
 import CommonLibs.Setting.Setting;
-import EZShare_Client.ClientSetting;
+import EZShare_Server.Dispatcher;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
+
+import javax.net.ServerSocketFactory;
 
 /**
  * Created by apple on 16/04/2017.
@@ -20,11 +23,49 @@ public class Communicator {
     private DataInputStream input;
     private DataOutputStream output;
 
+    private Dispatcher recallDispatcher;
+
     public Communicator(Setting setting) {
         this.setting = setting;
     }
 
-    public int connectToServer(){
+
+    public void establishConnection(Socket socket) {
+        this.socket = socket;
+        try {
+            this.input = new DataInputStream(this.socket.getInputStream());
+            this.output = new DataOutputStream(this.socket.getOutputStream());
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    public void acceptConnection() {
+//        ServerSocketFactory factory = ServerSocketFactory.getDefault();
+//        try(ServerSocket server = factory.createServerSocket(setting.getPort())){
+//            System.out.println("Waiting for client connection..");
+//
+//            // Wait for connections.
+//            while(true){
+//                Socket client = server.accept();
+////                counter++;
+////                System.out.println("Client "+counter+": Applying for connection!");
+//
+//                // Start a new thread for a connection
+//                recallDispatcher.start();
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void bindRecallDispatcher(Dispatcher dispatcher) {
+//        this.recallDispatcher = dispatcher;
+//        this.recallDispatcher.bindCommunicator(this);
+//    }
+
+    public int connectToServer() {
         try {
             //new socket
             this.socket = new Socket(setting.getHost(), setting.getPort());
@@ -32,37 +73,12 @@ public class Communicator {
             this.input = new DataInputStream(this.socket.getInputStream());
             this.output = new DataOutputStream(this.socket.getOutputStream());
 
-            return  1;
+            return 1;
         } catch (IOException e) {
             e.printStackTrace();
 
             return 0;
         }
-//        try(Socket socket = new Socket(localHost, localPort)){
-//            // Output and Input Stream
-//            this.socket = socket;
-//            DataInputStream input = new DataInputStream(socket.
-//                    getInputStream());
-//            DataOutputStream output = new DataOutputStream(socket.
-//                    getOutputStream());
-//
-//            output.writeUTF("I want to connect!");
-//            output.flush();
-//
-//            while(true){
-//                if(input.available() > 0) {
-//                    String message = input.readUTF();
-//                    System.out.println(message);
-//                }
-//
-//            }
-//
-//        } catch (UnknownHostException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public int connectToServer(String host, int port){

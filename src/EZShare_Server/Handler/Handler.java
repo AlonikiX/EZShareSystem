@@ -1,20 +1,25 @@
 package EZShare_Server.Handler;
 
 import CommonLibs.Commands.Command;
+import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.ResourceListManager;
 
 /**
  * Created by marsjc on 2017/04/17.
  */
 public abstract class Handler {
-
     // which command is being handled
     protected Command command;
+    protected Communicator communicator;
     protected ResourceListManager resourceListManager;
 
     public Handler(Command cmd){
         this.command = cmd;
         this.resourceListManager = ResourceListManager.shareResourceListManager();
+    }
+
+    public void bindCommunicator(Communicator communicator) {
+        this.communicator = communicator;
     }
 
     public abstract void handle();

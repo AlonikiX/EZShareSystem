@@ -13,7 +13,7 @@ public class Resource {
 //    • Name: optional user supplied name (String), default is "".
 //    • Description: optional user supplied description (String), default is "".
 //    • Tags: optional user supplied list of tags (Array of Strings), default is empty list.
-//    • URI: mandatory user supplied absolute URI, that is unique for each resource on a given EZShare Server
+//    • URI: mandatory user supplied absolute URI, that is unique for each resource on a given EZShare Main
 //           within each Channel on the server (String). The URI must conform to official URI format. • Channel: optional user supplied channel name (String), default is "".
 //    • Owner: optional user supplied owner name (String), default is "".
 //    • EZserver: system supplied server:port name that lists the Resource (String).
