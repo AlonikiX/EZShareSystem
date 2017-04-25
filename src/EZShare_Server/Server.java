@@ -3,6 +3,7 @@ package EZShare_Server;
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.Commands.Command;
 import CommonLibs.Communication.Communicator;
+import CommonLibs.DataStructure.ServerListManager;
 
 import javax.net.ServerSocketFactory;
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.net.Socket;
 /**
  * Created by apple on 17/04/2017.
  */
-public class Main {
+public class Server {
     private Dispatcher dispatcher;
 
     public static void main(String[] args) {
@@ -23,26 +24,24 @@ public class Main {
         //initial server setting
         ServerSetting.sharedSetting().initSetting(cliManager);
 
-        //run server
+        //initial server list manager
+        ServerListManager.sharedServerListManager();
 
+        //run server
         ServerSocketFactory factory = ServerSocketFactory.getDefault();
         try(ServerSocket server = factory.createServerSocket(ServerSetting.sharedSetting().getPort())){
             System.out.println("Waiting for client connection..");
 
             // Wait for connections.
             while(true){
+                //set communicator
                 Communicator communicator = new Communicator(ServerSetting.sharedSetting());
                 communicator.establishConnection(server.accept());
 
+                //new dispatching thread
                 Dispatcher dispatcher = new Dispatcher();
                 dispatcher.bindCommunicator(communicator);
                 dispatcher.start();
-
-//                counter++;
-//                System.out.println("Client "+counter+": Applying for connection!");
-
-                // Start a new thread for a connection
-//                recallDispatcher.start();
             }
 
         } catch (IOException e) {

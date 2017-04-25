@@ -20,14 +20,15 @@ public class Dispatcher extends Thread {
     public void run() {
         while (true) {
             if (0 < communicator.readableData()) {
+                //receive data
                 String data = communicator.readData();
                 System.out.println("RECEIVE:");
                 System.out.println(data);
-
+                //dispatch
                 Command command = Command.commandFactory(data);
                 Handler handler = Handler.handlerFactory(command);
                 handler.bindCommunicator(this.communicator);
-
+                //handle
                 handler.handle();
 
                 System.out.println("System Information:");

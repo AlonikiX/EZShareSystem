@@ -29,7 +29,10 @@ public class ServerListManager {
         this.rwlock = new ReentrantReadWriteLock();
         this.exchangeInterval = 10000;
 
-        runAutoExchange();
+        new Thread((Runnable) ()-> {
+            runAutoExchange();
+        }).start();
+
     }
 
     public static ServerListManager sharedServerListManager() {
@@ -47,7 +50,7 @@ public class ServerListManager {
      * @description randomly choose a server and exchange server list with it automatically
      * @interval the exchanging interval time is based on server setting
      */
-    public void runAutoExchange(){
+    private void runAutoExchange(){
         while (true) {
             //interval
             try {
