@@ -99,4 +99,21 @@ public class Resource {
     public void setChannel(String channel) {
         this.channel = channel;
     }
+
+    /**
+     * @return a clone of the resource
+     */
+    public Resource clone(){
+        Resource clone = new Resource();
+        rwlock.writeLock().lock();
+        clone.name = this.name;
+        clone.description = this.description;
+        clone.tags = this.tags;
+        clone.owner = this.owner;
+        clone.channel = this.channel;
+        clone.uri = this.uri;
+        clone.ezserver = this.ezserver;
+        rwlock.writeLock().unlock();
+        return clone;
+    }
 }

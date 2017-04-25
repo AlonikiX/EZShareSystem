@@ -117,7 +117,7 @@ public class ResourceListManager {
 
     /**
      * Remove a resource identified by the primary key
-     * @param resource the resource to remove
+     * @param resource the resource (resrouce template specifying the resource) to remove
      * @return true, if the resource is removed
      *          false, if the resource does not exist
      */
@@ -139,10 +139,22 @@ public class ResourceListManager {
     }
 
 
-
-
-
-
+    /**
+     * Find the resource to fetch specified by the resource template
+     * a clone would be used as the return object, so it could be further modified without affect this list
+     * @param resource the resource template specifying the resource
+     * @return null, if the no resource found
+     *          a clone for the resource specified, otherwise
+     */
+    public Resource findResource(Resource resource){
+        for (Resource rsc: resourceList){
+            if (resource.getChannel().equals(rsc.getChannel())
+                    && resource.getUri().equals(rsc.getUri())){
+                return rsc.clone();
+            }
+        }
+        return null;
+    }
 
 
 

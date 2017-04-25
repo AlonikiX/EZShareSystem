@@ -6,11 +6,13 @@ import com.sun.net.httpserver.Authenticator;
  * Created by apple on 20/04/2017.
  */
 public enum OptionField {
+
     //settings
     debug("debug"),
     host("host"),
     port("port"),
     timeout("timeout"),
+
     //commands
     query("query"),
     publish("publish"),
@@ -18,7 +20,8 @@ public enum OptionField {
     share("share"),
     fetch("fetch"),
     exchange("exchange"),
-    //command fields
+
+    //resource fields
     name("name"),
     description("description"),
     uri("uri"),
@@ -27,6 +30,7 @@ public enum OptionField {
     channel("channel"),
     secret("secret"),
     servers("servers"),
+    resourceSize("resourceSize"),
 
     //result
     resultSize("resultSize"),
@@ -47,8 +51,13 @@ public enum OptionField {
     ezserver("ezserver"),
     resource("resource"),
     resourceTemplate("resourceTemplate"),
-    ;
 
+    //invalid message
+    invalidResource("invalid resource"),
+    invalidTemplate("invalid resourceTemplate"),
+    missingResource("missing resource"),
+    missingTemplate("missing resourceTemplate"),
+    ;
 
     private String value;
 
