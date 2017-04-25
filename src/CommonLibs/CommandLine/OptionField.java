@@ -43,8 +43,7 @@ public enum OptionField {
     //json
     command("command"),
     relay("relay"),
-//    yes("true"),
-//    no("false"),
+    serverList("serverList"),
     ezserver("ezserver"),
     resource("resource"),
     resourceTemplate("resourceTemplate"),
