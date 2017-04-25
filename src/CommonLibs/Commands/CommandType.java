@@ -21,7 +21,7 @@ public enum CommandType {
         this.value = value;
     }
 
-    static CommandType getEnum(String value) {
+    public static CommandType getEnum(String value) {
         switch (value) {
             case "QUERY":
                 return QUERY;
