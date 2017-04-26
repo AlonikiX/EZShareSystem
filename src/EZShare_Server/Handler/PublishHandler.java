@@ -33,6 +33,7 @@ public class PublishHandler extends Handler{
         // if the resource is invalid, return error
         if (resource.getName() == "*"
                 || resource.getUri() == null
+                || resource.getUri() == ""
                 || isFile(resource.getUri())
                 ){
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());
