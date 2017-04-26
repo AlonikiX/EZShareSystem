@@ -44,11 +44,11 @@ public class QueryHandler extends Handler{
             return;
         }
 
-        // record results
         obj.put(OptionField.response.getValue(),OptionField.success.getValue());
         String msg = obj.toString();
         communicator.writeData(msg);
 
+        // record results
         int resultSize = 0;
 
         ArrayList<Resource> results = resourceListManager.matchTemplate(template);

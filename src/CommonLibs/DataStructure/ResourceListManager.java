@@ -189,10 +189,15 @@ public class ResourceListManager {
         if (template.getOwner()!="" && (!template.getOwner().equals(candidate.getOwner()))) return false;
         if (template.getUri()!="" && (!template.getUri().equals((candidate.getOwner())))) return false;
         ArrayList<String> tags = template.getTags();
+        boolean tagsInterval = false;
         for (String tag:tags){
-            if (!candidate.getTags().contains(tag)) return false;
+            if (candidate.getTags().contains(tag)) {
+                tagsInterval = true;
+                break;
+            }
         }
-        
+        if (!tagsInterval) return false;
+
 //        if (template.getName() == "" && template.getDescription() == "") return true;
         if (candidate.getName().indexOf(template.getName()) > -1) return true;
         if (candidate.getDescription().indexOf(template.getDescription()) > -1) return true;
