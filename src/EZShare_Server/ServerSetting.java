@@ -17,8 +17,8 @@ public class ServerSetting extends Setting {
     private ServerSetting() {
         this.secret = "";
         this.advertisedHostName = "EZServer";
-        this.connectionIntervalLimit = 1000;
-        this.exchangeInterval = 1000;
+        this.connectionIntervalLimit = 5000;
+        this.exchangeInterval = 10000;
     }
 
     public static ServerSetting sharedSetting(){

@@ -1,7 +1,5 @@
 package EZShare_Server;
 
-import EZShare_Client.Client;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -10,29 +8,33 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * Created by apple on 26/04/2017.
  */
-public class ClientListManager {
-    private static ClientListManager clientListManager;
+public class LimitedIPAddressListManager {
+    private static LimitedIPAddressListManager limitedIPAddressListManager;
     private ServerSetting setting;
     private HashMap<String, Integer> clientList;
     private ReadWriteLock readWriteLock;
 
-    private ClientListManager() {
+    private LimitedIPAddressListManager() {
         clientList = new HashMap<>();
         setting = ServerSetting.sharedSetting();
         readWriteLock = new ReentrantReadWriteLock();
+
+        new Thread(()-> {
+            checkIPAddressIntervalLimit();
+        }).start();
     }
 
-    public static ClientListManager shareClientListManager() {
-        if (null == clientListManager) {
-            clientListManager = new ClientListManager();
+    public static LimitedIPAddressListManager shareClientListManager() {
+        if (null == limitedIPAddressListManager) {
+            limitedIPAddressListManager = new LimitedIPAddressListManager();
         }
-        return clientListManager;
+        return limitedIPAddressListManager;
     }
 
-    public boolean limitConnection(String client) {
+    public boolean limitConnection(String ipAddress) {
         readWriteLock.readLock().lock();
         //limit a client connects to the server if it still has interval limit.
-        if (clientList.containsKey(client)) {
+        if (clientList.containsKey(ipAddress)) {
             readWriteLock.readLock().unlock();
             return true;
         }else {
@@ -41,38 +43,41 @@ public class ClientListManager {
         }
     }
 
-    public void checkClientInertvalLimit() {
+    public void checkIPAddressIntervalLimit() {
         int connectionIntervalLimit = setting.getConnectionIntervalLimit();
+        int rate = 500;
         while (true) {
-            try {//check interval limit for each client
-                Thread.sleep(connectionIntervalLimit);
+            try {//check interval limit for each IP address
+                Thread.sleep(rate);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             //create a temporary list to store the items that need to be removed
             ArrayList<String> temp = new ArrayList<>();
             readWriteLock.readLock().lock();
-            //calculate the remain limit time for each client
-            for (String client : clientList.keySet()) {
-                int interval = (Integer)clientList.get(client) - connectionIntervalLimit;
+            //calculate the remain limit time for each IP address
+            for (String ipAddress : clientList.keySet()) {
+                int interval = (Integer)clientList.get(ipAddress) - rate;
+                clientList.replace(ipAddress, interval);
                 if (interval <= 0) {
-                    temp.add(client);
+                    temp.add(ipAddress);
                 }
             }
             readWriteLock.readLock().unlock();
             readWriteLock.writeLock().lock();
-            //remove clients who have reached the interval limit
-            for (String client : temp) {
-                clientList.remove(client);
+            //remove IP address who have reached the interval limit
+            for (String ipAddress : temp) {
+                clientList.remove(ipAddress);
+                System.out.println("remove limited ip address" + ipAddress);
             }
             readWriteLock.writeLock().unlock();
         }
     }
 
-    //add a new client to the limited list
-    public void addIntervalLimitedClient(String client) {
+    //add a new IP address to the limited list
+    public void addIntervalLimitedIPAddress(String ipAddress) {
         readWriteLock.writeLock().lock();
-        clientList.put(client, setting.getConnectionIntervalLimit());
+        clientList.put(ipAddress, setting.getConnectionIntervalLimit());
         readWriteLock.writeLock().unlock();
     }
 }

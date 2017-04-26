@@ -1,14 +1,12 @@
 package EZShare_Server;
 
 import CommonLibs.CommandLine.CliManager;
-import CommonLibs.Commands.Command;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.ServerListManager;
 
 import javax.net.ServerSocketFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 /**
  * Created by apple on 17/04/2017.
@@ -25,7 +23,10 @@ public class Server {
         ServerSetting.sharedSetting().initSetting(cliManager);
 
         //initial server list manager
-        ServerListManager.sharedServerListManager();
+        ServerListManager serverListManager = ServerListManager.sharedServerListManager();
+
+        //initial limited client list manager
+        LimitedIPAddressListManager limitedIPAddressListManager = LimitedIPAddressListManager.shareClientListManager();
 
         //run server
         ServerSocketFactory factory = ServerSocketFactory.getDefault();
@@ -38,10 +39,21 @@ public class Server {
                 Communicator communicator = new Communicator(ServerSetting.sharedSetting());
                 communicator.establishConnection(server.accept());
 
+                String host = communicator.getClientAddress();
+                System.out.println("Server Information:");
+                System.out.println("connected with IP address:" + host);
+                if (limitedIPAddressListManager.limitConnection(host)) {
+                    System.out.println("Server Information:");
+                    System.out.println("connection too frequent");
+                    limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
+                    continue;
+                }
+                limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
+
                 //new dispatching thread
-                Dispatcher dispatcher = new Dispatcher();
-                dispatcher.bindCommunicator(communicator);
-                dispatcher.start();
+//                Dispatcher dispatcher = new Dispatcher();
+//                dispatcher.bindCommunicator(communicator);
+//                dispatcher.start();
             }
 
         } catch (IOException e) {

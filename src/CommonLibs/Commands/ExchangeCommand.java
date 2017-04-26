@@ -2,27 +2,24 @@ package CommonLibs.Commands;
 
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
-import CommonLibs.DataStructure.ServerListManager;
-import CommonLibs.DataStructure.ServerStructure;
+import CommonLibs.DataStructure.IPAddress;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 
 /**
  * Created by apple on 17/04/2017.
  */
 public class ExchangeCommand extends Command {
-    private ArrayList<ServerStructure> serverList;
+    private ArrayList<IPAddress> serverList;
 
-    public ArrayList<ServerStructure> getServerList() {
+    public ArrayList<IPAddress> getServerList() {
         return serverList;
     }
 
-    public void setServerList(ArrayList<ServerStructure> serverList) {
+    public void setServerList(ArrayList<IPAddress> serverList) {
         this.serverList = serverList;
     }
 
@@ -37,7 +34,7 @@ public class ExchangeCommand extends Command {
             if (null != serverString) {
                 String[] servers = serverString.split(",");
                 for (String server : servers) {
-                    this.serverList.add(new ServerStructure(server));
+                    this.serverList.add(new IPAddress(server));
                 }
             }
         }
@@ -49,7 +46,7 @@ public class ExchangeCommand extends Command {
             if (null != serverString) {
                 String[] servers = serverString.split(",");
                 for (String server : servers) {
-                    this.serverList.add(new ServerStructure(server));
+                    this.serverList.add(new IPAddress(server));
                 }
             }
         }
@@ -67,7 +64,7 @@ public class ExchangeCommand extends Command {
         this.toServerList(obj);
     }
 
-    public ExchangeCommand(ArrayList<ServerStructure> serverList) {
+    public ExchangeCommand(ArrayList<IPAddress> serverList) {
         this.serverList = serverList;
     }
 
@@ -78,7 +75,7 @@ public class ExchangeCommand extends Command {
         obj.put(OptionField.command.getValue(), this.commandType.getValue());
 
         JSONArray arr = new JSONArray();
-        for (ServerStructure server : this.serverList) {
+        for (IPAddress server : this.serverList) {
             JSONObject serverObject = new JSONObject();
             serverObject.put("hostname", server.host);
             serverObject.put(OptionField.port.getValue(), server.port);
