@@ -20,6 +20,15 @@ public abstract class ResourceCommand extends Command {
     /**
      * @description initial the resource
      */
+    /* ***********************************************************************
+     * notes for code optimization later:
+     * don't have to initiate, because if resource is not recorded, then use resource = null,
+     * otherwise, resource = new Resource(),
+     * then don't have to set initial value, check each option field one by one:
+     * IF option_defined
+     * THEN set defined value
+     * ELSE set default value
+     */
     private void initResourceCommand() {
         this.resource = new Resource();
         resource.setName("");
@@ -31,7 +40,16 @@ public abstract class ResourceCommand extends Command {
         resource.setEzserver(null);
     }
 
-    protected void toResource(JSONObject obj) {
+    protected void toResource(JSONObject commandObj) {
+
+        if (!commandObj.has(OptionField.resource.getValue())){
+            resource = null;
+            return;
+        }
+
+        JSONObject obj = commandObj.getJSONObject(OptionField.resource.getValue());
+        initResourceCommand();
+
         if (obj.has(OptionField.name.getValue())) {
             String name = obj.getString(OptionField.name.getValue());
                 if (null != name) {

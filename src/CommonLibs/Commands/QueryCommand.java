@@ -19,14 +19,14 @@ public class QueryCommand extends ResourceCommand {
     public QueryCommand(CliManager cli) {
         this.commandType = CommandType.QUERY;
         this.relay = cli.hasOption(OptionField.relay.getValue()) ?
-                (Boolean.parseBoolean(cli.getOptionValue(OptionField.relay.getValue()))) : false;
+                (Boolean.parseBoolean(cli.getOptionValue(OptionField.relay.getValue()))) : true;
         this.toResource(cli);
     }
 
     public QueryCommand(JSONObject obj) {
         this.commandType = CommandType.QUERY;
         this.relay = obj.has(OptionField.relay.getValue()) ?
-                (obj.getBoolean(OptionField.relay.getValue())):false;
+                (obj.getBoolean(OptionField.relay.getValue())):true;
         this.toResource(obj);
     }
 

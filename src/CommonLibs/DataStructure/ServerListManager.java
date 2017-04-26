@@ -25,7 +25,7 @@ public class ServerListManager {
 
     private ServerListManager() {
         this.communicator = new Communicator(ServerSetting.sharedSetting());
-        this.serverList = new ArrayList<>();
+        this.serverList = new ArrayList<ServerStructure>();
         this.rwlock = new ReentrantReadWriteLock();
         this.exchangeInterval = 10000;
 
@@ -106,4 +106,12 @@ public class ServerListManager {
         }
         this.rwlock.writeLock().unlock();
     }
+
+//    public ArrayList<ServerStructure> cloneServerList(){
+//        ArrayList<ServerStructure> list = new ArrayList<ServerStructure>();
+//        this.rwlock.readLock().lock();
+//        list.addAll(serverList);
+//        this.rwlock.readLock().unlock();
+//        return list;
+//    }
 }
