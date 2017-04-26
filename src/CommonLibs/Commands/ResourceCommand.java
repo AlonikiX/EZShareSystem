@@ -42,13 +42,18 @@ public abstract class ResourceCommand extends Command {
     }
 
     protected void toResource(JSONObject commandObj) {
-
+        JSONObject obj;
         if (!commandObj.has(OptionField.resource.getValue())){
-            resource = null;
-            return;
+            if (!commandObj.has(OptionField.resourceTemplate.getValue())){
+                resource = null;
+                return;
+            }else {
+                obj = commandObj.getJSONObject(OptionField.resourceTemplate.getValue());
+            }
+        }else {
+            obj = commandObj.getJSONObject(OptionField.resource.getValue());
         }
 
-        JSONObject obj = commandObj.getJSONObject(OptionField.resource.getValue());
         initResourceCommand();
 
         if (obj.has(OptionField.name.getValue())) {
@@ -67,6 +72,12 @@ public abstract class ResourceCommand extends Command {
             JSONArray arr = obj.getJSONArray(OptionField.tags.getValue());
             for (int i = 0; i < arr.length(); i++) {
                 resource.getTags().add(arr.getString(i).toLowerCase());
+            }
+        }
+        if (obj.has(OptionField.uri.getValue())) {
+            String uri = obj.getString(OptionField.uri.getValue());
+            if (null != uri) {
+                resource.setUri(uri);
             }
         }
         if (obj.has(OptionField.channel.getValue())) {

@@ -51,9 +51,9 @@ public class Server {
                 limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
 
                 //new dispatching thread
-//                Dispatcher dispatcher = new Dispatcher();
-//                dispatcher.bindCommunicator(communicator);
-//                dispatcher.start();
+                Dispatcher dispatcher = new Dispatcher();
+                dispatcher.bindCommunicator(communicator);
+                dispatcher.start();
             }
 
         } catch (IOException e) {

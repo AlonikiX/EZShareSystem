@@ -25,6 +25,8 @@ public enum CommandType {
         switch (value) {
             case "QUERY":
                 return QUERY;
+            case "REMOVE":
+                return REMOVE;
             case "PUBLISH":
                 return PUBLISH;
             case "SHARE":
