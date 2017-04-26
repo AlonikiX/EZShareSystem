@@ -71,27 +71,32 @@ public class ServerListManager {
 
                 this.rwlock.readLock().unlock();
 
-                //send exchange command to this server
-                communicator.connectToServer(server.host, server.port);
-                communicator.writeData(command.toJSON());
-                //handle results
-                while (true) {
-                    if (0 < communicator.readableData()) {
-                        String data = communicator.readData();
-                        JSONObject object = new JSONObject(data);
-                        if (object.has(OptionField.response.getValue())) {
-                            String response = object.getString(OptionField.response.getValue());
-                            if (0 == response.compareTo(OptionField.success.getValue())) {
+                //send exchange command to the chosen server
+                if (communicator.connectToServer(server.host, server.port)) {//can connect to the chosen server
+                    //send the server list to the chosen server
+                    communicator.writeData(command.toJSON());
+                    //handle results
+                    while (true) {
+                        if (0 < communicator.readableData()) {
+                            String data = communicator.readData();
+                            JSONObject object = new JSONObject(data);
+                            if (object.has(OptionField.response.getValue())) {
+                                String response = object.getString(OptionField.response.getValue());
+                                if (0 == response.compareTo(OptionField.success.getValue())) {
+                                    break;
+                                }
+                            }
+                            if (object.has(OptionField.errorMessage.getValue())) {
                                 break;
                             }
                         }
-                        if (object.has(OptionField.errorMessage.getValue())) {
-                            break;
-                        }
                     }
+                } else {//fail to connect to the chosen server, remove it from the server list
+                    this.rwlock.readLock().unlock();
+                    this.rwlock.writeLock().lock();
+                    this.serverList.remove(index);
+                    this.rwlock.writeLock().unlock();
                 }
-            } else {
-                this.rwlock.readLock().unlock();
             }
         }
     }

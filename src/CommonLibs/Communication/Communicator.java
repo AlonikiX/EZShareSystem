@@ -5,6 +5,7 @@ import EZShare_Server.Dispatcher;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
@@ -40,39 +41,42 @@ public class Communicator {
     }
 
 
-    public int connectToServer() {
+    public boolean connectToServer() {
 
         // TODO how about just write:
 //        return connectToServer(setting.getHost(),setting.getPort());
 
         try {
             //new socket
-            this.socket = new Socket(setting.getHost(), setting.getPort());
+            this.socket = new Socket();
+            this.socket.connect(new InetSocketAddress(setting.getHost(),setting.getPort()), setting.getTimeout());
             //create data input and output stream
             this.input = new DataInputStream(this.socket.getInputStream());
             this.output = new DataOutputStream(this.socket.getOutputStream());
 
-            return 1;
+            return true;
         } catch (IOException e) {
-            e.printStackTrace();
-
-            return 0;
+//            e.printStackTrace();
+            System.out.println("Connect timed out");
+            return false;
         }
     }
 
-    public int connectToServer(String host, int port){
+    public boolean connectToServer(String host, int port){
         try {
             //new socket
-            this.socket = new Socket(host, port);
+            this.socket = new Socket();
+            this.socket.connect(new InetSocketAddress(setting.getHost(),setting.getPort()), setting.getTimeout());
             //create data input and output stream
             this.input = new DataInputStream(this.socket.getInputStream());
             this.output = new DataOutputStream(this.socket.getOutputStream());
 
-            return 1;
+            return true;
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println("Connect timed out");
 
-            return 0;
+            return false;
         }
     }
 

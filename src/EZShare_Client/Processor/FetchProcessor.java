@@ -19,6 +19,14 @@ public class FetchProcessor extends Processor {
             if (0 < communicator.readableData()) {
                 String data = communicator.readData();
                 JSONObject object = new JSONObject(data);
+                if (object.has(OptionField.resourceSize.getValue())) {
+                    long fileSize = object.getLong(OptionField.resourceSize.getValue());
+                    String uri = object.getString(OptionField.uri.getValue());
+                    String fileName = object.getString(OptionField.name.getValue());
+                    fileName += uri.substring(uri.lastIndexOf("."));
+
+                    communicator.downloadFile(fileSize, fileName);
+                }
                 if (object.has(OptionField.resultSize.getValue())) {
                     break;
                 }
