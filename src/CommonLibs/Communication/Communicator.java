@@ -2,12 +2,13 @@ package CommonLibs.Communication;
 
 import CommonLibs.Setting.Setting;
 import EZShare_Server.Dispatcher;
+import org.json.JSONObject;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 import javax.net.ServerSocketFactory;
 
@@ -39,64 +40,43 @@ public class Communicator {
         }
     }
 
-//    public void acceptConnection() {
-//        ServerSocketFactory factory = ServerSocketFactory.getDefault();
-//        try(ServerSocket server = factory.createServerSocket(setting.getPort())){
-//            System.out.println("Waiting for client connection..");
-//
-//            // Wait for connections.
-//            while(true){
-//                Socket client = server.accept();
-////                counter++;
-////                System.out.println("Client "+counter+": Applying for connection!");
-//
-//                // Start a new thread for a connection
-//                recallDispatcher.start();
-//            }
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void bindRecallDispatcher(Dispatcher dispatcher) {
-//        this.recallDispatcher = dispatcher;
-//        this.recallDispatcher.bindCommunicator(this);
-//    }
 
-    public int connectToServer() {
+    public boolean connectToServer() {
 
         // TODO how about just write:
 //        return connectToServer(setting.getHost(),setting.getPort());
 
         try {
             //new socket
-            this.socket = new Socket(setting.getHost(), setting.getPort());
+            this.socket = new Socket();
+            this.socket.connect(new InetSocketAddress(setting.getHost(),setting.getPort()), setting.getTimeout());
             //create data input and output stream
             this.input = new DataInputStream(this.socket.getInputStream());
             this.output = new DataOutputStream(this.socket.getOutputStream());
 
-            return 1;
+            return true;
         } catch (IOException e) {
-            e.printStackTrace();
-
-            return 0;
+//            e.printStackTrace();
+            System.out.println("Connect timed out");
+            return false;
         }
     }
 
-    public int connectToServer(String host, int port){
+    public boolean connectToServer(String host, int port){
         try {
             //new socket
-            this.socket = new Socket(host, port);
+            this.socket = new Socket();
+            this.socket.connect(new InetSocketAddress(setting.getHost(),setting.getPort()), setting.getTimeout());
             //create data input and output stream
             this.input = new DataInputStream(this.socket.getInputStream());
             this.output = new DataOutputStream(this.socket.getOutputStream());
 
-            return 1;
+            return true;
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println("Connect timed out");
 
-            return 0;
+            return false;
         }
     }
 
@@ -132,6 +112,89 @@ public class Communicator {
         return -1;
     }
 
+    public void downloadFile(long fileSize, String fileName) {
+        long fileSizeRemaining = fileSize;
+
+        String filePath = "client_files/" + fileName;
+
+        // Create a RandomAccessFile to read and write the output file.
+        RandomAccessFile downloadingFile = null;
+        try {
+            downloadingFile = new RandomAccessFile(fileName, "rw");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        int chunkSize = setChunkSize(fileSizeRemaining);
+        // Represents the receiving buffer
+        byte[] receiveBuffer = new byte[chunkSize];
+
+        // Variable used to read if there are remaining size left to read.
+        int num;
+
+        System.out.println("Downloading "+fileName+" of size "+fileSizeRemaining);
+        try {
+            while((num=input.read(receiveBuffer))>0){
+                // Write the received bytes into the RandomAccessFile
+                downloadingFile.write(Arrays.copyOf(receiveBuffer, num));
+
+                // Reduce the file size left to read..
+                fileSizeRemaining-=num;
+
+                // Set the chunkSize again
+                chunkSize = setChunkSize(fileSizeRemaining);
+                receiveBuffer = new byte[chunkSize];
+
+                // If you're done then break
+                if(fileSizeRemaining==0){
+                    break;
+                }
+            }
+            System.out.println("File received!");
+            downloadingFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void transmitFile(String filePath) {
+        // Check if file exists
+        File f = new File(filePath);
+        if(f.exists()){
+            try {
+                // Start sending file
+                RandomAccessFile byteFile = new RandomAccessFile(f,"r");
+                byte[] sendingBuffer = new byte[1024*1024];
+                int num;
+                // While there are still bytes to send..
+                while((num = byteFile.read(sendingBuffer)) > 0){
+                    System.out.print("Sent:");
+                    System.out.println(num);
+                    output.write(Arrays.copyOf(sendingBuffer, num));
+                }
+                byteFile.close();
+                System.out.println("File transmitting complete");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            // Throw an error here..
+        }
+    }
+
+
+    public static int setChunkSize(long fileSizeRemaining){
+        // Determine the chunkSize
+        int chunkSize=1024*1024;
+
+        // If the file size remaining is less than the chunk size
+        // then set the chunk size to be equal to the file size.
+        if(fileSizeRemaining<chunkSize){
+            chunkSize=(int) fileSizeRemaining;
+        }
+
+        return chunkSize;
+    }
 }
 
 //{"command": "QUERY","relay": true,"resourceTemplate": {"name": "","tags": [],"description": "","uri": "","channel": "","owner": "","ezserver": null}}

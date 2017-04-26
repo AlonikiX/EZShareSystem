@@ -117,7 +117,7 @@ public class ResourceListManager {
 
     /**
      * Remove a resource identified by the primary key
-     * @param resource the resource (resrouce template specifying the resource) to remove
+     * @param resource the resource (resource template specifying the resource) to remove
      * @return true, if the resource is removed
      *          false, if the resource does not exist
      */
@@ -155,6 +155,48 @@ public class ResourceListManager {
         }
         return null;
     }
+
+    /**
+     * Find the resource(s) that matches the template in the query command
+     * a clone would be used for each result matching the template
+     * @param template the resource template to match
+     * @return a list of resources, (could be empty)
+     */
+    public ArrayList<Resource> matchTemplate(Resource template){
+        ArrayList<Resource> list = new ArrayList<Resource>();
+        this.rwlock.readLock().lock();
+        for (Resource rsc:resourceList){
+            if (matches(template,rsc) ){
+                Resource match = rsc.clone();
+                list.add(match);
+            }
+        }
+        this.rwlock.readLock().unlock();
+        return list;
+    }
+
+    /**
+     * To check if a template matches a candidate resource
+     * @param template the template provided
+     * @param candidate the candidate resource
+     * @return true, if they match
+     *          false, otherwise
+     */
+    private boolean matches(Resource template, Resource candidate){
+        if (!template.getChannel().equals(candidate.getChannel())) return false;
+        if (template.getOwner()!="" && (!template.getOwner().equals(candidate.getOwner()))) return false;
+        if (template.getUri()!="" && (!template.getUri().equals((candidate.getOwner())))) return false;
+        ArrayList<String> tags = template.getTags();
+        for (String tag:tags){
+            if (!candidate.getTags().contains(tag)) return false;
+        }
+        
+//        if (template.getName() == "" && template.getDescription() == "") return true;
+        if (candidate.getName().indexOf(template.getName()) > -1) return true;
+        if (candidate.getDescription().indexOf(template.getDescription()) > -1) return true;
+        return false;
+    }
+
 
 
 

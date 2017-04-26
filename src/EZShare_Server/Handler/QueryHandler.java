@@ -12,17 +12,13 @@ public class QueryHandler extends Handler{
 
 
     public QueryHandler(Command cmd){
-
         super(cmd);
     }
 
     public void handle(){
 
-        ArrayList<String> results = new ArrayList<String>();
 
 
 
-
-        // TODO
     }
 }
