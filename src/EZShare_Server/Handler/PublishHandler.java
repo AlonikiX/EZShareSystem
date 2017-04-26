@@ -38,6 +38,12 @@ public class PublishHandler extends Handler{
                 ){
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(),OptionField.invalidResource.getValue());
+
+            // for test
+            obj.put(OptionField.owner.getValue(),resource.getOwner());
+            obj.put(OptionField.uri.getValue(),resource.getUri());
+            obj.put("if file",isFile(resource.getUri()));
+
             String msg = obj.toString();
             communicator.writeData(msg);
             return;
