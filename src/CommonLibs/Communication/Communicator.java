@@ -168,7 +168,7 @@ public class Communicator {
                     System.out.println(num);
                     output.write(Arrays.copyOf(sendingBuffer, num));
                 }
-                byteFile.close();
+                fin.close();
                 System.out.println("File transmitting complete");
             } catch (IOException e) {
                 e.printStackTrace();
