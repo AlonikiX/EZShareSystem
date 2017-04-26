@@ -22,7 +22,7 @@ public class RemoveHandler extends Handler{
 
         JSONObject obj = new JSONObject();
 
-        Resource resource = ((PublishCommand)command).getResource();
+        Resource resource = ((RemoveCommand)command).getResource();
 
         // if the resource is not given, return error
         if (resource == null){
@@ -35,7 +35,7 @@ public class RemoveHandler extends Handler{
 
         // if the resource is invalid, return error
         if (resource.getOwner() == "*"
-                || resource.getUri() == null
+//                || resource.getUri() == null
                 || resource.getUri() == ""
                 ) {
             obj.put(OptionField.response.getValue(), OptionField.error.getValue());
@@ -46,7 +46,7 @@ public class RemoveHandler extends Handler{
         }
 
         // handle and get response
-        boolean handleResult = resourceListManager.removeResource(((RemoveCommand)command).getResource());
+        boolean handleResult = resourceListManager.removeResource(resource);
 
         // generate message
         if (handleResult){

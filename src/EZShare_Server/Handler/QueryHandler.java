@@ -1,7 +1,15 @@
 package EZShare_Server.Handler;
 
+import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
+import CommonLibs.Commands.PublishCommand;
+import CommonLibs.Commands.QueryCommand;
+import CommonLibs.DataStructure.Resource;
+import EZShare_Server.ServerSetting;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import javax.management.Query;
 import java.util.ArrayList;
 
 /**
@@ -9,16 +17,74 @@ import java.util.ArrayList;
  */
 public class QueryHandler extends Handler{
 
-
-
     public QueryHandler(Command cmd){
         super(cmd);
     }
 
     public void handle(){
 
+        JSONObject obj = new JSONObject();
+        Resource template = ((QueryCommand)command).getResource();
+
+        // if the resource is not given, return error
+        if (template == null){
+            obj.put(OptionField.response.getValue(),OptionField.error.getValue());
+            obj.put(OptionField.errorMessage.getValue(),OptionField.missingTemplate.getValue());
+            String msg = obj.toString();
+            communicator.writeData(msg);
+            return;
+        }
+
+        // if the resource is invalid, return error
+        if (template.getOwner() == "*"){
+            obj.put(OptionField.response.getValue(),OptionField.error.getValue());
+            obj.put(OptionField.errorMessage.getValue(),OptionField.invalidTemplate.getValue());
+            String msg = obj.toString();
+            communicator.writeData(msg);
+            return;
+        }
+
+        // record results
+        obj.put(OptionField.response.getValue(),OptionField.success.getValue());
+        String msg = obj.toString();
+        communicator.writeData(msg);
+
+        int resultSize = 0;
+
+        ArrayList<Resource> results = resourceListManager.matchTemplate(template);
+        resultSize += results.size();
+        String thisServer = ServerSetting.sharedSetting().getHost() + ":"
+                + ServerSetting.sharedSetting().getPort();
+
+        for (Resource resource:results){
+            obj = new JSONObject();
+            obj.put(OptionField.name.getValue(), resource.getName());
+            obj.put(OptionField.description.getValue(), resource.getDescription());
+            obj.put(OptionField.channel.getValue(), resource.getChannel());
+            obj.put(OptionField.owner.getValue(),"*");
+            obj.put(OptionField.uri.getValue(), resource.getUri());
+            JSONArray tags = new JSONArray();
+            for (String tag:resource.getTags()){
+                tags.put(tag);
+            }
+            obj.put(OptionField.tags.getValue(),tags);
+            obj.put(OptionField.ezserver.getValue(),thisServer);
+
+            msg = obj.toString();
+            communicator.writeData(msg);
+        }
+
+        // if relay on, we need to do further work
+        // send query with relay off
+        // wait for response
+        // delete server for those no responding ones? shall we?
+        // increase resultSize
+        // send resource results
 
 
+        obj = new JSONObject();
+        obj.put(OptionField.resultSize.getValue(),resultSize);
+        communicator.writeData(msg);
 
     }
 }

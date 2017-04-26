@@ -28,6 +28,7 @@ public abstract class ResourceCommand extends Command {
      * IF option_defined
      * THEN set defined value
      * ELSE set default value
+     * NOTICE, however, do initialize tags as an empty arraylist
      */
     private void initResourceCommand() {
         this.resource = new Resource();
@@ -65,7 +66,7 @@ public abstract class ResourceCommand extends Command {
         if (obj.has(OptionField.tags.getValue())) {
             JSONArray arr = obj.getJSONArray(OptionField.tags.getValue());
             for (int i = 0; i < arr.length(); i++) {
-                resource.getTags().add(arr.getString(i));
+                resource.getTags().add(arr.getString(i).toLowerCase());
             }
         }
         if (obj.has(OptionField.channel.getValue())) {
@@ -112,7 +113,13 @@ public abstract class ResourceCommand extends Command {
             String tagString = cli.getOptionValue(OptionField.tags.getValue());
             if (null != tagString) {
                 String[] tags = tagString.split(",");
-                resource.setTags(new ArrayList<>(Arrays.asList(tags)));
+                ArrayList<String> tageList = new ArrayList<String>(Arrays.asList(tags));
+                String tmp = "";
+                for (int i=0; i<tageList.size(); i++){
+                    tmp = tageList.get(i).toLowerCase();
+                    tageList.set(i,tmp);
+                }
+                resource.setTags(tageList);
             }
         }
         if (cli.hasOption(OptionField.uri.getValue())) {

@@ -1,6 +1,7 @@
 package CommonLibs.DataStructure;
 
 import CommonLibs.Commands.ResourceCommand;
+import EZShare_Server.ServerSetting;
 
 import java.sql.Ref;
 import java.sql.Struct;
@@ -125,7 +126,8 @@ public class ResourceListManager {
         boolean result = false;
         rwlock.writeLock().lock();
         // remove the resource if exists
-        for (Resource rsc:resourceList){
+        for (int i=0; i<resourceList.size(); i++){
+            Resource rsc = resourceList.get(i);
             if (resource.getOwner().equals(rsc.getOwner())
                     && resource.getChannel().equals(rsc.getChannel())
                     && resource.getUri().equals(rsc.getUri())){

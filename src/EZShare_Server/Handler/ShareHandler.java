@@ -24,7 +24,7 @@ public class ShareHandler extends Handler{
 
         JSONObject obj = new JSONObject();
 
-        Resource resource = ((PublishCommand)command).getResource();
+        Resource resource = ((ShareCommand)command).getResource();
 
         // if the resource is not given, return error
         if (resource == null||((ShareCommand)command).getSecret() == null){
@@ -37,7 +37,7 @@ public class ShareHandler extends Handler{
 
         // if the resource is invalid, return error
         if (resource.getOwner() == "*"
-                || resource.getUri() == null
+//                || resource.getUri() == null
                 || resource.getUri() == ""
                 || !(isFile(resource.getUri()))
                 ){
@@ -52,7 +52,7 @@ public class ShareHandler extends Handler{
         if (((ShareCommand)command).getSecret() == ServerSetting.sharedSetting().getSecret()){
 
             // if the secret is correct, attempt to share the resource
-            boolean handleResult = resourceListManager.addResource(((ShareCommand)command).getResource());
+            boolean handleResult = resourceListManager.addResource(resource);
 
             // generate message
             if (handleResult){

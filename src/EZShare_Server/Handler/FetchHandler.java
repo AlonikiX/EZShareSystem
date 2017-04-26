@@ -96,12 +96,12 @@ public class FetchHandler extends Handler{
             //TODO send file by bytes
             // I'll check the communication then think about how to do it
 
-            // close streams
-            try {
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            // close streams
+//            try {
+//                in.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
 
             // send final words
 

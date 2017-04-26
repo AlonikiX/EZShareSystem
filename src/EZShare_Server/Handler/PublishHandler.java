@@ -32,7 +32,7 @@ public class PublishHandler extends Handler{
 
         // if the resource is invalid, return error
         if (resource.getOwner() == "*"
-                || resource.getUri() == null
+//                || resource.getUri() == null
                 || resource.getUri() == ""
                 || isFile(resource.getUri())
                 ){
