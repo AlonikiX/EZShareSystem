@@ -22,7 +22,6 @@ public class ShareHandler extends Handler{
     public void handle() {
 
 
-
         JSONObject obj = new JSONObject();
 
         Resource resource = ((PublishCommand)command).getResource();
