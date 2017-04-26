@@ -80,7 +80,7 @@ public class ExchangeCommand extends Command {
         JSONArray arr = new JSONArray();
         for (ServerStructure server : this.serverList) {
             JSONObject serverObject = new JSONObject();
-            serverObject.put(OptionField.host.getValue(), server.host);
+            serverObject.put("hostname", server.host);
             serverObject.put(OptionField.port.getValue(), server.port);
             arr.put(serverObject);
         }
