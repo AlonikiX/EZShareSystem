@@ -55,7 +55,6 @@ public class PublishHandler extends Handler{
         String msg = obj.toString();
         communicator.writeData(msg);
 
-
     }
 
 }
