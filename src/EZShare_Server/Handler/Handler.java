@@ -3,6 +3,7 @@ package EZShare_Server.Handler;
 import CommonLibs.Commands.Command;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.ResourceListManager;
+import EZShare_Server.ServerSetting;
 
 /**
  * Created by marsjc on 2017/04/17.
@@ -54,5 +55,8 @@ public abstract class Handler {
         return new UndefinedHandler(cmd);
     }
 
+    protected boolean isDebug(){
+        return ServerSetting.sharedSetting().isDebugModel();
+    }
 
 }
