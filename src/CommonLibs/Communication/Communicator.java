@@ -1,10 +1,12 @@
 package CommonLibs.Communication;
 
+import CommonLibs.DataStructure.IPAddress;
 import CommonLibs.Setting.Setting;
 import EZShare_Server.Dispatcher;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -38,6 +40,10 @@ public class Communicator {
         }catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getClientAddress() {
+        return this.socket.getInetAddress().getHostAddress();
     }
 
 

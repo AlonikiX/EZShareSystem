@@ -20,12 +20,12 @@ public class ServerListManager {
     private static ServerListManager severListManager;
     private int exchangeInterval;
 
-    private ArrayList<ServerStructure> serverList;
+    private ArrayList<IPAddress> serverList;
     private ReadWriteLock rwlock;
 
     private ServerListManager() {
         this.communicator = new Communicator(ServerSetting.sharedSetting());
-        this.serverList = new ArrayList<ServerStructure>();
+        this.serverList = new ArrayList<IPAddress>();
         this.rwlock = new ReentrantReadWriteLock();
         this.exchangeInterval = 10000;
 
@@ -42,7 +42,7 @@ public class ServerListManager {
         return severListManager;
     }
 
-    public ArrayList<ServerStructure> getServerList() {
+    public ArrayList<IPAddress> getServerList() {
         return this.serverList;
     }
 
@@ -65,7 +65,7 @@ public class ServerListManager {
                 //randomly choose a server to exchange
                 Random random = new Random();
                 int index = random.nextInt(size-1);
-                ServerStructure server = this.serverList.get(index);
+                IPAddress server = this.serverList.get(index);
 
                 Command command = new ExchangeCommand(this.serverList);
 
@@ -102,9 +102,9 @@ public class ServerListManager {
     }
 
 
-    public void updateServerList(ArrayList<ServerStructure> serverList) {
+    public void updateServerList(ArrayList<IPAddress> serverList) {
         this.rwlock.writeLock().lock();
-        for (ServerStructure server : serverList) {
+        for (IPAddress server : serverList) {
             if (false == this.serverList.contains(server)) {
                 this.serverList.add(server);
             }
@@ -112,8 +112,8 @@ public class ServerListManager {
         this.rwlock.writeLock().unlock();
     }
 
-//    public ArrayList<ServerStructure> cloneServerList(){
-//        ArrayList<ServerStructure> list = new ArrayList<ServerStructure>();
+//    public ArrayList<IPAddress> cloneServerList(){
+//        ArrayList<IPAddress> list = new ArrayList<IPAddress>();
 //        this.rwlock.readLock().lock();
 //        list.addAll(serverList);
 //        this.rwlock.readLock().unlock();
