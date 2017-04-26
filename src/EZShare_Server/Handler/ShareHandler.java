@@ -2,7 +2,9 @@ package EZShare_Server.Handler;
 
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
+import CommonLibs.Commands.PublishCommand;
 import CommonLibs.Commands.ShareCommand;
+import CommonLibs.DataStructure.Resource;
 import EZShare_Server.ServerSetting;
 import org.json.JSONObject;
 
@@ -19,14 +21,34 @@ public class ShareHandler extends Handler{
      */
     public void handle() {
 
+
+
         JSONObject obj = new JSONObject();
 
-        //TODO if need to handle invalid resource,
-        // e.g. name != "*",
-        // resource.rui != doc,
-        // resource.rui != null
-        // remove white space
-        // resource not given
+        Resource resource = ((PublishCommand)command).getResource();
+
+        // if the resource is not given, return error
+        if (resource == null||((ShareCommand)command).getSecret() == null){
+            obj.put(OptionField.response.getValue(),OptionField.error.getValue());
+            obj.put(OptionField.errorMessage.getValue(),"missing resource and/or secret");
+            String msg = obj.toString();
+            communicator.writeData(msg);
+            return;
+        }
+
+        // if the resource is invalid, return error
+        if (resource.getOwner() == "*"
+                || resource.getUri() == null
+                || resource.getUri() == ""
+                || !(isFile(resource.getUri()))
+                ){
+            obj.put(OptionField.response.getValue(),OptionField.error.getValue());
+            obj.put(OptionField.errorMessage.getValue(),OptionField.invalidResource.getValue());
+            String msg = obj.toString();
+            communicator.writeData(msg);
+            return;
+        }
+
 
         if (((ShareCommand)command).getSecret() == ServerSetting.sharedSetting().getSecret()){
 
@@ -49,9 +71,7 @@ public class ShareHandler extends Handler{
         }
 
         String msg = obj.toString();
-
-        // TODO connect to client and send message
-        // or otherwise, change this method to String, and return the msg
+        communicator.writeData(msg);
 
     }
 }
