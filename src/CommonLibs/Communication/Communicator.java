@@ -156,17 +156,14 @@ public class Communicator {
         }
     }
 
-    public void transmitFile(String filePath) {
-        // Check if file exists
-        File f = new File(filePath);
-        if(f.exists()){
+    public void transmitFile(FileInputStream fin) {
+        if(null != fin){
             try {
                 // Start sending file
-                RandomAccessFile byteFile = new RandomAccessFile(f,"r");
                 byte[] sendingBuffer = new byte[1024*1024];
                 int num;
                 // While there are still bytes to send..
-                while((num = byteFile.read(sendingBuffer)) > 0){
+                while((num = fin.read(sendingBuffer)) > 0){
                     System.out.print("Sent:");
                     System.out.println(num);
                     output.write(Arrays.copyOf(sendingBuffer, num));
