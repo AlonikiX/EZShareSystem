@@ -3,6 +3,7 @@ package EZShare_Server.Handler;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.PublishCommand;
+import CommonLibs.DataStructure.Resource;
 import org.json.JSONObject;
 
 /**
@@ -14,36 +15,44 @@ public class PublishHandler extends Handler{
         super(cmd);
     }
 
-    /**
-     * Directly attempt to publish the resource
-     */
     public void handle() {
 
         JSONObject obj = new JSONObject();
 
-        //TODO if need to handle invalid resource,
-        // e.g. name != "*",
-        // resource.rui != doc,
-        // resource.rui != null
-        // remove white space
-        // resource not given
+        Resource resource = ((PublishCommand)command).getResource();
 
-        // handle and get response
-        boolean handleResult = resourceListManager.addResource(((PublishCommand)command).getResource());
+        // if the resource is not given, return error
+        if (resource == null){
+            obj.put(OptionField.response.getValue(),OptionField.error.getValue());
+            obj.put(OptionField.errorMessage.getValue(),OptionField.missingResource.getValue());
+            String msg = obj.toString();
+            communicator.writeData(msg);
+            return;
+        }
 
-        // generate message
+        // if the resource is invalid, return error
+        if (resource.getName() == "*"
+                || resource.getUri() == null
+                || isFile(resource.getUri())
+                ){
+            obj.put(OptionField.response.getValue(),OptionField.error.getValue());
+            obj.put(OptionField.errorMessage.getValue(),OptionField.invalidResource.getValue());
+            String msg = obj.toString();
+            communicator.writeData(msg);
+            return;
+        }
+
+        // attempt to publish the resource, the result reflects whether the publish is successful
+        boolean handleResult = resourceListManager.addResource(resource);
+
         if (handleResult){
             obj.put(OptionField.response.getValue(), OptionField.success.getValue());
         } else {
             obj.put(OptionField.response.getValue(), OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(), "cannot publish resource");
         }
-
         String msg = obj.toString();
-
-        // TODO connect to client and send message
-        // or otherwise, change this method to String, and return the msg
-
+        communicator.writeData(msg);
     }
 
 }

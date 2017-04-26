@@ -29,7 +29,6 @@ public class Communicator {
         this.setting = setting;
     }
 
-
     public void establishConnection(Socket socket) {
         this.socket = socket;
         try {
@@ -66,6 +65,10 @@ public class Communicator {
 //    }
 
     public int connectToServer() {
+
+        // TODO how about just write:
+//        return connectToServer(setting.getHost(),setting.getPort());
+
         try {
             //new socket
             this.socket = new Socket(setting.getHost(), setting.getPort());

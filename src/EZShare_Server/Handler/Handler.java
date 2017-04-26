@@ -22,6 +22,16 @@ public abstract class Handler {
         this.communicator = communicator;
     }
 
+    public static boolean isFile(String s){
+        if (s.length()<5) return false;
+        if (s.charAt(0) == 'f'
+                && s.charAt(1) == 'i'
+                && s.charAt(2) == 'l'
+                && s.charAt(3) == 'e'
+                && s.charAt(4) == ':') return true;
+        return false;
+    }
+
     public abstract void handle();
 
 //    public abstract boolean checkValid();
