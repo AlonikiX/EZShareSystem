@@ -2,7 +2,9 @@ package EZShare_Server.Handler;
 
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
+import CommonLibs.Commands.PublishCommand;
 import CommonLibs.Commands.RemoveCommand;
+import CommonLibs.DataStructure.Resource;
 import org.json.JSONObject;
 
 /**
@@ -20,9 +22,28 @@ public class RemoveHandler extends Handler{
 
         JSONObject obj = new JSONObject();
 
-        //TODO if need to handle invalid resource,
-        // remove white space
-        // resource not given
+        Resource resource = ((PublishCommand)command).getResource();
+
+        // if the resource is not given, return error
+        if (resource == null){
+            obj.put(OptionField.response.getValue(),OptionField.error.getValue());
+            obj.put(OptionField.errorMessage.getValue(),OptionField.missingResource.getValue());
+            String msg = obj.toString();
+            communicator.writeData(msg);
+            return;
+        }
+
+        // if the resource is invalid, return error
+        if (resource.getOwner() == "*"
+                || resource.getUri() == null
+                || resource.getUri() == ""
+                ) {
+            obj.put(OptionField.response.getValue(), OptionField.error.getValue());
+            obj.put(OptionField.errorMessage.getValue(), OptionField.invalidResource.getValue());
+            String msg = obj.toString();
+            communicator.writeData(msg);
+            return;
+        }
 
         // handle and get response
         boolean handleResult = resourceListManager.removeResource(((RemoveCommand)command).getResource());
@@ -36,9 +57,8 @@ public class RemoveHandler extends Handler{
         }
 
         String msg = obj.toString();
+        communicator.writeData(msg);
 
-        // TODO connect to client and send message
-        // or otherwise, change this method to String, and return the msg
 
     }
 }
