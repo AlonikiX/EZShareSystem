@@ -49,6 +49,7 @@ public enum OptionField {
     relay("relay"),
     serverList("serverList"),
     ezserver("ezserver"),
+    hostname("hostname"),
     resource("resource"),
     resourceTemplate("resourceTemplate"),
 
@@ -57,6 +58,7 @@ public enum OptionField {
     invalidTemplate("invalid resourceTemplate"),
     missingResource("missing resource"),
     missingTemplate("missing resourceTemplate"),
+    missingResourceTemplate("missingResourceTemplate"),
     ;
 
     private String value;

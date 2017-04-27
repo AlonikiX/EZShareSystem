@@ -35,7 +35,10 @@ public abstract class Processor {
     }
 
     public void process() {
-        communicator.connectToServer();
-        communicator.writeData(command.toJSON());
+        if (true == communicator.connectToServer()) {
+            communicator.writeData(command.toJSON());
+        }else {
+                System.out.println("System Information: Connection failed");
+        }
     }
 }
