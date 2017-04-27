@@ -36,9 +36,9 @@ public class ShareHandler extends Handler{
         }
 
         // if the resource is invalid, return error
-        if (resource.getOwner().equals("*")
+        if ((resource.getOwner().compareTo("*"))==0
 //                || resource.getUri() == null
-                || resource.getUri().equals("")
+                || (resource.getUri().compareTo(""))==0
                 || !(isFile(resource.getUri()))
                 ){
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());

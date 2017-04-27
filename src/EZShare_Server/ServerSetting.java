@@ -56,6 +56,7 @@ public class ServerSetting extends Setting {
                 this.exchangeInterval = Integer.parseInt(exchangeInterval);
             }
         }
+
     }
 
     public String getSecret(){
@@ -73,4 +74,7 @@ public class ServerSetting extends Setting {
     public int getExchangeInterval() {
         return exchangeInterval;
     }
+
+
+
 }

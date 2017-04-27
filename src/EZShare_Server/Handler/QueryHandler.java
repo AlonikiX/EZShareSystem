@@ -37,7 +37,7 @@ public class QueryHandler extends Handler{
         }
 
         // if the template is invalid, return error
-        if (template.getOwner() == "*"){
+        if ((template.getOwner().compareTo("*"))==0){
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(),OptionField.invalidTemplate.getValue());
             String msg = obj.toString();
