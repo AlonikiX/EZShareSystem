@@ -49,7 +49,7 @@ public class ShareHandler extends Handler{
         }
 
 
-        if (((ShareCommand)command).getSecret() == ServerSetting.sharedSetting().getSecret()){
+        if (0 == ((ShareCommand)command).getSecret().compareTo(ServerSetting.sharedSetting().getSecret())){
 
             // if the secret is correct, attempt to share the resource
             boolean handleResult = resourceListManager.addResource(resource);

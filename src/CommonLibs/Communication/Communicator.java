@@ -137,7 +137,7 @@ public class Communicator {
         // Variable used to read if there are remaining size left to read.
         int num;
 
-        System.out.println("Downloading "+fileName+" of size "+fileSizeRemaining);
+//        System.out.println("Downloading "+fileName+" of size "+fileSizeRemaining);
         try {
             while((num=input.read(receiveBuffer))>0){
                 // Write the received bytes into the RandomAccessFile
@@ -155,7 +155,7 @@ public class Communicator {
                     break;
                 }
             }
-            System.out.println("File received!");
+//            System.out.println("File received!");
             downloadingFile.close();
         } catch (IOException e) {
             e.printStackTrace();

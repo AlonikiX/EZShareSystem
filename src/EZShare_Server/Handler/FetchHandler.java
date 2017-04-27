@@ -41,6 +41,7 @@ public class FetchHandler extends Handler{
         obj.put(OptionField.response.getValue(), OptionField.success.getValue());
         String success = obj.toString();
         // TODO send the success message
+        communicator.writeData(success);
 
         // check if the resource is in the resource list
         Resource resource = resourceListManager.findResource(((FetchCommand)command).getResource());
@@ -56,9 +57,9 @@ public class FetchHandler extends Handler{
             // case: the resource is found in the resource list
             String path = resource.getUri().substring(5);
             File file = new File(path);
-            FileInputStream in = null;
+            FileInputStream fin = null;
             try {
-                in = new FileInputStream(file);
+                fin = new FileInputStream(file);
             } catch (FileNotFoundException e) {
                 // in this case, the file is considered as not found too
                 obj = new JSONObject();
@@ -66,7 +67,7 @@ public class FetchHandler extends Handler{
                 String resultSzie = obj.toString();
 
                 //TODO send the result size message
-
+                communicator.writeData(resultSzie);
                 return;
             }
 
@@ -91,9 +92,10 @@ public class FetchHandler extends Handler{
             String resourceDetail = obj.toString();
 
             //TODO send the resource detail message
-
+            communicator.writeData(resourceDetail);
 
             //TODO send file by bytes
+            communicator.transmitFile(fin);
             // I'll check the communication then think about how to do it
 
 //            // close streams
@@ -110,6 +112,7 @@ public class FetchHandler extends Handler{
             String resultSzie = obj.toString();
 
             //TODO send the result size message
+            communicator.writeData(resultSzie);
 
 
         }
