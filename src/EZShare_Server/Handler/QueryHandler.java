@@ -85,7 +85,7 @@ public class QueryHandler extends Handler{
 
         if (((QueryCommand)command).relay()){
 
-            QueryCommand relayCommand = command.relayClone();
+            QueryCommand relayCommand = ((QueryCommand)command).relayClone();
 
 
         }
