@@ -6,6 +6,7 @@ import CommonLibs.DataStructure.ServerListManager;
 
 import javax.net.ServerSocketFactory;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 
 /**
@@ -30,19 +31,18 @@ public class Server {
 
         //run server
         ServerSocketFactory factory = ServerSocketFactory.getDefault();
-        try(ServerSocket server = factory.createServerSocket(ServerSetting.sharedSetting().getPort())){
+        try(ServerSocket serverSocket = factory.createServerSocket(ServerSetting.sharedSetting().getPort())){
             System.out.println("Waiting for client connection..");
-
             // Wait for connections.
             while(true){
                 //set communicator
                 Communicator communicator = new Communicator(ServerSetting.sharedSetting());
-                communicator.establishConnection(server.accept());
+                communicator.establishConnection(serverSocket.accept());
 
                 String host = communicator.getClientAddress();
                 System.out.println("Server Information:");
                 System.out.println("connected with IP address:" + host);
-                if (limitedIPAddressListManager.limitConnection(host)) {
+                if (/*limitedIPAddressListManager.limitConnection(host)*/false) {
                     System.out.println("Server Information:");
                     System.out.println("connection too frequent");
                     limitedIPAddressListManager.addIntervalLimitedIPAddress(host);

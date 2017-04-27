@@ -4,10 +4,16 @@ import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Setting.Setting;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Created by Anson Chen on 2017/4/24.
  */
 public class ServerSetting extends Setting {
+    private ArrayList<String> hosts;
     private static ServerSetting setting;
     private String secret;
     private String advertisedHostName;
@@ -15,9 +21,10 @@ public class ServerSetting extends Setting {
     private int exchangeInterval;
 
     private ServerSetting() {
+        this.hosts = new ArrayList<>();
         this.secret = "";
         this.advertisedHostName = "EZServer";
-        this.connectionIntervalLimit = 5000;
+        this.connectionIntervalLimit = 1000;
         this.exchangeInterval = 10000;
     }
 
@@ -31,6 +38,16 @@ public class ServerSetting extends Setting {
     @Override
     public void initSetting(CliManager cli) {
         super.initSetting(cli);
+
+        try {
+            ArrayList<InetAddress> addresses = new ArrayList<>(Arrays.asList(InetAddress.
+                    getAllByName("localhost")));
+            for (InetAddress address : addresses) {
+                hosts.add(address.getHostAddress());
+            }
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
 
         if (cli.hasOption(OptionField.secret.getValue())) {
             String secret = cli.getOptionValue(OptionField.secret.getValue());
@@ -57,6 +74,10 @@ public class ServerSetting extends Setting {
             }
         }
 
+    }
+
+    public ArrayList<String> getHosts() {
+        return this.hosts;
     }
 
     public String getSecret(){

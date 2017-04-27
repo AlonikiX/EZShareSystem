@@ -44,7 +44,7 @@ public class ShareHandler extends Handler{
 //                || resource.getUri() == null
                 || (resource.getUri().compareTo(""))==0
                 || !(isFile(resource.getUri()))
-                || !shareFile .exists()
+//                || !shareFile.exists()
                 ){
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(),OptionField.invalidResource.getValue());

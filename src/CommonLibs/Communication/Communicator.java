@@ -44,6 +44,9 @@ public class Communicator {
         return this.socket.getInetAddress().getHostAddress();
     }
 
+    public int getClientPort() {
+        return this.socket.getPort();
+    }
 
     public boolean connectToServer() {
 

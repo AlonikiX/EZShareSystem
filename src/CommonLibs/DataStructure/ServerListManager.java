@@ -4,10 +4,15 @@ import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.ExchangeCommand;
 import CommonLibs.Communication.Communicator;
+import EZShare_Server.Server;
 import EZShare_Server.ServerSetting;
 import org.json.JSONObject;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -25,7 +30,7 @@ public class ServerListManager {
     private ServerListManager() {
         this.serverList = new ArrayList<IPAddress>();
         this.rwlock = new ReentrantReadWriteLock();
-        this.exchangeInterval = 10000;
+        this.exchangeInterval = 12000;
 
         new Thread((Runnable) ()-> {
             runAutoExchange();
@@ -52,7 +57,7 @@ public class ServerListManager {
         while (true) {
             //interval
             try {
-                Thread.sleep(5000);
+                Thread.sleep(this.exchangeInterval);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -61,9 +66,13 @@ public class ServerListManager {
             int size = this.serverList.size();
             if (0 != size) {
                 //randomly choose a server to exchange
-                Random random = new Random();
-                int index = random.nextInt(size) == 0 ? 0 : size - 1;
-                IPAddress server = this.serverList.get(index);
+                IPAddress ipAddress;
+                int index;
+                do {
+                    Random random = new Random();
+                    index = random.nextInt(size);
+                    ipAddress = this.serverList.get(index);
+                }while (isLocalHost(ipAddress));
 
                 Command command = new ExchangeCommand(this.serverList);
 
@@ -71,10 +80,10 @@ public class ServerListManager {
 
                 //send exchange command to the chosen server
                 Communicator communicator = new Communicator(ServerSetting.sharedSetting());
-                if (communicator.connectToServer(server.hostname, server.port)) {//can connect to the chosen server
+                if (communicator.connectToServer(ipAddress.hostname, ipAddress.port)) {//can connect to the chosen server
                     //send the server list to the chosen server
                     communicator.writeData(command.toJSON());
-                    System.out.println("SENT TO "+server);
+                    System.out.println("SENT TO "+ipAddress);
                     //handle results
                     while (true) {
                         if (0 < communicator.readableData()) {
@@ -103,14 +112,34 @@ public class ServerListManager {
     }
 
 
+    public boolean isLocalHost(IPAddress ipAddress) {
+        if (ServerSetting.sharedSetting().getPort() == ipAddress.port) {
+            if (ServerSetting.sharedSetting().getHosts().contains(ipAddress.hostname)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void updateServerList(ArrayList<IPAddress> serverList) {
         this.rwlock.writeLock().lock();
         for (IPAddress server : serverList) {
-            if (false == this.serverList.contains(server)) {
+            if (false == checkExists(server)) {
                 this.serverList.add(server);
             }
         }
         this.rwlock.writeLock().unlock();
+    }
+
+    public boolean checkExists(IPAddress ipAddress) {
+        for (IPAddress server : serverList) {
+            if (server.port == ipAddress.port) {
+                if (0 == server.hostname.compareTo(ipAddress.hostname)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public ArrayList<IPAddress> cloneServerList(){
