@@ -4,6 +4,7 @@ import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.PublishCommand;
 import CommonLibs.Commands.QueryCommand;
+import CommonLibs.DataStructure.IPAddress;
 import CommonLibs.DataStructure.Resource;
 import CommonLibs.DataStructure.ServerListManager;
 import EZShare_Server.Server;
@@ -86,7 +87,16 @@ public class QueryHandler extends Handler{
         if (((QueryCommand)command).relay()){
 
             QueryCommand relayCommand = ((QueryCommand)command).relayClone();
-            ServerListManager.sharedServerListManager().cloneServerList();
+            String jsonMessage = relayCommand.toJSON();
+            ArrayList<IPAddress> addressList = ServerListManager.sharedServerListManager().cloneServerList();
+
+            for (IPAddress address:addressList){
+
+
+            }
+
+
+
 
 
             //TODO I'll do it later, ready to test for non-relay results
@@ -95,10 +105,6 @@ public class QueryHandler extends Handler{
 
 
         }
-
-
-
-
 
         obj = new JSONObject();
         obj.put(OptionField.resultSize.getValue(),resultSize);
