@@ -98,6 +98,9 @@ public class QueryHandler extends Handler{
                 Thread thread = new Thread() {
                     public void run(){
                         Communicator queryCommunicator = new Communicator(ServerSetting.sharedSetting());
+                        if (communicator.isLocalHost(address)) {
+                            return;
+                        }
                         if (queryCommunicator.connectToServer(address.hostname,address.port)){
                             queryCommunicator.writeData(jsonMessage);
 
@@ -153,7 +156,8 @@ public class QueryHandler extends Handler{
 
         obj = new JSONObject();
         obj.put(OptionField.resultSize.getValue(),resultSize);
-        communicator.writeData(msg);
+        String resultSize = obj.toString();
+        communicator.writeData(resultSize);
     }
 
     private void sendResource(String jsonResource){

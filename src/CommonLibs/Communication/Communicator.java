@@ -3,6 +3,7 @@ package CommonLibs.Communication;
 import CommonLibs.DataStructure.IPAddress;
 import CommonLibs.Setting.Setting;
 import EZShare_Server.Dispatcher;
+import EZShare_Server.ServerSetting;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -38,6 +39,15 @@ public class Communicator {
         }catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isLocalHost(IPAddress ipAddress) {
+        if (ServerSetting.sharedSetting().getPort() == ipAddress.port) {
+            if (ServerSetting.sharedSetting().getHosts().contains(ipAddress.hostname)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public String getClientAddress() {

@@ -189,10 +189,10 @@ public class ResourceListManager {
         if ((!template.getOwner().isEmpty()) && (0 != template.getOwner().compareTo(candidate.getOwner()))) return false;
         if ((!template.getUri().isEmpty()) && (0 != template.getUri().compareTo((candidate.getUri())))) return false;
         ArrayList<String> tags = template.getTags();
-        boolean tagsInterval = false;
+        boolean tagsInterval = true;
         for (String tag:tags){
-            if (candidate.getTags().contains(tag)) {
-                tagsInterval = true;
+            if (!candidate.getTags().contains(tag)) {
+                tagsInterval = false;
                 break;
             }
         }
