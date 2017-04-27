@@ -112,11 +112,11 @@ public class ServerListManager {
         this.rwlock.writeLock().unlock();
     }
 
-//    public ArrayList<IPAddress> cloneServerList(){
-//        ArrayList<IPAddress> list = new ArrayList<IPAddress>();
-//        this.rwlock.readLock().lock();
-//        list.addAll(serverList);
-//        this.rwlock.readLock().unlock();
-//        return list;
-//    }
+    public ArrayList<IPAddress> cloneServerList(){
+        ArrayList<IPAddress> list = new ArrayList<IPAddress>();
+        this.rwlock.readLock().lock();
+        list.addAll(serverList);
+        this.rwlock.readLock().unlock();
+        return list;
+    }
 }
