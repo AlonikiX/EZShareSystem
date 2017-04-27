@@ -101,7 +101,7 @@ public class FetchHandler extends Handler{
             obj.put(OptionField.name.getValue(), resource.getName());
             obj.put(OptionField.description.getValue(), resource.getDescription());
             obj.put(OptionField.channel.getValue(), resource.getChannel());
-            obj.put(OptionField.owner.getValue(),"*");
+            obj.put(OptionField.owner.getValue(),(resource.getOwner().equals("")) ? "" : "*");
             obj.put(OptionField.uri.getValue(), resource.getUri());
             JSONArray tags = new JSONArray();
             for (String tag:resource.getTags()){
