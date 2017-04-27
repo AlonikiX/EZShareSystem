@@ -40,7 +40,6 @@ public class FetchHandler extends Handler{
         obj = new JSONObject();
         obj.put(OptionField.response.getValue(), OptionField.success.getValue());
         String success = obj.toString();
-        // TODO send the success message
         communicator.writeData(success);
 
         // check if the resource is in the resource list
@@ -50,8 +49,8 @@ public class FetchHandler extends Handler{
             obj = new JSONObject();
             obj.put(OptionField.resultSize.getValue(), 0);
             String resultSzie = obj.toString();
-
-            //TODO send the result size message
+            communicator.writeData(resultSzie);
+            return;
 
         } else {
             // case: the resource is found in the resource list
@@ -65,8 +64,6 @@ public class FetchHandler extends Handler{
                 obj = new JSONObject();
                 obj.put(OptionField.resultSize.getValue(), 0);
                 String resultSzie = obj.toString();
-
-                //TODO send the result size message
                 communicator.writeData(resultSzie);
                 return;
             }
@@ -90,13 +87,8 @@ public class FetchHandler extends Handler{
             obj.put(OptionField.resourceSize.getValue(), length);
 
             String resourceDetail = obj.toString();
-
-            //TODO send the resource detail message
             communicator.writeData(resourceDetail);
-
-            //TODO send file by bytes
             communicator.transmitFile(fin);
-            // I'll check the communication then think about how to do it
 
 //            // close streams
 //            try {
@@ -105,13 +97,9 @@ public class FetchHandler extends Handler{
 //                e.printStackTrace();
 //            }
 
-            // send final words
-
             obj = new JSONObject();
             obj.put(OptionField.resultSize.getValue(), 1);
             String resultSzie = obj.toString();
-
-            //TODO send the result size message
             communicator.writeData(resultSzie);
 
 

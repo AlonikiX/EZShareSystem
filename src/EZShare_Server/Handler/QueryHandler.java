@@ -5,6 +5,7 @@ import CommonLibs.Commands.Command;
 import CommonLibs.Commands.PublishCommand;
 import CommonLibs.Commands.QueryCommand;
 import CommonLibs.DataStructure.Resource;
+import EZShare_Server.Server;
 import EZShare_Server.ServerSetting;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -73,6 +74,10 @@ public class QueryHandler extends Handler{
             msg = obj.toString();
             communicator.writeData(msg);
         }
+
+        if ()
+
+
 
         // if relay on, we need to do further work
         // send query with relay off
