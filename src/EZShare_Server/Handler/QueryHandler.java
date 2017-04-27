@@ -98,7 +98,7 @@ public class QueryHandler extends Handler{
                 Thread thread = new Thread() {
                     public void run(){
                         Communicator queryCommunicator = new Communicator(ServerSetting.sharedSetting());
-                        if (queryCommunicator.connectToServer(address.host,address.port)){
+                        if (queryCommunicator.connectToServer(address.hostname,address.port)){
                             queryCommunicator.writeData(jsonMessage);
 
                             boolean waitForMore = true;
