@@ -3,6 +3,7 @@ package EZShare_Server.Handler;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.FetchCommand;
+import CommonLibs.Commands.QueryCommand;
 import CommonLibs.DataStructure.Resource;
 import EZShare_Server.ServerSetting;
 import org.json.JSONArray;
@@ -28,16 +29,31 @@ public class FetchHandler extends Handler{
 
     public void handle(){
 
-        JSONObject obj;
+        JSONObject obj = new JSONObject();
+        Resource template = ((FetchCommand)command).getResource();
+
+        // if the template is not given, return error
+        if (template == null){
+            obj.put(OptionField.response.getValue(),OptionField.error.getValue());
+            obj.put(OptionField.errorMessage.getValue(),OptionField.missingTemplate.getValue());
+            String msg = obj.toString();
+            communicator.writeData(msg);
+            return;
+        }
+
+        // if the template is invalid, return error
+        if (template.getOwner() == "*"){
+            obj.put(OptionField.response.getValue(),OptionField.error.getValue());
+            obj.put(OptionField.errorMessage.getValue(),OptionField.invalidTemplate.getValue());
+            String msg = obj.toString();
+            communicator.writeData(msg);
+            return;
+        }
+
 
         //TODO if need to handle invalid resource,
         // e.g. validate channel
         // validate uri (file uri)
-        // resource template exists
-        // resource structure is valid
-        // remove white space
-
-        obj = new JSONObject();
         obj.put(OptionField.response.getValue(), OptionField.success.getValue());
         String success = obj.toString();
         communicator.writeData(success);
