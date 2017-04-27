@@ -50,7 +50,7 @@ public class QueryHandler extends Handler{
         }
 
         // if the template is invalid, return error
-        if (template.getOwner().equals("*")){
+        if (0 == template.getOwner().compareTo("*")){
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(),OptionField.invalidTemplate.getValue());
             String msg = obj.toString();
@@ -112,7 +112,8 @@ public class QueryHandler extends Handler{
 
                                         // in these cases, the other server will nt reply with resources
                                         if (!object.has(OptionField.response.getValue())
-                                                || (!object.get(OptionField.response.getValue()).equals(OptionField.success.getValue()))
+                                                || (0 != object.getString(OptionField.response.getValue())
+                                                .compareTo(OptionField.success.getValue()))
                                                 )
                                             waitForMore = false;
                                     }

@@ -165,7 +165,7 @@ public class ResourceListManager {
      * @return a list of resources, (could be empty)
      */
     public ArrayList<Resource> matchTemplate(Resource template){
-        ArrayList<Resource> list = new ArrayList<Resource>();
+        ArrayList<Resource> list = new ArrayList<>();
         this.rwlock.readLock().lock();
         for (Resource rsc:resourceList){
             if (matches(template,rsc) ){
@@ -185,9 +185,9 @@ public class ResourceListManager {
      *          false, otherwise
      */
     private boolean matches(Resource template, Resource candidate){
-        if (!template.getChannel().equals(candidate.getChannel())) return false;
-        if (template.getOwner()!="" && (!template.getOwner().equals(candidate.getOwner()))) return false;
-        if (template.getUri()!="" && (!template.getUri().equals((candidate.getOwner())))) return false;
+        if (0 != template.getChannel().compareTo(candidate.getChannel())) return false;
+        if ((!template.getOwner().isEmpty()) && (0 != template.getOwner().compareTo(candidate.getOwner()))) return false;
+        if ((!template.getUri().isEmpty()) && (0 != template.getUri().compareTo((candidate.getUri())))) return false;
         ArrayList<String> tags = template.getTags();
         boolean tagsInterval = false;
         for (String tag:tags){
