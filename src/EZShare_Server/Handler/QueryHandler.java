@@ -5,6 +5,7 @@ import CommonLibs.Commands.Command;
 import CommonLibs.Commands.PublishCommand;
 import CommonLibs.Commands.QueryCommand;
 import CommonLibs.DataStructure.Resource;
+import CommonLibs.DataStructure.ServerListManager;
 import EZShare_Server.Server;
 import EZShare_Server.ServerSetting;
 import org.json.JSONArray;
@@ -79,13 +80,18 @@ public class QueryHandler extends Handler{
         // if relay on, we need to do further work
         // send query with relay off
         // wait for response
-        // delete server for those no responding ones? shall we?
         // increase resultSize
         // send resource results
 
         if (((QueryCommand)command).relay()){
 
             QueryCommand relayCommand = ((QueryCommand)command).relayClone();
+            ServerListManager.sharedServerListManager().cloneServerList();
+
+
+            //TODO I'll do it later, ready to test for non-relay results
+
+
 
 
         }
