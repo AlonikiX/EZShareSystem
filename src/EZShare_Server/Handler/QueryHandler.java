@@ -62,8 +62,6 @@ public class QueryHandler extends Handler{
         String msg = obj.toString();
         communicator.writeData(msg);
 
-
-
         ArrayList<Resource> results = resourceListManager.matchTemplate(template);
         resultSize += results.size();
         String thisServer = ServerSetting.sharedSetting().getHost() + ":"
@@ -151,6 +149,11 @@ public class QueryHandler extends Handler{
                     }
                 };
                 thread.start();
+                try{
+                    thread.join();
+                } catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         }
 
