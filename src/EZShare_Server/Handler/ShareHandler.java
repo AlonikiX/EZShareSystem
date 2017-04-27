@@ -8,6 +8,8 @@ import CommonLibs.DataStructure.Resource;
 import EZShare_Server.ServerSetting;
 import org.json.JSONObject;
 
+import java.io.File;
+
 /**
  * Created by marsjc on 2017/04/17.
  */
@@ -36,10 +38,13 @@ public class ShareHandler extends Handler{
         }
 
         // if the resource is invalid, return error
+
+        File shareFile = new File(resource.getUri());
         if ((resource.getOwner().compareTo("*"))==0
 //                || resource.getUri() == null
                 || (resource.getUri().compareTo(""))==0
                 || !(isFile(resource.getUri()))
+                || !shareFile .exists()
                 ){
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(),OptionField.invalidResource.getValue());
