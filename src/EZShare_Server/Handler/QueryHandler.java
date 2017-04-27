@@ -4,6 +4,7 @@ import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.PublishCommand;
 import CommonLibs.Commands.QueryCommand;
+import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.IPAddress;
 import CommonLibs.DataStructure.Resource;
 import CommonLibs.DataStructure.ServerListManager;
@@ -13,7 +14,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.management.Query;
+import javax.naming.event.ObjectChangeListener;
+import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Created by marsjc on 2017/04/17.
@@ -23,6 +30,10 @@ public class QueryHandler extends Handler{
     public QueryHandler(Command cmd){
         super(cmd);
     }
+    private ReadWriteLock rwlock = new ReentrantReadWriteLock();
+
+    // record number of returned results
+    private int resultSize = 0;
 
     public void handle(){
 
@@ -51,8 +62,7 @@ public class QueryHandler extends Handler{
         String msg = obj.toString();
         communicator.writeData(msg);
 
-        // record results
-        int resultSize = 0;
+
 
         ArrayList<Resource> results = resourceListManager.matchTemplate(template);
         resultSize += results.size();
@@ -60,6 +70,7 @@ public class QueryHandler extends Handler{
                 + ServerSetting.sharedSetting().getPort();
 
         for (Resource resource:results){
+
             obj = new JSONObject();
             obj.put(OptionField.name.getValue(), resource.getName());
             obj.put(OptionField.description.getValue(), resource.getDescription());
@@ -77,13 +88,6 @@ public class QueryHandler extends Handler{
             communicator.writeData(msg);
         }
 
-
-        // if relay on, we need to do further work
-        // send query with relay off
-        // wait for response
-        // increase resultSize
-        // send resource results
-
         if (((QueryCommand)command).relay()){
 
             QueryCommand relayCommand = ((QueryCommand)command).relayClone();
@@ -91,24 +95,75 @@ public class QueryHandler extends Handler{
             ArrayList<IPAddress> addressList = ServerListManager.sharedServerListManager().cloneServerList();
 
             for (IPAddress address:addressList){
+                Thread thread = new Thread() {
+                    public void run(){
+                        Communicator queryCommunicator = new Communicator(ServerSetting.sharedSetting());
+                        if (queryCommunicator.connectToServer(address.host,address.port)){
+                            queryCommunicator.writeData(jsonMessage);
 
+                            boolean waitForMore = true;
+//                            try {
 
+                                // waiting for response
+                                while (waitForMore){
+                                    if (0<communicator.readableData()){
+                                        String data = communicator.readData();
+                                        JSONObject object = new JSONObject(data);
+
+                                        // in these cases, the other server will nt reply with resources
+                                        if (!object.has(OptionField.response.getValue())
+                                                || (!object.get(OptionField.response.getValue()).equals(OptionField.success.getValue()))
+                                                )
+                                            waitForMore = false;
+                                    }
+                                }
+
+                                // waiting for resources
+                                while (waitForMore){
+                                    if (0<communicator.readableData()){
+                                        String data = communicator.readData();
+                                        JSONObject object = new JSONObject(data);
+
+                                        if (object.has(OptionField.resultSize.getValue())){
+                                            // the response ends
+                                            waitForMore = false;
+                                        } else {
+                                            // this is a resource object
+                                            // we reinforce the rule of encrypt owner
+                                            if (object.has(OptionField.owner.getValue())) {
+                                                object.put(OptionField.owner.getValue(),
+                                                        (object.get(OptionField.owner.getValue()).equals(""))?"":"*");
+                                            }
+                                            String msg = object.toString();
+                                            incresaResultSize();
+                                            sendResource(msg);
+                                        }
+                                    }
+                                }
+//                            } catch (TimeoutException e){
+//                                //TODO terminate this thread
+//                            }
+                        }
+                    }
+                };
+                thread.start();
             }
-
-
-
-
-
-            //TODO I'll do it later, ready to test for non-relay results
-
-
-
-
         }
 
         obj = new JSONObject();
         obj.put(OptionField.resultSize.getValue(),resultSize);
         communicator.writeData(msg);
+    }
 
+    private void sendResource(String jsonResource){
+        rwlock.writeLock().lock();
+        communicator.writeData(jsonResource);
+        rwlock.writeLock().unlock();
+    }
+
+    private void incresaResultSize(){
+        rwlock.writeLock().lock();
+        resultSize++;
+        rwlock.writeLock().unlock();
     }
 }
