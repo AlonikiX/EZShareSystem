@@ -108,11 +108,12 @@ public class Resource {
         rwlock.writeLock().lock();
         clone.name = this.name;
         clone.description = this.description;
-        clone.tags = this.tags;
+        ArrayList<String> cloneTags = new ArrayList<String>(tags);
+        clone.tags = cloneTags;
         clone.owner = this.owner;
         clone.channel = this.channel;
         clone.uri = this.uri;
-        clone.ezserver = this.ezserver;
+//        clone.ezserver = this.ezserver;
         rwlock.writeLock().unlock();
         return clone;
     }

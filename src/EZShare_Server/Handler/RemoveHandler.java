@@ -34,9 +34,9 @@ public class RemoveHandler extends Handler{
         }
 
         // if the resource is invalid, return error
-        if (resource.getOwner() == "*"
+        if (resource.getOwner().equals("*")
 //                || resource.getUri() == null
-                || resource.getUri() == ""
+                || resource.getUri().equals("")
                 ) {
             obj.put(OptionField.response.getValue(), OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(), OptionField.invalidResource.getValue());

@@ -101,8 +101,6 @@ public class FetchHandler extends Handler{
             obj.put(OptionField.resultSize.getValue(), 1);
             String resultSzie = obj.toString();
             communicator.writeData(resultSzie);
-
-
         }
     }
 }
