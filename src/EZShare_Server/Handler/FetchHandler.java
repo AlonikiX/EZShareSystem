@@ -3,6 +3,7 @@ package EZShare_Server.Handler;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.FetchCommand;
+import CommonLibs.Commands.QueryCommand;
 import CommonLibs.DataStructure.Resource;
 import EZShare_Server.ServerSetting;
 import org.json.JSONArray;
@@ -28,7 +29,6 @@ public class FetchHandler extends Handler{
 
     public void handle(){
 
-        JSONObject obj;
 
         //TODO if need to handle invalid resource,
         // e.g. validate channel
@@ -37,10 +37,33 @@ public class FetchHandler extends Handler{
         // resource structure is valid
         // remove white space
 
-        obj = new JSONObject();
+        JSONObject obj = new JSONObject();
+        Resource template = ((FetchCommand)command).getResource();
+
+        // if the template is not given, return error
+        if (template == null){
+            obj.put(OptionField.response.getValue(),OptionField.error.getValue());
+            obj.put(OptionField.errorMessage.getValue(),OptionField.missingTemplate.getValue());
+            String msg = obj.toString();
+            communicator.writeData(msg);
+            return;
+        }
+
+        // if the template is invalid, return error
+        if (template.getOwner() == "*"){
+            obj.put(OptionField.response.getValue(),OptionField.error.getValue());
+            obj.put(OptionField.errorMessage.getValue(),OptionField.invalidTemplate.getValue());
+            String msg = obj.toString();
+            communicator.writeData(msg);
+            return;
+        }
+
+        // TODO set limit when sending the success message
+
         obj.put(OptionField.response.getValue(), OptionField.success.getValue());
-        String success = obj.toString();
-        // TODO send the success message
+        String msg = obj.toString();
+        communicator.writeData(msg);
+
 
         // check if the resource is in the resource list
         Resource resource = resourceListManager.findResource(((FetchCommand)command).getResource());

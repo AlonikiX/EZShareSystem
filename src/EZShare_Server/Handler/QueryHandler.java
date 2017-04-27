@@ -26,7 +26,7 @@ public class QueryHandler extends Handler{
         JSONObject obj = new JSONObject();
         Resource template = ((QueryCommand)command).getResource();
 
-        // if the resource is not given, return error
+        // if the template is not given, return error
         if (template == null){
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(),OptionField.missingTemplate.getValue());
@@ -35,7 +35,7 @@ public class QueryHandler extends Handler{
             return;
         }
 
-        // if the resource is invalid, return error
+        // if the template is invalid, return error
         if (template.getOwner() == "*"){
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(),OptionField.invalidTemplate.getValue());
