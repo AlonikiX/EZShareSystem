@@ -75,9 +75,6 @@ public class QueryHandler extends Handler{
             communicator.writeData(msg);
         }
 
-        if ()
-
-
 
         // if relay on, we need to do further work
         // send query with relay off
@@ -85,6 +82,16 @@ public class QueryHandler extends Handler{
         // delete server for those no responding ones? shall we?
         // increase resultSize
         // send resource results
+
+        if (((QueryCommand)command).relay()){
+
+            QueryCommand relayCommand = ((QueryCommand)command).relayClone();
+
+
+        }
+
+
+
 
 
         obj = new JSONObject();

@@ -16,6 +16,10 @@ public class QueryCommand extends ResourceCommand {
         return relay;
     }
 
+    private QueryCommand(){
+
+    }
+
     public QueryCommand(CliManager cli) {
         this.commandType = CommandType.QUERY;
         this.relay = cli.hasOption(OptionField.relay.getValue()) ?
@@ -43,4 +47,19 @@ public class QueryCommand extends ResourceCommand {
 
         return out.toString();
     }
+
+    /**
+     * To clone this command for relied query only
+     * @return a cloned query, with, however, owner and channel set to "", and with relay off
+     */
+    public QueryCommand relayClone(){
+        QueryCommand clone = new QueryCommand();
+        clone.commandType = CommandType.QUERY;
+        clone.relay = false;
+        clone.resource = this.resource.clone();
+        clone.resource.setOwner("");
+        clone.resource.setChannel("");
+        return clone;
+    }
+
 }
