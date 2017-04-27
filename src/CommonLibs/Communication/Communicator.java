@@ -26,8 +26,6 @@ public class Communicator {
     private DataInputStream input;
     private DataOutputStream output;
 
-    private Dispatcher recallDispatcher;
-
     public Communicator(Setting setting) {
         this.setting = setting;
     }
@@ -72,7 +70,7 @@ public class Communicator {
         try {
             //new socket
             this.socket = new Socket();
-            this.socket.connect(new InetSocketAddress(setting.getHost(),setting.getPort()), setting.getTimeout());
+            this.socket.connect(new InetSocketAddress(host, port), setting.getTimeout());
             //create data input and output stream
             this.input = new DataInputStream(this.socket.getInputStream());
             this.output = new DataOutputStream(this.socket.getOutputStream());

@@ -15,7 +15,7 @@ public abstract class Setting {
     protected Setting() {
         this.host = "sunrise.cis.unimelb.edu.au";
         this.port = 3781;
-        this.timeout = 10000;
+        this.timeout = 12000;
         this.isDebugModel = false;
     }
 

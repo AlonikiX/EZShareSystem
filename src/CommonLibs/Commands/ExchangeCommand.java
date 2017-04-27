@@ -41,14 +41,22 @@ public class ExchangeCommand extends Command {
     }
 
     private void toServerList(JSONObject obj) {
-        if (obj.has(OptionField.servers.getValue())) {
-            String serverString = obj.getString(OptionField.servers.getValue());
-            if (null != serverString) {
-                String[] servers = serverString.split(",");
-                for (String server : servers) {
-                    this.serverList.add(new IPAddress(server));
-                }
+        if (obj.has(OptionField.serverList.getValue())) {
+            JSONArray arr = obj.getJSONArray(OptionField.serverList.getValue());
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject element = arr.getJSONObject(i);
+                String hostName = element.getString(OptionField.hostname.getValue());
+                int port = element.getInt(OptionField.port.getValue());
+                serverList.add(new IPAddress(hostName, port));
             }
+//            String serverString = obj.getString(OptionField.serverList.getValue());
+//            if (null != serverString) {
+//                String[] servers = serverString.split(",");
+//                for (String server : servers) {
+//                    this.serverList.add(new IPAddress(server));
+//                }
+//
+//            }
         }
     }
 
@@ -65,6 +73,7 @@ public class ExchangeCommand extends Command {
     }
 
     public ExchangeCommand(ArrayList<IPAddress> serverList) {
+        this.commandType = CommandType.EXCHANGE;
         this.serverList = serverList;
     }
 
@@ -77,7 +86,7 @@ public class ExchangeCommand extends Command {
         JSONArray arr = new JSONArray();
         for (IPAddress server : this.serverList) {
             JSONObject serverObject = new JSONObject();
-            serverObject.put("hostname", server.host);
+            serverObject.put("hostname", server.hostname);
             serverObject.put(OptionField.port.getValue(), server.port);
             arr.put(serverObject);
         }

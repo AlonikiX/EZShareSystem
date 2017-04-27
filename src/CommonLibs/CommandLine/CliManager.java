@@ -20,7 +20,7 @@ public class CliManager {
         if (ROLE == "CLIENT") {
             //settings
             options.addOption(OptionField.debug.getValue(),false, "debug model");
-            options.addOption(OptionField.host.getValue(),true, "connect to host");
+            options.addOption(OptionField.host.getValue(),true, "connect to hostname");
             options.addOption(OptionField.port.getValue(),true, "connect to port");
             //commands
             options.addOption(OptionField.query.getValue(),false, "query command");

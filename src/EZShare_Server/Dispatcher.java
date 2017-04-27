@@ -31,8 +31,7 @@ public class Dispatcher extends Thread {
                 //handle
                 handler.handle();
 
-                System.out.println("System Information:");
-                System.out.println("Finish handling");
+                System.out.println("System Information:"+"Finish handling");
                 break;
             }
         }
