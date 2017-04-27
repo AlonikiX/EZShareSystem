@@ -107,18 +107,21 @@ public abstract class ResourceCommand extends Command {
     protected void toResource(CliManager cli) {
         //initial
         initResourceCommand();
+        boolean resourceDefined = false;
         //parse to resource
         if (cli.hasOption(OptionField.name.getValue())) {
             String name = cli.getOptionValue(OptionField.name.getValue());
             if (null != name) {
                 resource.setName(name.trim());
             }
+            resourceDefined = true;
         }
         if (cli.hasOption(OptionField.description.getValue())) {
             String description = cli.getOptionValue(OptionField.description.getValue());
             if (null != description) {
                 resource.setDescription(description.trim());
             }
+            resourceDefined = true;
         }
         if (cli.hasOption(OptionField.tags.getValue())) {
             String tagString = cli.getOptionValue(OptionField.tags.getValue());
@@ -132,25 +135,30 @@ public abstract class ResourceCommand extends Command {
                 }
                 resource.setTags(tageList);
             }
+            resourceDefined = true;
         }
         if (cli.hasOption(OptionField.uri.getValue())) {
             String uri = cli.getOptionValue(OptionField.uri.getValue());
             if (null != uri) {
                 resource.setUri(uri.trim());
             }
+            resourceDefined = true;
         }
         if (cli.hasOption(OptionField.channel.getValue())) {
             String channel = cli.getOptionValue(OptionField.channel.getValue());
             if (null != channel) {
                 resource.setChannel(channel.trim());
             }
+            resourceDefined = true;
         }
         if (cli.hasOption(OptionField.owner.getValue())) {
             String owner = cli.getOptionValue(OptionField.owner.getValue());
             if (null != owner) {
                 resource.setOwner(owner.trim());
             }
+            resourceDefined = true;
         }
+        if(!resourceDefined) resource = null;
     }
 
 
@@ -176,7 +184,6 @@ public abstract class ResourceCommand extends Command {
 
         return obj;
     }
-
 
     public Resource getResource(){
         return resource;
