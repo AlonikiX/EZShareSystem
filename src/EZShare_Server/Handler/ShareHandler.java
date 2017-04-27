@@ -38,7 +38,6 @@ public class ShareHandler extends Handler{
         }
 
         // if the resource is invalid, return error
-
         File shareFile = new File(resource.getUri());
         if ((resource.getOwner().compareTo("*"))==0
 //                || resource.getUri() == null
