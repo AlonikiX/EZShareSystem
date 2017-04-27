@@ -42,7 +42,7 @@ public class FetchHandler extends Handler{
         }
 
         // if the template is invalid, return error
-        if (template.getOwner() == "*"){
+        if (template.getOwner().equals("*")){
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(),OptionField.invalidTemplate.getValue());
             String msg = obj.toString();
@@ -54,6 +54,8 @@ public class FetchHandler extends Handler{
         //TODO if need to handle invalid resource,
         // e.g. validate channel
         // validate uri (file uri)
+
+
         obj.put(OptionField.response.getValue(), OptionField.success.getValue());
         String success = obj.toString();
         communicator.writeData(success);
