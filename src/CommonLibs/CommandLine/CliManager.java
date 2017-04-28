@@ -15,7 +15,7 @@ public class CliManager {
 
     private CommandLine cmd;
 
-    public void initOptions(String[] args) {
+    public void initOptions(String[] args) throws ParseException {
         Options options = new Options();
         if (ROLE == "CLIENT") {
             //settings
@@ -54,7 +54,8 @@ public class CliManager {
         try{
             this.cmd = parser.parse(options,args);
         } catch (ParseException e){
-            e.printStackTrace();
+//            e.printStackTrace();
+            throw e;
         }
 //        name = cmd.getOptionValue("name");
 //

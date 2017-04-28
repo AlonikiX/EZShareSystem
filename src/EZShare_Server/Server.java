@@ -3,6 +3,7 @@ package EZShare_Server;
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.ServerListManager;
+import org.apache.commons.cli.ParseException;
 
 import javax.net.ServerSocketFactory;
 import java.io.IOException;
@@ -18,7 +19,11 @@ public class Server {
     public static void main(String[] args) {
         //initial command line options
         CliManager cliManager = new CliManager();
-        cliManager.initOptions(args);
+        try {
+            cliManager.initOptions(args);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         //initial server setting
         ServerSetting.sharedSetting().initSetting(cliManager);

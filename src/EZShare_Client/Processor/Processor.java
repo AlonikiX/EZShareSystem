@@ -2,6 +2,7 @@ package EZShare_Client.Processor;
 
 import CommonLibs.Commands.Command;
 import CommonLibs.Communication.Communicator;
+import CommonLibs.Exception.UndefinedCommandException;
 import EZShare_Client.ClientSetting;
 
 /**
@@ -16,8 +17,11 @@ public abstract class Processor {
         this.communicator = new Communicator(ClientSetting.sharedSetting());
     }
 
-    public static Processor processorFactory(Command command) {
-        switch (command.getCommandType()) {
+    public static Processor processorFactory(Command command) throws UndefinedCommandException{
+
+        if (command == null) throw new UndefinedCommandException();
+
+        switch (command.getCommandType() ) {
             case PUBLISH:
                 return new PublishProcessor(command);
             case QUERY:
@@ -30,8 +34,7 @@ public abstract class Processor {
                 return new FetchProcessor(command);
             case EXCHANGE:
                 return new ExchangeProcessor(command);
-        }
-        return null;
+        } throw new UndefinedCommandException();
     }
 
     public void process() {
