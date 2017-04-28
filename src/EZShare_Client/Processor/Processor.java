@@ -44,4 +44,15 @@ public abstract class Processor {
                 System.out.println("System Information: Connection failed");
         }
     }
+
+//    protected void printLog(String msg){
+//        String prefix = "[EZShare.Client.receiveMessage] - [FINE] - RECEIVED:";
+//        String suffix = "\nFrom Server: " +
+//                communicator.getClientAddress() + ":" + communicator.getClientPort();
+//        if (ServerSetting.sharedSetting().isDebugModel()){
+//            System.out.println(prefix + msg + suffix);
+//        } else {
+//            System.out.println("SENT:" + msg);
+//        }
+//    }
 }
