@@ -11,9 +11,13 @@ import org.apache.commons.cli.HelpFormatter;
  * Created by apple on 16/04/2017.
  */
 public class CliManager {
-    private static final String ROLE = "CLIENT";
+    private String ROLE;
 
     private CommandLine cmd;
+
+    public CliManager(String role) {
+        this.ROLE = role;
+    }
 
     public void initOptions(String[] args) throws ParseException {
         Options options = new Options();
@@ -40,7 +44,7 @@ public class CliManager {
             options.addOption(OptionField.servers.getValue(),true, "server list");
             options.addOption(OptionField.relay.getValue(), true, "relay");
         }else if (ROLE == "SERVER") {
-            options.addOption(OptionField.debug.getValue(),true, "print debug information");
+            options.addOption(OptionField.debug.getValue(),false, "print debug information");
             options.addOption(OptionField.port.getValue(),true,"server port, an integer");
             options.addOption(OptionField.secret.getValue(),true, "secret of the server");
             options.addOption(OptionField.advertisedhostname.getValue(),true, "advertised hostname");

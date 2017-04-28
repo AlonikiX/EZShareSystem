@@ -14,12 +14,13 @@ import java.net.ServerSocket;
  */
 public class Server {
 
+    private static final String ROLE  = "SERVER";
     private Dispatcher dispatcher;
 
 
     public static void main(String[] args) {
         //initial command line options
-        CliManager cliManager = new CliManager();
+        CliManager cliManager = new CliManager(ROLE);
         try {
             cliManager.initOptions(args);
         } catch (ParseException e) {

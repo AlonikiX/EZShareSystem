@@ -10,11 +10,12 @@ import org.apache.commons.cli.UnrecognizedOptionException;
 import org.json.JSONObject;
 
 public class Client {
+    private static final String ROLE  = "CLIENT";
     public static void main(String[] args) {
 
         try{
             //initial command line options
-            CliManager cliManager = new CliManager();
+            CliManager cliManager = new CliManager(ROLE);
             cliManager.initOptions(args);
 
             //parse command
