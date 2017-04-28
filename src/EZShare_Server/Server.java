@@ -3,12 +3,10 @@ package EZShare_Server;
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.ServerListManager;
-import CommonLibs.Setting.Setting;
 import org.apache.commons.cli.ParseException;
 
 import javax.net.ServerSocketFactory;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 
 /**
@@ -33,16 +31,16 @@ public class Server {
         setting.initSetting(cliManager);
 
         // print server setting information
-        String log = setting.timeLog() + " - [EZShare.Server.main] " +
+        String log = setting.getTime() + " - [EZShare.Server.main] " +
                 "- [INFO] Starting the EZShare Server";
         System.out.println(log);
-        log = setting.timeLog() + " - [EZShare.ServerSetting] " +
+        log = setting.getTime() + " - [EZShare.ServerSetting] " +
                 "- [INFO] - using secret: " + setting.getSecret();
         System.out.println(log);
-        log = setting.timeLog() + " - [EZShare.ServerSetting] " +
+        log = setting.getTime() + " - [EZShare.ServerSetting] " +
                 "- [INFO] - using advertised hostname: " + setting.getAdvertisedHostName();
         System.out.println(log);
-        log = setting.timeLog() + " - [EZShare.ServerSetting] " +
+        log = setting.getTime() + " - [EZShare.ServerSetting] " +
                 "- [INFO] - bound to por " + setting.getPort();
         System.out.println(log);
 

@@ -68,7 +68,7 @@ public abstract class Setting {
         return timeout;
     }
 
-    public String timeLog(){
+    public String getTime(){
         String currentTime = dateFormat.format(new Date());
         return currentTime;
     }

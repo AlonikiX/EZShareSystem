@@ -103,8 +103,8 @@ public class QueryHandler extends Handler{
                             queryCommunicator.writeData(jsonMessage);
 
                             boolean waitForMore = true;
-//                            try {
 
+//                            try {
                                 // waiting for response
                                 while (waitForMore){
                                     if (0<communicator.readableData()){
@@ -115,10 +115,19 @@ public class QueryHandler extends Handler{
                                         if (!object.has(OptionField.response.getValue())
                                                 || (0 != object.getString(OptionField.response.getValue())
                                                 .compareTo(OptionField.success.getValue()))
-                                                )
+                                                ){
                                             waitForMore = false;
+                                        } else {
+                                            break;
+                                        }
+
                                     }
                                 }
+
+
+                                System.err.println("Waiting for resource? " + waitForMore);
+
+
 
                                 // waiting for resources
                                 while (waitForMore){
@@ -126,9 +135,29 @@ public class QueryHandler extends Handler{
                                         String data = communicator.readData();
                                         JSONObject object = new JSONObject(data);
 
+
+
+                                        System.err.println("resultSize? " + object.has(OptionField.resultSize.getValue()));
+
+
                                         if (object.has(OptionField.resultSize.getValue())){
+
+
+
+
+
+
                                             // the response ends
                                             waitForMore = false;
+
+
+
+
+                                            System.err.println("Waiting for resource? " + waitForMore);
+
+
+
+
                                         } else {
                                             // this is a resource object
                                             // we reinforce the rule of encrypt owner
@@ -146,11 +175,15 @@ public class QueryHandler extends Handler{
 //                                //TODO terminate this thread
 //                            }
                         }
+
+                        System.err.println("Loop end ");
                     }
                 };
-                thread.start();
                 try{
-                    thread.join();
+                    synchronized (this.getClass()){
+                        thread.start();
+                        thread.join();
+                    }
                 } catch (InterruptedException e){
                     e.printStackTrace();
                 }
