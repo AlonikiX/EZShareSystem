@@ -10,6 +10,7 @@ import org.json.JSONObject;
 public class QueryProcessor extends Processor {
     public QueryProcessor(Command command) {
         super(command);
+        printConnectionLog("querying ");
     }
 
     @Override
@@ -18,6 +19,7 @@ public class QueryProcessor extends Processor {
         while (true) {
             if (0 < communicator.readableData()) {
                 String data = communicator.readData();
+                printReceiveLog(data);
                 JSONObject object = new JSONObject(data);
                 if (object.has(OptionField.resultSize.getValue())) {
                     break;

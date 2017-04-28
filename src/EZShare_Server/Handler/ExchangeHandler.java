@@ -60,7 +60,8 @@ public class ExchangeHandler extends Handler{
 
     @Override
     protected void printLog(String msg){
-        String prefix = "[EZShare.Server.sendMessage] - [FINE] - SENT:";
+        String prefix = ServerSetting.sharedSetting().getTime() +
+                " - [EZShare.Server.sendMessage] - [FINE] - SENT:";
         String suffix = "\nTarget Server: " +
                 communicator.getClientAddress() + ":" + communicator.getClientPort();
         if (ServerSetting.sharedSetting().isDebugModel()){

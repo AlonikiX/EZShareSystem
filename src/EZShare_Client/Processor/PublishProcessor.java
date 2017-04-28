@@ -12,6 +12,7 @@ public class PublishProcessor extends Processor {
 
     public PublishProcessor(Command command) {
         super(command);
+        printConnectionLog("publishing to ");
     }
 
     @Override
@@ -20,6 +21,7 @@ public class PublishProcessor extends Processor {
         while (true) {
             if (0 < communicator.readableData()) {
                 String data = communicator.readData();
+                printReceiveLog(data);
                 JSONObject object = new JSONObject(data);
                 if (object.has(OptionField.response.getValue())) {
                     String response = object.getString(OptionField.response.getValue());

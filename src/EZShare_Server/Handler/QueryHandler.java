@@ -184,7 +184,8 @@ public class QueryHandler extends Handler{
     }
 
     private void relaySendLog(Communicator queryCommunicator, String msg){
-        String prefix = "[EZShare.Server.sendMessage] - [FINE] - SENT:";
+        String prefix = ServerSetting.sharedSetting().getTime() +
+                " - [EZShare.Server.sendMessage] - [FINE] - SENT:";
         String suffix = "\nTarget Server: " +
                 queryCommunicator.getClientAddress() + ":" + queryCommunicator.getClientPort();
         if (ServerSetting.sharedSetting().isDebugModel()){
@@ -195,7 +196,8 @@ public class QueryHandler extends Handler{
     }
 
     private void relayReceiveLog(Communicator queryCommunicator, String msg){
-        String prefix = "[EZShare.Server.receiveMessage] - [FINE] - RECEIVED:";
+        String prefix = ServerSetting.sharedSetting().getTime() +
+                " - [EZShare.Server.receiveMessage] - [FINE] - RECEIVED:";
         String suffix = "\nFrom Server: " +
                 queryCommunicator.getClientAddress() + ":" + queryCommunicator.getClientPort();
         if (ServerSetting.sharedSetting().isDebugModel()){

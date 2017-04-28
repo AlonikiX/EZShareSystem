@@ -1,9 +1,12 @@
 package EZShare_Client.Processor;
 
 import CommonLibs.Commands.Command;
+import CommonLibs.Commands.CommandType;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.Exception.UndefinedCommandException;
+import EZShare_Client.Client;
 import EZShare_Client.ClientSetting;
+import EZShare_Server.ServerSetting;
 
 /**
  * Created by apple on 24/04/2017.
@@ -20,8 +23,9 @@ public abstract class Processor {
     public static Processor processorFactory(Command command) throws UndefinedCommandException{
 
         if (command == null) throw new UndefinedCommandException();
+        CommandType type = command.getCommandType();
 
-        switch (command.getCommandType() ) {
+        switch (type) {
             case PUBLISH:
                 return new PublishProcessor(command);
             case QUERY:
@@ -39,20 +43,39 @@ public abstract class Processor {
 
     public void process() {
         if (true == communicator.connectToServer()) {
-            communicator.writeData(command.toJSON());
+            String msg = command.toJSON();
+            communicator.writeData(msg);
+            if (ServerSetting.sharedSetting().isDebugModel()){
+                String prefix = ClientSetting.sharedSetting().getTime() +
+                        " - [EZShare.Client.sendMessage] - [FINE] - SENT:";
+                System.out.println(prefix + msg);
+            } else {
+                System.out.println("SENT:" + msg);
+            }
+
+
         }else {
-                System.out.println("System Information: Connection failed");
+            System.out.println(ClientSetting.sharedSetting().getTime() +
+                    " - [EZShare.Client.Connection] - [Failed]");
         }
     }
 
-//    protected void printLog(String msg){
-//        String prefix = "[EZShare.Client.receiveMessage] - [FINE] - RECEIVED:";
-//        String suffix = "\nFrom Server: " +
-//                communicator.getClientAddress() + ":" + communicator.getClientPort();
-//        if (ServerSetting.sharedSetting().isDebugModel()){
-//            System.out.println(prefix + msg + suffix);
-//        } else {
-//            System.out.println("SENT:" + msg);
-//        }
-//    }
+    protected void printConnectionLog(String verb){
+        if (ClientSetting.sharedSetting().isDebugModel()){
+            String msg = ClientSetting.sharedSetting().getTime() +
+                    "[EZShare.Client."+ command.getCommandType().getValue() +"Command] - [FINE] - " + verb +
+                    communicator.getClientAddress() + ":" + communicator.getClientPort();
+            System.out.println(msg);
+        }
+    }
+
+    protected void printReceiveLog(String msg){
+        String prefix = ClientSetting.sharedSetting().getTime() +
+                " - [EZShare.Client.receiveMessage] - [FINE] - RECEIVED:";
+        if (ServerSetting.sharedSetting().isDebugModel()){
+            System.out.println(prefix + msg);
+        } else {
+            System.out.println("RECEIVED:" + msg);
+        }
+    }
 }

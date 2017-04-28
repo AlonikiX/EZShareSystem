@@ -10,6 +10,7 @@ import org.json.JSONObject;
 public class ShareProcessor extends Processor {
     public ShareProcessor(Command command) {
         super(command);
+        printConnectionLog("sharing to ");
     }
 
     @Override
@@ -18,6 +19,7 @@ public class ShareProcessor extends Processor {
         while (true) {
             if (0 < communicator.readableData()) {
                 String data = communicator.readData();
+                printReceiveLog(data);
                 JSONObject object = new JSONObject(data);
                 if (object.has(OptionField.response.getValue())) {
                     String response = object.getString(OptionField.response.getValue());

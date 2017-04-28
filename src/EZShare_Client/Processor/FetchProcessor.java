@@ -10,6 +10,7 @@ import org.json.JSONObject;
 public class FetchProcessor extends Processor {
     public FetchProcessor(Command command) {
         super(command);
+        printConnectionLog("fetching from ");
     }
 
     @Override
@@ -19,6 +20,7 @@ public class FetchProcessor extends Processor {
             if (0 < communicator.readableData()) {
                 String data = communicator.readData();
                 JSONObject object = new JSONObject(data);
+                printReceiveLog(data);
                 if (object.has(OptionField.resourceSize.getValue())) {
                     long fileSize = object.getLong(OptionField.resourceSize.getValue());
                     String uri = object.getString(OptionField.uri.getValue());

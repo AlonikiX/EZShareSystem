@@ -10,6 +10,7 @@ import org.json.JSONObject;
 public class ExchangeProcessor extends Processor {
     public ExchangeProcessor(Command command) {
         super(command);
+        printConnectionLog("adding exchange list to ");
     }
 
     @Override
@@ -19,6 +20,7 @@ public class ExchangeProcessor extends Processor {
             if (0 < communicator.readableData()) {
                 String data = communicator.readData();
                 JSONObject object = new JSONObject(data);
+                printReceiveLog(data);
                 if (object.has(OptionField.response.getValue())) {
                     String response = object.getString(OptionField.response.getValue());
                     if (0 == response.compareTo(OptionField.success.getValue())) {

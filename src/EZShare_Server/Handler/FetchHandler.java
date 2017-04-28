@@ -104,7 +104,8 @@ public class FetchHandler extends Handler{
             communicator.writeData(resourceDetail);
             communicator.transmitFile(fin);
             if (ServerSetting.sharedSetting().isDebugModel()){
-                String log = "[EZShare.Server.sendFile] - [FINE] \nTarget Client: " +
+                String log = ServerSetting.sharedSetting().getTime() +
+                        " - [EZShare.Server.sendFile] - [FINE] \nTarget Client: " +
                         communicator.getClientAddress() + ":" + communicator.getClientPort();
             }
 

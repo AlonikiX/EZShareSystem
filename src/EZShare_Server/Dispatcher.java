@@ -22,15 +22,14 @@ public class Dispatcher extends Thread {
             if (0 < communicator.readableData()) {
                 //receive data
                 String data = communicator.readData();
-
-                String prefix = "[EZShare.Server.receiveMessage] - [FINE] - RECEIVED:";
-                String suffix = "\nFrom Client: " +
-                        communicator.getClientAddress() + ":" + communicator.getClientPort();
-
                 if (ServerSetting.sharedSetting().isDebugModel()){
+                    String prefix = ServerSetting.sharedSetting().getTime() +
+                            "[EZShare.Server.receiveMessage] - [FINE] - RECEIVED:";
+                    String suffix = "\nFrom Client: " +
+                            communicator.getClientAddress() + ":" + communicator.getClientPort();
                     System.out.println(prefix + data + suffix);
                 } else {
-                    System.out.println("SENT:" + data);
+                    System.out.println("RECEIVED:" + data);
                 }
                 //dispatch
                 Command command = Command.commandFactory(data);
@@ -40,10 +39,10 @@ public class Dispatcher extends Thread {
                 handler.handle();
 
                 if (ServerSetting.sharedSetting().isDebugModel()){
-                    System.out.println("[EZShare.Server.FinishHandleRequest] From Client: "+
+                    System.out.println(ServerSetting.sharedSetting().getTime() +
+                            "[EZShare.Server.FinishHandleRequest] From Client: "+
                             communicator.getClientAddress() + ":" + communicator.getClientPort());
                 }
-
                 break;
             }
         }

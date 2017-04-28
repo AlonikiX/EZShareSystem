@@ -57,12 +57,13 @@ public abstract class Handler {
         return new UndefinedHandler(cmd);
     }
 
-    protected boolean isDebug(){
-        return ServerSetting.sharedSetting().isDebugModel();
-    }
+//    protected boolean isDebug(){
+//        return ServerSetting.sharedSetting().isDebugModel();
+//    }
 
     protected void printLog(String msg){
-        String prefix = "[EZShare.Server.sendMessage] - [FINE] - SENT:";
+        String prefix = ServerSetting.sharedSetting().getTime() +
+                " - [EZShare.Server.sendMessage] - [FINE] - SENT:";
         String suffix = "\nTarget Client: " +
                 communicator.getClientAddress() + ":" + communicator.getClientPort();
         if (ServerSetting.sharedSetting().isDebugModel()){
