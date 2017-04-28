@@ -3,8 +3,6 @@ package EZShare_Server.Handler;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.FetchCommand;
-import CommonLibs.Commands.QueryCommand;
-import CommonLibs.Commands.ShareCommand;
 import CommonLibs.DataStructure.Resource;
 import EZShare_Server.ServerSetting;
 import org.json.JSONArray;
@@ -13,10 +11,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Created by marsjc on 2017/04/17.
@@ -39,6 +33,7 @@ public class FetchHandler extends Handler{
             obj.put(OptionField.errorMessage.getValue(),OptionField.missingTemplate.getValue());
             String msg = obj.toString();
             communicator.writeData(msg);
+            printLog(msg);
             return;
         }
 
@@ -56,6 +51,7 @@ public class FetchHandler extends Handler{
             obj.put(OptionField.response.getValue(), OptionField.success.getValue());
             String success = obj.toString();
             communicator.writeData(success);
+            printLog(success);
 
 
 
@@ -67,6 +63,7 @@ public class FetchHandler extends Handler{
             obj.put(OptionField.resultSize.getValue(), 0);
             String resultSzie = obj.toString();
             communicator.writeData(resultSzie);
+            printLog(resultSzie);
             return;
 
         } else {
@@ -82,6 +79,7 @@ public class FetchHandler extends Handler{
                 obj.put(OptionField.resultSize.getValue(), 0);
                 String resultSzie = obj.toString();
                 communicator.writeData(resultSzie);
+                printLog(resultSzie);
                 return;
             }
 
@@ -105,6 +103,10 @@ public class FetchHandler extends Handler{
             String resourceDetail = obj.toString();
             communicator.writeData(resourceDetail);
             communicator.transmitFile(fin);
+            if (ServerSetting.sharedSetting().isDebugModel()){
+                String log = "[EZShare.Server.sendFile] - [FINE] \nTarget Client: " +
+                        communicator.getClientAddress() + ":" + communicator.getClientPort();
+            }
 
 //            // close streams
 //            try {
@@ -117,6 +119,7 @@ public class FetchHandler extends Handler{
             obj.put(OptionField.resultSize.getValue(), 1);
             String resultSzie = obj.toString();
             communicator.writeData(resultSzie);
+            printLog(resultSzie);
         }
     }
 }

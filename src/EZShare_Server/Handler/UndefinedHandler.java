@@ -20,5 +20,6 @@ public class UndefinedHandler extends Handler {
         obj.put(OptionField.errorMessage.getValue(), "missing or incorrect type for command");
         String msg = obj.toString();
         communicator.writeData(msg);
+        printLog(msg);
     }
 }

@@ -17,7 +17,6 @@ public class Server {
     private static final String ROLE  = "SERVER";
     private Dispatcher dispatcher;
 
-
     public static void main(String[] args) {
         //initial command line options
         CliManager cliManager = new CliManager(ROLE);
@@ -44,8 +43,9 @@ public class Server {
         log = setting.getTime() + " - [EZShare.ServerSetting] " +
                 "- [INFO] - bound to por " + setting.getPort();
         System.out.println(log);
-
-
+        log = setting.getTime() + " - [EZShare.ServerSetting] " +
+                "- [INFO] - setting debug " + ((setting.isDebugModel())?"on":"off");
+        System.out.println(log);
 
         //initial server list manager
         ServerListManager serverListManager = ServerListManager.sharedServerListManager();

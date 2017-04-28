@@ -2,7 +2,6 @@ package EZShare_Server.Handler;
 
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
-import CommonLibs.Commands.PublishCommand;
 import CommonLibs.Commands.ShareCommand;
 import CommonLibs.DataStructure.Resource;
 import EZShare_Server.ServerSetting;
@@ -34,6 +33,7 @@ public class ShareHandler extends Handler{
             obj.put(OptionField.errorMessage.getValue(),"missing resource and/or secret");
             String msg = obj.toString();
             communicator.writeData(msg);
+            printLog(msg);
             return;
         }
 
@@ -50,6 +50,7 @@ public class ShareHandler extends Handler{
             obj.put(OptionField.errorMessage.getValue(),OptionField.invalidResource.getValue());
             String msg = obj.toString();
             communicator.writeData(msg);
+            printLog(msg);
             return;
         }
 
@@ -76,6 +77,7 @@ public class ShareHandler extends Handler{
 
         String msg = obj.toString();
         communicator.writeData(msg);
+        printLog(msg);
 
     }
 }

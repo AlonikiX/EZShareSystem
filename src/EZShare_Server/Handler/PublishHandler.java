@@ -23,11 +23,11 @@ public class PublishHandler extends Handler{
 
         // if the resource is not given, return error
         if (resource == null){
-
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(),OptionField.missingResource.getValue());
             String msg = obj.toString();
             communicator.writeData(msg);
+            printLog(msg);
             return;
         }
 
@@ -41,6 +41,7 @@ public class PublishHandler extends Handler{
             obj.put(OptionField.errorMessage.getValue(),OptionField.invalidResource.getValue());
             String msg = obj.toString();
             communicator.writeData(msg);
+            printLog(msg);
             return;
         }
 
@@ -55,6 +56,7 @@ public class PublishHandler extends Handler{
         }
         String msg = obj.toString();
         communicator.writeData(msg);
+        printLog(msg);
 
     }
 

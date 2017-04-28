@@ -6,6 +6,7 @@ import CommonLibs.Commands.ExchangeCommand;
 import CommonLibs.DataStructure.IPAddress;
 import CommonLibs.DataStructure.Resource;
 import CommonLibs.DataStructure.ServerListManager;
+import EZShare_Server.ServerSetting;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class ExchangeHandler extends Handler{
             obj.put(OptionField.errorMessage.getValue(),serverMissingOrInvalidError);
             String msg = obj.toString();
             communicator.writeData(msg);
+            printLog(msg);
             return;
         }
 
@@ -52,7 +54,21 @@ public class ExchangeHandler extends Handler{
         obj.put(OptionField.response.getValue(), OptionField.success.getValue());
         String msg = obj.toString();
         communicator.writeData(msg);
+        printLog(msg);
 
     }
+
+    @Override
+    protected void printLog(String msg){
+        String prefix = "[EZShare.Server.sendMessage] - [FINE] - SENT:";
+        String suffix = "\nTarget Server: " +
+                communicator.getClientAddress() + ":" + communicator.getClientPort();
+        if (ServerSetting.sharedSetting().isDebugModel()){
+            System.out.println(prefix + msg + suffix);
+        } else {
+            System.out.println("SENT:" + msg);
+        }
+    }
+
 
 }

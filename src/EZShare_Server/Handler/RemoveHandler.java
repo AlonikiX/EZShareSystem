@@ -2,7 +2,6 @@ package EZShare_Server.Handler;
 
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
-import CommonLibs.Commands.PublishCommand;
 import CommonLibs.Commands.RemoveCommand;
 import CommonLibs.DataStructure.Resource;
 import org.json.JSONObject;
@@ -30,6 +29,7 @@ public class RemoveHandler extends Handler{
             obj.put(OptionField.errorMessage.getValue(),OptionField.missingResource.getValue());
             String msg = obj.toString();
             communicator.writeData(msg);
+            printLog(msg);
             return;
         }
 
@@ -42,6 +42,7 @@ public class RemoveHandler extends Handler{
             obj.put(OptionField.errorMessage.getValue(), OptionField.invalidResource.getValue());
             String msg = obj.toString();
             communicator.writeData(msg);
+            printLog(msg);
             return;
         }
 
@@ -58,7 +59,7 @@ public class RemoveHandler extends Handler{
 
         String msg = obj.toString();
         communicator.writeData(msg);
-
+        printLog(msg);
 
     }
 }

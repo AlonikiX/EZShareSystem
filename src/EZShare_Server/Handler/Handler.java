@@ -1,8 +1,10 @@
 package EZShare_Server.Handler;
 
 import CommonLibs.Commands.Command;
+import CommonLibs.Commands.CommandType;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.ResourceListManager;
+import EZShare_Server.Server;
 import EZShare_Server.ServerSetting;
 
 /**
@@ -57,6 +59,17 @@ public abstract class Handler {
 
     protected boolean isDebug(){
         return ServerSetting.sharedSetting().isDebugModel();
+    }
+
+    protected void printLog(String msg){
+        String prefix = "[EZShare.Server.sendMessage] - [FINE] - SENT:";
+        String suffix = "\nTarget Client: " +
+                communicator.getClientAddress() + ":" + communicator.getClientPort();
+        if (ServerSetting.sharedSetting().isDebugModel()){
+            System.out.println(prefix + msg + suffix);
+        } else {
+            System.out.println("SENT:" + msg);
+        }
     }
 
 }

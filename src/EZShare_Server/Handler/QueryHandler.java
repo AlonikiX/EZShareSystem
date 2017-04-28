@@ -2,23 +2,16 @@ package EZShare_Server.Handler;
 
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
-import CommonLibs.Commands.PublishCommand;
 import CommonLibs.Commands.QueryCommand;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.IPAddress;
 import CommonLibs.DataStructure.Resource;
 import CommonLibs.DataStructure.ServerListManager;
-import EZShare_Server.Server;
 import EZShare_Server.ServerSetting;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.management.Query;
-import javax.naming.event.ObjectChangeListener;
-import java.io.IOException;
-import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -46,6 +39,7 @@ public class QueryHandler extends Handler{
             obj.put(OptionField.errorMessage.getValue(),OptionField.missingTemplate.getValue());
             String msg = obj.toString();
             communicator.writeData(msg);
+            printLog(msg);
             return;
         }
 
@@ -55,12 +49,14 @@ public class QueryHandler extends Handler{
             obj.put(OptionField.errorMessage.getValue(),OptionField.invalidTemplate.getValue());
             String msg = obj.toString();
             communicator.writeData(msg);
+            printLog(msg);
             return;
         }
 
         obj.put(OptionField.response.getValue(),OptionField.success.getValue());
         String msg = obj.toString();
         communicator.writeData(msg);
+        printLog(msg);
 
         ArrayList<Resource> results = resourceListManager.matchTemplate(template);
         resultSize += results.size();
@@ -83,6 +79,7 @@ public class QueryHandler extends Handler{
 
             msg = obj.toString();
             communicator.writeData(msg);
+            printLog(msg);
         }
 
         if (((QueryCommand)command).relay()){
@@ -101,6 +98,7 @@ public class QueryHandler extends Handler{
                         }
                         if (queryCommunicator.connectToServer(address.hostname,address.port)){
                             queryCommunicator.writeData(jsonMessage);
+                            relaySendLog(queryCommunicator,jsonMessage);
 
                             boolean waitForMore = true;
 
@@ -109,6 +107,7 @@ public class QueryHandler extends Handler{
                                 while (waitForMore){
                                     if (0<queryCommunicator.readableData()){
                                         String data = queryCommunicator.readData();
+                                        relayReceiveLog(queryCommunicator,jsonMessage);
                                         JSONObject object = new JSONObject(data);
 
                                         // in these cases, the other server will nt reply with resources
@@ -127,6 +126,7 @@ public class QueryHandler extends Handler{
                                 while (waitForMore){
                                     if (0<queryCommunicator.readableData()){
                                         String data = queryCommunicator.readData();
+                                        relayReceiveLog(queryCommunicator,jsonMessage);
                                         JSONObject object = new JSONObject(data);
                                         if (object.has(OptionField.resultSize.getValue())){
                                             // the response ends
@@ -154,9 +154,7 @@ public class QueryHandler extends Handler{
 
                 thread.start();
                 threads.add(thread);
-
             }
-
             for (Thread thread:threads){
                 try{
                     thread.join();
@@ -164,18 +162,18 @@ public class QueryHandler extends Handler{
                     e.printStackTrace();
                 }
             }
-
         }
-
         obj = new JSONObject();
         obj.put(OptionField.resultSize.getValue(),resultSize);
         String resultSize = obj.toString();
         communicator.writeData(resultSize);
+        printLog(resultSize);
     }
 
     private void sendResource(String jsonResource){
         rwlock.writeLock().lock();
         communicator.writeData(jsonResource);
+        printLog(jsonResource);
         rwlock.writeLock().unlock();
     }
 
@@ -183,5 +181,27 @@ public class QueryHandler extends Handler{
         rwlock.writeLock().lock();
         resultSize++;
         rwlock.writeLock().unlock();
+    }
+
+    private void relaySendLog(Communicator queryCommunicator, String msg){
+        String prefix = "[EZShare.Server.sendMessage] - [FINE] - SENT:";
+        String suffix = "\nTarget Server: " +
+                queryCommunicator.getClientAddress() + ":" + queryCommunicator.getClientPort();
+        if (ServerSetting.sharedSetting().isDebugModel()){
+            System.out.println(prefix + msg + suffix);
+        } else {
+            System.out.println("SENT:" + msg);
+        }
+    }
+
+    private void relayReceiveLog(Communicator queryCommunicator, String msg){
+        String prefix = "[EZShare.Server.receiveMessage] - [FINE] - RECEIVED:";
+        String suffix = "\nFrom Server: " +
+                queryCommunicator.getClientAddress() + ":" + queryCommunicator.getClientPort();
+        if (ServerSetting.sharedSetting().isDebugModel()){
+            System.out.println(prefix + msg + suffix);
+        } else {
+            System.out.println("RECEIVED:" + msg);
+        }
     }
 }
