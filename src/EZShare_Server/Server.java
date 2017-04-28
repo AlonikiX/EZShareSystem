@@ -66,7 +66,7 @@ public class Server {
                 String host = communicator.getClientAddress();
                 System.out.println("Server Information:");
                 System.out.println("connected with IP address:" + host);
-                if (/*limitedIPAddressListManager.limitConnection(host)*/false) {
+                if (limitedIPAddressListManager.limitConnection(host)) {
                     System.out.println("Server Information:");
                     System.out.println("connection too frequent");
                     limitedIPAddressListManager.addIntervalLimitedIPAddress(host);

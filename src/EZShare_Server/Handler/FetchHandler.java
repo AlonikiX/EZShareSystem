@@ -86,8 +86,7 @@ public class FetchHandler extends Handler{
             }
 
             long length = file.length();
-            String thisServer = ServerSetting.sharedSetting().getHost() + ":"
-                    + ServerSetting.sharedSetting().getPort();
+            String thisServer = ServerSetting.sharedSetting().getAdvertisedHostName();
 
             obj = new JSONObject();
             obj.put(OptionField.name.getValue(), resource.getName());

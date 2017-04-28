@@ -64,8 +64,7 @@ public class QueryHandler extends Handler{
 
         ArrayList<Resource> results = resourceListManager.matchTemplate(template);
         resultSize += results.size();
-        String thisServer = ServerSetting.sharedSetting().getHost() + ":"
-                + ServerSetting.sharedSetting().getPort();
+        String thisServer = ServerSetting.sharedSetting().getAdvertisedHostName();
 
         for (Resource resource:results){
 
