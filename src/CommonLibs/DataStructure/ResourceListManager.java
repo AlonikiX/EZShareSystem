@@ -185,7 +185,8 @@ public class ResourceListManager {
      *          false, otherwise
      */
     private boolean matches(Resource template, Resource candidate){
-        if (0 != template.getChannel().compareTo(candidate.getChannel())) return false;
+
+        if ((!template.getChannel().isEmpty()) && 0 != template.getChannel().compareTo(candidate.getChannel())) return false;
         if ((!template.getOwner().isEmpty()) && (0 != template.getOwner().compareTo(candidate.getOwner()))) return false;
         if ((!template.getUri().isEmpty()) && (0 != template.getUri().compareTo((candidate.getUri())))) return false;
         ArrayList<String> tags = template.getTags();
