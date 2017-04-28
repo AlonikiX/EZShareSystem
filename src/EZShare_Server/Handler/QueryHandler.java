@@ -107,9 +107,12 @@ public class QueryHandler extends Handler{
 //                            try {
                                 // waiting for response
                                 while (waitForMore){
-                                    if (0<communicator.readableData()){
-                                        String data = communicator.readData();
+                                    if (0<queryCommunicator.readableData()){
+                                        String data = queryCommunicator.readData();
                                         JSONObject object = new JSONObject(data);
+
+
+
 
                                         // in these cases, the other server will nt reply with resources
                                         if (!object.has(OptionField.response.getValue())
@@ -123,41 +126,14 @@ public class QueryHandler extends Handler{
 
                                     }
                                 }
-
-
-                                System.err.println("Waiting for resource? " + waitForMore);
-
-
-
                                 // waiting for resources
                                 while (waitForMore){
-                                    if (0<communicator.readableData()){
-                                        String data = communicator.readData();
+                                    if (0<queryCommunicator.readableData()){
+                                        String data = queryCommunicator.readData();
                                         JSONObject object = new JSONObject(data);
-
-
-
-                                        System.err.println("resultSize? " + object.has(OptionField.resultSize.getValue()));
-
-
                                         if (object.has(OptionField.resultSize.getValue())){
-
-
-
-
-
-
                                             // the response ends
                                             waitForMore = false;
-
-
-
-
-                                            System.err.println("Waiting for resource? " + waitForMore);
-
-
-
-
                                         } else {
                                             // this is a resource object
                                             // we reinforce the rule of encrypt owner
@@ -166,7 +142,7 @@ public class QueryHandler extends Handler{
                                                         (object.get(OptionField.owner.getValue()).equals(""))?"":"*");
                                             }
                                             String msg = object.toString();
-                                            incresaResultSize();
+                                            increaseResultSize();
                                             sendResource(msg);
                                         }
                                     }
@@ -176,7 +152,6 @@ public class QueryHandler extends Handler{
 //                            }
                         }
 
-                        System.err.println("Loop end ");
                     }
                 };
                 try{
@@ -202,7 +177,7 @@ public class QueryHandler extends Handler{
         rwlock.writeLock().unlock();
     }
 
-    private void incresaResultSize(){
+    private void increaseResultSize(){
         rwlock.writeLock().lock();
         resultSize++;
         rwlock.writeLock().unlock();
