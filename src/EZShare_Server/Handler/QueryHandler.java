@@ -92,6 +92,7 @@ public class QueryHandler extends Handler{
             String jsonMessage = relayCommand.toJSON();
             ArrayList<IPAddress> addressList = ServerListManager.sharedServerListManager().cloneServerList();
 
+            ArrayList<Thread> threads = new ArrayList<Thread>();
             for (IPAddress address:addressList){
                 Thread thread = new Thread() {
                     public void run(){
@@ -110,9 +111,6 @@ public class QueryHandler extends Handler{
                                     if (0<queryCommunicator.readableData()){
                                         String data = queryCommunicator.readData();
                                         JSONObject object = new JSONObject(data);
-
-
-
 
                                         // in these cases, the other server will nt reply with resources
                                         if (!object.has(OptionField.response.getValue())
@@ -154,15 +152,20 @@ public class QueryHandler extends Handler{
 
                     }
                 };
+
+                thread.start();
+                threads.add(thread);
+
+            }
+
+            for (Thread thread:threads){
                 try{
-                    synchronized (this.getClass()){
-                        thread.start();
-                        thread.join();
-                    }
+                    thread.join();
                 } catch (InterruptedException e){
                     e.printStackTrace();
                 }
             }
+
         }
 
         obj = new JSONObject();
