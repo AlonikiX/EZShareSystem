@@ -168,20 +168,22 @@ public abstract class ResourceCommand extends Command {
      */
     protected JSONObject toResourceJSONObject() {
         JSONObject obj = new JSONObject();
-        obj.put(OptionField.name.getValue(), resource.getName());
-        obj.put(OptionField.description.getValue(), resource.getDescription());
 
-        JSONArray arr = new JSONArray();
-        for (String tag : resource.getTags()) {
-            arr.put(tag);
+        if (resource != null){
+            obj.put(OptionField.name.getValue(), resource.getName());
+            obj.put(OptionField.description.getValue(), resource.getDescription());
+
+            JSONArray arr = new JSONArray();
+            for (String tag : resource.getTags()) {
+                arr.put(tag);
+            }
+            obj.put(OptionField.tags.getValue(), arr);
+
+            obj.put(OptionField.uri.getValue(), resource.getUri());
+            obj.put(OptionField.channel.getValue(), resource.getChannel());
+            obj.put(OptionField.owner.getValue(), resource.getOwner());
+            obj.put(OptionField.ezserver.getValue(), resource.getEzserver());
         }
-        obj.put(OptionField.tags.getValue(), arr);
-
-        obj.put(OptionField.uri.getValue(), resource.getUri());
-        obj.put(OptionField.channel.getValue(), resource.getChannel());
-        obj.put(OptionField.owner.getValue(), resource.getOwner());
-        obj.put(OptionField.ezserver.getValue(), resource.getEzserver());
-
         return obj;
     }
 
