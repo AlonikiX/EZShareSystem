@@ -105,11 +105,23 @@ public abstract class ResourceCommand extends Command {
      * @param cli, an instance of CliManager
      */
     protected void toResource(CliManager cli) {
+
+
+
+        System.out.println("Resource gained via CLI");
+
+
+
+
+
         //initial
         initResourceCommand();
         boolean resourceDefined = false;
         //parse to resource
         if (cli.hasOption(OptionField.name.getValue())) {
+
+            System.out.println("Option has a name field");
+
             String name = cli.getOptionValue(OptionField.name.getValue());
             if (null != name) {
                 resource.setName(name.trim());
@@ -117,6 +129,10 @@ public abstract class ResourceCommand extends Command {
             resourceDefined = true;
         }
         if (cli.hasOption(OptionField.description.getValue())) {
+
+            System.out.println("Option has a desc field");
+
+
             String description = cli.getOptionValue(OptionField.description.getValue());
             if (null != description) {
                 resource.setDescription(description.trim());
@@ -124,6 +140,10 @@ public abstract class ResourceCommand extends Command {
             resourceDefined = true;
         }
         if (cli.hasOption(OptionField.tags.getValue())) {
+
+            System.out.println("Option has a tags field");
+
+
             String tagString = cli.getOptionValue(OptionField.tags.getValue());
             if (null != tagString) {
                 String[] tags = tagString.split(",");
@@ -138,6 +158,12 @@ public abstract class ResourceCommand extends Command {
             resourceDefined = true;
         }
         if (cli.hasOption(OptionField.uri.getValue())) {
+
+
+            System.out.println("Option has a uri field");
+
+
+
             String uri = cli.getOptionValue(OptionField.uri.getValue());
             if (null != uri) {
                 resource.setUri(uri.trim());
@@ -145,6 +171,12 @@ public abstract class ResourceCommand extends Command {
             resourceDefined = true;
         }
         if (cli.hasOption(OptionField.channel.getValue())) {
+
+
+            System.out.println("Option has a channel field");
+
+
+
             String channel = cli.getOptionValue(OptionField.channel.getValue());
             if (null != channel) {
                 resource.setChannel(channel.trim());
@@ -152,12 +184,24 @@ public abstract class ResourceCommand extends Command {
             resourceDefined = true;
         }
         if (cli.hasOption(OptionField.owner.getValue())) {
+
+
+
+            System.out.println("Option has an owner field");
+
+
+
             String owner = cli.getOptionValue(OptionField.owner.getValue());
             if (null != owner) {
                 resource.setOwner(owner.trim());
             }
             resourceDefined = true;
         }
+
+
+
+        System.out.println("Resource is " + ((resourceDefined)?"":"not ") + "defined");
+
         if(!resourceDefined) resource = null;
     }
 
@@ -170,6 +214,8 @@ public abstract class ResourceCommand extends Command {
         JSONObject obj = new JSONObject();
 
         if (resource != null){
+
+            // Opt tips: we don;t need the if resource != null, because this method is never called in that case
             obj.put(OptionField.name.getValue(), resource.getName());
             obj.put(OptionField.description.getValue(), resource.getDescription());
 
@@ -183,8 +229,12 @@ public abstract class ResourceCommand extends Command {
             obj.put(OptionField.channel.getValue(), resource.getChannel());
             obj.put(OptionField.owner.getValue(), resource.getOwner());
             obj.put(OptionField.ezserver.getValue(), resource.getEzserver());
+            return obj;
+
         }
+
         return obj;
+
     }
 
     public Resource getResource(){

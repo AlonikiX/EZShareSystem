@@ -23,6 +23,7 @@ public class PublishHandler extends Handler{
 
         // if the resource is not given, return error
         if (resource == null){
+
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(),OptionField.missingResource.getValue());
             String msg = obj.toString();

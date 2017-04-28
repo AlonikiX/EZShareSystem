@@ -43,7 +43,7 @@ public class ShareCommand extends ResourceCommand {
         JSONObject obj = new JSONObject();
         obj.put(OptionField.command.getValue(), this.commandType.getValue());
         obj.put(OptionField.secret.getValue(), this.secret);
-        obj.put(OptionField.resource.getValue(), this.toResourceJSONObject());
+        if (resource != null) obj.put(OptionField.resource.getValue(), this.toResourceJSONObject());
 
         StringWriter out = new StringWriter();
         obj.write(out);
