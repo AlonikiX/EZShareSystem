@@ -3,6 +3,7 @@ package EZShare_Server;
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.ServerListManager;
+import CommonLibs.Setting.Setting;
 import org.apache.commons.cli.ParseException;
 
 import javax.net.ServerSocketFactory;
@@ -14,7 +15,9 @@ import java.net.ServerSocket;
  * Created by apple on 17/04/2017.
  */
 public class Server {
+
     private Dispatcher dispatcher;
+
 
     public static void main(String[] args) {
         //initial command line options
@@ -26,7 +29,24 @@ public class Server {
         }
 
         //initial server setting
-        ServerSetting.sharedSetting().initSetting(cliManager);
+        ServerSetting setting = ServerSetting.sharedSetting();
+        setting.initSetting(cliManager);
+
+        // print server setting information
+        String log = setting.timeLog() + " - [EZShare.Server.main] " +
+                "- [INFO] Starting the EZShare Server";
+        System.out.println(log);
+        log = setting.timeLog() + " - [EZShare.ServerSetting] " +
+                "- [INFO] - using secret: " + setting.getSecret();
+        System.out.println(log);
+        log = setting.timeLog() + " - [EZShare.ServerSetting] " +
+                "- [INFO] - using advertised hostname: " + setting.getAdvertisedHostName();
+        System.out.println(log);
+        log = setting.timeLog() + " - [EZShare.ServerSetting] " +
+                "- [INFO] - bound to por " + setting.getPort();
+        System.out.println(log);
+
+
 
         //initial server list manager
         ServerListManager serverListManager = ServerListManager.sharedServerListManager();

@@ -32,10 +32,6 @@ public class ExchangeHandler extends Handler{
         JSONObject obj = new JSONObject();
 
         //TODO if need to handle invalid resource,
-        // remove white space
-        // server list is not given
-        // server is not valid in structure
-        // server ip/port is not valid
         ArrayList<IPAddress> serverList = ((ExchangeCommand)command).getServerList();
 
         // missing server list

@@ -3,6 +3,9 @@ package CommonLibs.Setting;
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by apple on 25/04/2017.
  */
@@ -11,12 +14,14 @@ public abstract class Setting {
     protected int port;
     protected int timeout;
     protected boolean isDebugModel;
+    protected SimpleDateFormat dateFormat;
 
     protected Setting() {
         this.host = "sunrise.cis.unimelb.edu.au";
         this.port = 3781;
         this.timeout = 12000;
         this.isDebugModel = false;
+        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
     }
 
     public void initSetting(CliManager cli) {
@@ -61,5 +66,10 @@ public abstract class Setting {
 
     public int getTimeout() {
         return timeout;
+    }
+
+    public String timeLog(){
+        String currentTime = dateFormat.format(new Date());
+        return currentTime;
     }
 }

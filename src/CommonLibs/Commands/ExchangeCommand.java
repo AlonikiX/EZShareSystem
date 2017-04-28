@@ -23,7 +23,6 @@ public class ExchangeCommand extends Command {
         this.serverList = serverList;
     }
 
-
     /**
      * @description get the server list from cli
      * @param cli, an instance of CliManager

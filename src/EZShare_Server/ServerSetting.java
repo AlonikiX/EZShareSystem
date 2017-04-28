@@ -2,12 +2,14 @@ package EZShare_Server;
 
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
+import CommonLibs.DataStructure.IPAddress;
 import CommonLibs.Setting.Setting;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Created by Anson Chen on 2017/4/24.
@@ -22,8 +24,12 @@ public class ServerSetting extends Setting {
 
     private ServerSetting() {
         this.hosts = new ArrayList<>();
-        this.secret = "";
-        this.advertisedHostName = "EZServer";
+        this.secret = generateSecret();
+        try {
+            this.advertisedHostName = InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            this.advertisedHostName = "EZServer";
+        }
         this.connectionIntervalLimit = 1000;
         this.exchangeInterval = 10000;
     }
@@ -96,6 +102,14 @@ public class ServerSetting extends Setting {
         return exchangeInterval;
     }
 
-
+    private String generateSecret(){
+        char[] base = "1234567890abcdefghijklmnopqrstuvwxyz".toCharArray();
+        String result = "";
+        Random rdm = new Random();
+        for (int i=0; i<20; i++){
+            result += base[rdm.nextInt(base.length)];
+        }
+        return result;
+    }
 
 }
