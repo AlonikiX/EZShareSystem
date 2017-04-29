@@ -1,10 +1,8 @@
 package EZShare_Client.Processor;
 
 import CommonLibs.Commands.Command;
-import CommonLibs.Commands.CommandType;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.Exception.UndefinedCommandException;
-import EZShare_Client.Client;
 import EZShare_Client.ClientSetting;
 
 /**

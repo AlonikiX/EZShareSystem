@@ -153,7 +153,11 @@ public abstract class ResourceCommand extends Command {
         }
         if (cli.hasOption(OptionField.owner.getValue())) {
             String owner = cli.getOptionValue(OptionField.owner.getValue());
-            if (null != owner) {
+
+            if (owner.compareTo(".git") == 0){
+                // this case is used to handle the problems in the library CLI
+                resource.setOwner("*");
+            } else if (null != owner) {
                 resource.setOwner(owner.trim());
             }
             resourceDefined = true;

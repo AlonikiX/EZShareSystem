@@ -32,7 +32,6 @@ public class ExchangeHandler extends Handler{
 
         JSONObject obj = new JSONObject();
 
-        //TODO if need to handle invalid resource,
         ArrayList<IPAddress> serverList = ((ExchangeCommand)command).getServerList();
 
         // missing server list
@@ -45,6 +44,13 @@ public class ExchangeHandler extends Handler{
             printLog(msg);
             return;
         }
+
+//        // validate the servers in the given list
+//        boolean allValid = true;
+//        for (IPAddress ipAddress:serverList){
+//            Communicator cmtr = new
+//        }
+
 
         //handle successfully
         ExchangeCommand cmd = (ExchangeCommand)command;

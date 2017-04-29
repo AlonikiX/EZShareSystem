@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="EZShareSystem:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/EZShareSystem_jar</output-path>
+    <root id="archive" name="EZShareSystem.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="E:/EZShare/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="EZShareSystem" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/commons-cli-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/json for java.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

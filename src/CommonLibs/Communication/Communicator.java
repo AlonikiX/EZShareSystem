@@ -101,8 +101,8 @@ public class Communicator {
         try {
             this.output.writeUTF(data);
             this.output.flush();
-            System.out.println("Send:");
-            System.out.println(data);
+//            System.out.println("Send:");
+//            System.out.println(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -111,8 +111,8 @@ public class Communicator {
     public String readData() {
         try {
             String data = this.input.readUTF();
-            System.out.println("Receive:");
-            System.out.println(data);
+//            System.out.println("Receive:");
+//            System.out.println(data);
             return data;
         } catch (IOException e) {
             e.printStackTrace();
