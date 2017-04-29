@@ -1,7 +1,5 @@
 package CommonLibs.DataStructure;
 
-import java.lang.reflect.Array;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -14,7 +12,8 @@ public class Resource {
 //    • Description: optional user supplied description (String), default is "".
 //    • Tags: optional user supplied list of tags (Array of Strings), default is empty list.
 //    • URI: mandatory user supplied absolute URI, that is unique for each resource on a given EZShare Server
-//           within each Channel on the server (String). The URI must conform to official URI format. • Channel: optional user supplied channel name (String), default is "".
+//           within each Channel on the server (String). The URI must conform to official URI format.
+//    • Channel: optional user supplied channel name (String), default is "".
 //    • Owner: optional user supplied owner name (String), default is "".
 //    • EZserver: system supplied server:port name that lists the Resource (String).
 

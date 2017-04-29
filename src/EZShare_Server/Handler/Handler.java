@@ -1,10 +1,8 @@
 package EZShare_Server.Handler;
 
 import CommonLibs.Commands.Command;
-import CommonLibs.Commands.CommandType;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.ResourceListManager;
-import EZShare_Server.Server;
 import EZShare_Server.ServerSetting;
 
 /**

@@ -68,7 +68,7 @@ public class LimitedIPAddressListManager {
             //remove IP address who have reached the interval limit
             for (String ipAddress : temp) {
                 clientList.remove(ipAddress);
-                System.out.println("remove limited ip address" + ipAddress);
+//                System.out.println("remove limited ip address" + ipAddress);
             }
             readWriteLock.writeLock().unlock();
         }

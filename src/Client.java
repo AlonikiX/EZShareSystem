@@ -1,8 +1,8 @@
-package EZShare_Client;
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Exception.UndefinedCommandException;
+import EZShare_Client.ClientSetting;
 import EZShare_Client.Processor.Processor;
 import org.apache.commons.cli.ParseException;
 import org.json.JSONObject;
