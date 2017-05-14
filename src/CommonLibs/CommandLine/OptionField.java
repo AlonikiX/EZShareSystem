@@ -20,6 +20,8 @@ public enum OptionField {
     share("share"),
     fetch("fetch"),
     exchange("exchange"),
+    subscribe("subscribe"),
+    unsubscribe("unsubscribe"),
 
     //resource fields
     name("name"),
@@ -58,7 +60,16 @@ public enum OptionField {
     invalidTemplate("invalid resourceTemplate"),
     missingResource("missing resource"),
     missingTemplate("missing resourceTemplate"),
-    missingResourceTemplate("missingResourceTemplate"),
+//    missingResourceTemplate("missingResourceTemplate"),
+
+    // secure socket
+    secure("secure"),
+
+    // subscription
+    id("id"),
+
+
+
     ;
 
     private String value;
