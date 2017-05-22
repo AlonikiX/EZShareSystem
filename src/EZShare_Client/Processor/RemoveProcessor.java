@@ -30,7 +30,7 @@ public class RemoveProcessor extends Processor {
                 if (object.has(OptionField.errorMessage.getValue())) {
                     break;
                 }
-            }
+            }//
         }
     }
 }
