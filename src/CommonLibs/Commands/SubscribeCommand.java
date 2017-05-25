@@ -16,6 +16,8 @@ public class SubscribeCommand extends ResourceCommand {
 
     private SubscribeCommand(){
 
+        this.commandType = CommandType.SUBSCRIBE;
+
     }
 
     public SubscribeCommand(CliManager cli) {

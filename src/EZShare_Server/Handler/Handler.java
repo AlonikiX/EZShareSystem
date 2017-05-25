@@ -51,6 +51,8 @@ public abstract class Handler {
                 return new FetchHandler(cmd);
             case "EXCHANGE":
                 return new ExchangeHandler(cmd);
+            case "SUBSCRIBE":
+                return new SubscribeHandler(cmd);
         }
         return new UndefinedHandler(cmd);
     }
