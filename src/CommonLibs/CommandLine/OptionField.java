@@ -64,6 +64,7 @@ public enum OptionField {
 
     // secure socket
     secure("secure"),
+    sport("sport"),
 
     // subscription
     id("id"),

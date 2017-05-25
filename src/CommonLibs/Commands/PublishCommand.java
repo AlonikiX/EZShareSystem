@@ -25,9 +25,7 @@ public class PublishCommand extends ResourceCommand {
     public String toJSON() {
         JSONObject obj = new JSONObject();
         obj.put(OptionField.command.getValue(), this.commandType.getValue());
-
         if (resource != null) obj.put(OptionField.resource.getValue(), this.toResourceJSONObject());
-
         StringWriter out = new StringWriter();
         obj.write(out);
 
