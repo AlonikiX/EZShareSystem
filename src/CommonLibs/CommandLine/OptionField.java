@@ -41,10 +41,14 @@ public enum OptionField {
     error("error"),
     errorMessage("errorMessage"),
 
+    //client options
+    secure("secure"),
+
     //server options
     advertisedhostname("advertisedhostname"),
     connectionintervallimit("connectionintervallimit"),
     exchangeinterval("exchangeinterval"),
+    sport("sport"),
 
     //json
     command("command"),
@@ -61,9 +65,6 @@ public enum OptionField {
     missingResource("missing resource"),
     missingTemplate("missing resourceTemplate"),
 //    missingResourceTemplate("missingResourceTemplate"),
-
-    // secure socket
-    secure("secure"),
 
     // subscription
     id("id"),

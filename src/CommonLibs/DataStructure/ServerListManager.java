@@ -19,11 +19,12 @@ public class ServerListManager {
     private static ServerListManager severListManager;
     private int exchangeInterval;
 
-    private ArrayList<IPAddress> serverList;
+    private ArrayList<IPAddress> insecureServerList;
+    private ArrayList<IPAddress> secureServerList;
     private ReadWriteLock rwlock;
 
     private ServerListManager() {
-        this.serverList = new ArrayList<IPAddress>();
+        this.insecureServerList = new ArrayList<IPAddress>();
         this.rwlock = new ReentrantReadWriteLock();
         this.exchangeInterval = 12000;
 
@@ -40,8 +41,8 @@ public class ServerListManager {
         return severListManager;
     }
 
-    public ArrayList<IPAddress> getServerList() {
-        return this.serverList;
+    public ArrayList<IPAddress> getInsecureServerList() {
+        return this.insecureServerList;
     }
 
     /**
@@ -58,7 +59,7 @@ public class ServerListManager {
             }
 
             this.rwlock.readLock().lock();
-            int size = this.serverList.size();
+            int size = this.insecureServerList.size();
             if (0 != size) {
                 //randomly choose a server to exchange
                 IPAddress ipAddress;
@@ -66,10 +67,10 @@ public class ServerListManager {
                 do {
                     Random random = new Random();
                     index = random.nextInt(size);
-                    ipAddress = this.serverList.get(index);
+                    ipAddress = this.insecureServerList.get(index);
                 }while (isLocalHost(ipAddress));
 
-                Command command = new ExchangeCommand(this.serverList);
+                Command command = new ExchangeCommand(this.insecureServerList);
 
                 this.rwlock.readLock().unlock();
 
@@ -97,7 +98,7 @@ public class ServerListManager {
                     }
                 } else {//fail to connect to the chosen server, remove it from the server list
                     this.rwlock.writeLock().lock();
-                    this.serverList.remove(index);
+                    this.insecureServerList.remove(index);
                     this.rwlock.writeLock().unlock();
                 }
             }else {
@@ -120,14 +121,14 @@ public class ServerListManager {
         this.rwlock.writeLock().lock();
         for (IPAddress server : serverList) {
             if (false == checkExists(server)) {
-                this.serverList.add(server);
+                this.insecureServerList.add(server);
             }
         }
         this.rwlock.writeLock().unlock();
     }
 
     public boolean checkExists(IPAddress ipAddress) {
-        for (IPAddress server : serverList) {
+        for (IPAddress server : insecureServerList) {
             if (server.port == ipAddress.port) {
                 if (0 == server.hostname.compareTo(ipAddress.hostname)) {
                     return true;
@@ -140,7 +141,7 @@ public class ServerListManager {
     public ArrayList<IPAddress> cloneServerList(){
         ArrayList<IPAddress> list = new ArrayList<IPAddress>();
         this.rwlock.readLock().lock();
-        list.addAll(serverList);
+        list.addAll(insecureServerList);
         this.rwlock.readLock().unlock();
         return list;
     }

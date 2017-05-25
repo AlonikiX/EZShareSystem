@@ -2,9 +2,7 @@ package EZShare;
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.ServerListManager;
-import EZShare_Server.Dispatcher;
-import EZShare_Server.LimitedIPAddressListManager;
-import EZShare_Server.ServerSetting;
+import EZShare_Server.*;
 import org.apache.commons.cli.ParseException;
 
 import javax.net.ServerSocketFactory;
@@ -49,42 +47,11 @@ public class Server {
                 "- [INFO] - setting debug " + ((setting.isDebugModel())?"on":"off");
         System.out.println(log);
 
-        //initial server list manager
-        ServerListManager serverListManager = ServerListManager.sharedServerListManager();
+        NormalSocketListener normalSocketListener = new NormalSocketListener();
+        normalSocketListener.start();
 
-        //initial limited client list manager
-        LimitedIPAddressListManager limitedIPAddressListManager = LimitedIPAddressListManager.shareClientListManager();
-
-        //run server
-        ServerSocketFactory factory = ServerSocketFactory.getDefault();
-        try(ServerSocket serverSocket = factory.createServerSocket(ServerSetting.sharedSetting().getPort())){
-            System.out.println("Waiting for client connection..");
-            // Wait for connections.
-            while(true){
-                //set communicator
-                Communicator communicator = new Communicator(ServerSetting.sharedSetting());
-                communicator.establishConnection(serverSocket.accept());
-
-                String host = communicator.getClientAddress();
-                System.out.println("Server Information:");
-                System.out.println("connected with IP address:" + host);
-                if (limitedIPAddressListManager.limitConnection(host)) {
-                    System.out.println("Server Information:");
-                    System.out.println("connection too frequent");
-                    limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
-                    continue;
-                }
-                limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
-
-                //new dispatching thread
-                Dispatcher dispatcher = new Dispatcher();
-                dispatcher.bindCommunicator(communicator);
-                dispatcher.start();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SecureSocketListener secureSocketListener = new SecureSocketListener(args[1],args[2]);
+        secureSocketListener.start();
 
     }
 }

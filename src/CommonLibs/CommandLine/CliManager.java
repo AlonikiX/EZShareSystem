@@ -26,6 +26,7 @@ public class CliManager {
             options.addOption(OptionField.debug.getValue(),false, "debug model");
             options.addOption(OptionField.host.getValue(),true, "connect to hostname");
             options.addOption(OptionField.port.getValue(),true, "connect to port");
+            options.addOption(OptionField.secure.getValue(), false, "set using ssl");
             //commands
             options.addOption(OptionField.query.getValue(),false, "query command");
             options.addOption(OptionField.publish.getValue(),false, "publish command");
@@ -50,6 +51,7 @@ public class CliManager {
             options.addOption(OptionField.advertisedhostname.getValue(),true, "advertised hostname");
             options.addOption(OptionField.connectionintervallimit.getValue(),true, "connection interval limit in seconds");
             options.addOption(OptionField.exchangeinterval.getValue(),true, "exchange interval in seconds");
+            options.addOption(OptionField.sport.getValue(), true, "set secure port");
         }
 
         //parse options to command line

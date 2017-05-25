@@ -3,6 +3,7 @@ package EZShare_Server.Handler;
 import CommonLibs.Commands.Command;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.ResourceListManager;
+import CommonLibs.Setting.SecurityMode;
 import EZShare_Server.ServerSetting;
 
 /**
@@ -13,10 +14,12 @@ public abstract class Handler {
     protected Command command;
     protected Communicator communicator;
     protected ResourceListManager resourceListManager;
+    protected SecurityMode securityMode;
 
     public Handler(Command cmd){
         this.command = cmd;
         this.resourceListManager = ResourceListManager.shareResourceListManager();
+        this.securityMode = SecurityMode.inSecure;
     }
 
     public void bindCommunicator(Communicator communicator) {
@@ -51,6 +54,24 @@ public abstract class Handler {
                 return new FetchHandler(cmd);
             case "EXCHANGE":
                 return new ExchangeHandler(cmd);
+        }
+        return new UndefinedHandler(cmd);
+    }
+
+    public static Handler secureHandlerFactory(Command cmd) {
+        switch (cmd.getCommandType().getValue()){
+            case "PUBLISH":
+                return new PublishHandler(cmd);
+            case "REMOVE":
+                return new RemoveHandler(cmd);
+            case "SHARE":
+                return new ShareHandler(cmd);
+            case "QUERY":
+                return new SecureQueryHandler(cmd);
+            case "FETCH":
+                return new FetchHandler(cmd);
+            case "EXCHANGE":
+                return new SecureExchangeHandler(cmd);
         }
         return new UndefinedHandler(cmd);
     }

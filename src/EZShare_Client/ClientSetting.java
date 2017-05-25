@@ -1,5 +1,8 @@
 package EZShare_Client;
 
+import CommonLibs.CommandLine.CliManager;
+import CommonLibs.CommandLine.OptionField;
+import CommonLibs.Setting.SecurityMode;
 import CommonLibs.Setting.Setting;
 
 /**
@@ -7,9 +10,11 @@ import CommonLibs.Setting.Setting;
  */
 public class ClientSetting extends Setting {
     private static ClientSetting setting;
+    protected SecurityMode securityMode;
 
     private ClientSetting() {
         super();
+        this.securityMode = SecurityMode.inSecure;
     }
 
     public static ClientSetting sharedSetting(){
@@ -19,4 +24,19 @@ public class ClientSetting extends Setting {
         return setting;
     }
 
+    @Override
+    public void initSetting(CliManager cli) {
+        super.initSetting(cli);
+        if (cli.hasOption(OptionField.secure.getValue())) {
+            this.securityMode = SecurityMode.secure;
+        }
+    }
+
+    public SecurityMode getSecurityMode() {
+        return securityMode;
+    }
+
+    public void setSecurityMode(SecurityMode securityMode) {
+        this.securityMode = securityMode;
+    }
 }

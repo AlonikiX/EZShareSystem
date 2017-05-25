@@ -3,6 +3,7 @@ package EZShare_Server;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.*;
 import CommonLibs.Communication.Communicator;
+import CommonLibs.Setting.SecurityMode;
 import EZShare_Server.Handler.Handler;
 import org.json.JSONObject;
 
@@ -11,9 +12,18 @@ import org.json.JSONObject;
  */
 public class Dispatcher extends Thread {
     private Communicator communicator;
+    private SecurityMode securityMode;
+
+    public Dispatcher(){
+        this.securityMode = SecurityMode.inSecure;
+    }
 
     public void bindCommunicator(Communicator communicator){
         this.communicator = communicator;
+    }
+
+    public void setSecurityMode(SecurityMode securityMode) {
+        this.securityMode = securityMode;
     }
 
     @Override
@@ -33,7 +43,14 @@ public class Dispatcher extends Thread {
                 }
                 //dispatch
                 Command command = Command.commandFactory(data);
-                Handler handler = Handler.handlerFactory(command);
+                //use different handler factory base on the secure mode
+                Handler handler;
+                if (SecurityMode.inSecure == this.securityMode) {
+                    handler = Handler.handlerFactory(command);
+                }else {
+                    handler = Handler.secureHandlerFactory(command);
+                }
+
                 handler.bindCommunicator(this.communicator);
                 //handle
                 handler.handle();
