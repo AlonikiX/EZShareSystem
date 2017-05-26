@@ -9,7 +9,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
@@ -46,7 +45,7 @@ public class SubscribeHandler extends Handler {
         if (((SubscribeCommand)command).relay()){
             ServerSetting.sharedSetting().addRelay(this);
         } else {
-            ServerSetting.sharedSetting().addNonRelay(this);
+            ServerSetting.sharedSetting().addDirect(this);
         }
 
         // TODO subscribe successful message - [JiaCheng]
@@ -111,7 +110,7 @@ public class SubscribeHandler extends Handler {
         if (((SubscribeCommand)command).relay()){
             ServerSetting.sharedSetting().addRelay(this);
         } else {
-            ServerSetting.sharedSetting().addNonRelay(this);
+            ServerSetting.sharedSetting().addDirect(this);
         }
         // TODO debug mode?
 

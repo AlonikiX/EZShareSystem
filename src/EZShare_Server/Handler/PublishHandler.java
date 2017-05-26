@@ -4,6 +4,7 @@ import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.PublishCommand;
 import CommonLibs.DataStructure.Resource;
+import EZShare_Server.ServerSetting;
 import org.json.JSONObject;
 
 /**
@@ -51,13 +52,8 @@ public class PublishHandler extends Handler{
 
         if (handleResult){
             obj.put(OptionField.response.getValue(), OptionField.success.getValue());
-
-
-
-            // TODO also notify all subscription users
-            //
-
-
+            ServerSetting.sharedSetting().notifyDirect(resource);
+            ServerSetting.sharedSetting().notifyRelay(resource);
         } else {
             obj.put(OptionField.response.getValue(), OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(), "cannot publish resource");
@@ -65,7 +61,5 @@ public class PublishHandler extends Handler{
         String msg = obj.toString();
         communicator.writeData(msg);
         printLog(msg);
-
     }
-
 }
