@@ -46,9 +46,6 @@ public class ResourceListManager {
 //    }
 
 
-
-
-
     private static ResourceListManager resourceListManager;
 
     private ArrayList<Resource> resourceList;

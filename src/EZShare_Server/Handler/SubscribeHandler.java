@@ -2,6 +2,7 @@ package EZShare_Server.Handler;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.SubscribeCommand;
+import CommonLibs.DataStructure.HandlerListManager;
 import CommonLibs.DataStructure.Resource;
 import EZShare_Server.ServerSetting;
 import org.json.JSONArray;
@@ -79,9 +80,9 @@ public class SubscribeHandler extends Handler {
 
         // self register in server
         if (((SubscribeCommand)command).relay()){
-            ServerSetting.sharedSetting().addRelay(this);
+            HandlerListManager.sharedHanderListManager().add(this, true);
         } else {
-            ServerSetting.sharedSetting().addDirect(this);
+            HandlerListManager.sharedHanderListManager().add(this, false);
         }
 
         obj.put(OptionField.response.getValue(),OptionField.success.getValue());
@@ -163,9 +164,9 @@ public class SubscribeHandler extends Handler {
 
         // self unregister
         if (((SubscribeCommand)command).relay()){
-            ServerSetting.sharedSetting().addRelay(this);
+            HandlerListManager.sharedHanderListManager().remove(this, true);
         } else {
-            ServerSetting.sharedSetting().addDirect(this);
+            HandlerListManager.sharedHanderListManager().remove(this, false);
         }
         // TODO debug mode?
 

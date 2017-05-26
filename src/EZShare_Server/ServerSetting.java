@@ -2,19 +2,12 @@ package EZShare_Server;
 
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
-import CommonLibs.Communication.Communicator;
-import CommonLibs.DataStructure.ConnectionList;
-import CommonLibs.DataStructure.HandlerList;
-import CommonLibs.DataStructure.IPAddress;
-import CommonLibs.DataStructure.Resource;
 import CommonLibs.Setting.Setting;
-import EZShare_Server.Handler.SubscribeHandler;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -28,12 +21,6 @@ public class ServerSetting extends Setting {
     private int connectionIntervalLimit;
     private int exchangeInterval;
 
-    private HandlerList relay;
-    private HandlerList direct;
-
-    private ConnectionList secureConnections = new ConnectionList();
-    private ConnectionList unsecureConnections = new ConnectionList();
-
     private ServerSetting() {
         this.hosts = new ArrayList<>();
         this.secret = generateSecret();
@@ -45,8 +32,6 @@ public class ServerSetting extends Setting {
         this.connectionIntervalLimit = 1000;
         this.exchangeInterval = 10000;
         this.securePort = 4001;
-        this.relay = new HandlerList();
-        this.direct = new HandlerList();
     }
 
     public static ServerSetting sharedSetting(){
@@ -121,46 +106,6 @@ public class ServerSetting extends Setting {
 
     public int getExchangeInterval() {
         return exchangeInterval;
-    }
-
-    public void addRelay (SubscribeHandler handler){
-        relay.add(handler);
-    }
-
-    public void removeRelay (SubscribeHandler handler){
-        relay.remove(handler);
-    }
-
-    public void notifyRelay(Resource resource){
-        relay.notify(resource,false);
-    }
-
-    public void addDirect(SubscribeHandler handler){
-        direct.add(handler);
-    }
-
-    public void removeDirect(SubscribeHandler handler){
-        direct.remove(handler);
-    }
-
-    public void notifyDirect(Resource resource){
-        direct.notify(resource,true);
-    }
-
-    public Communicator relaySecure(IPAddress address){
-        return secureConnections.connect(address);
-    }
-
-    public void unrelaySecure (){
-        secureConnections.disconnectAll();
-    }
-
-    public Communicator relayUnsecure (IPAddress address){
-        return unsecureConnections.connect(address);
-    }
-
-    public void unrelayUnsecure(){
-        unsecureConnections.disconnectAll();
     }
 
     private String generateSecret(){
