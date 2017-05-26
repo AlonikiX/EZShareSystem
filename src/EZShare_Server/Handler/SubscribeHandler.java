@@ -72,7 +72,6 @@ public class SubscribeHandler extends Handler {
                 // TODO debug mode?
 
 
-
                 // here it is assumed that Client will never subscribe more than one resources
                 rwlock.writeLock().lock();
                 templates.put(((SubscribeCommand)cmd).getId(),((SubscribeCommand)cmd).getResource());
