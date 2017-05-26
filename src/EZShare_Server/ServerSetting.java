@@ -37,6 +37,7 @@ public class ServerSetting extends Setting {
         }
         this.connectionIntervalLimit = 1000;
         this.exchangeInterval = 10000;
+        this.securePort = 4001;
         this.relay = new HandlerList();
         this.nonRealy = new HandlerList();
     }
@@ -84,6 +85,12 @@ public class ServerSetting extends Setting {
             String exchangeInterval = cli.getOptionValue(OptionField.exchangeinterval.getValue());
             if (null != exchangeInterval) {
                 this.exchangeInterval = Integer.parseInt(exchangeInterval);
+            }
+        }
+        if (cli.hasOption(OptionField.sport.getValue())) {
+            String securePort = cli.getOptionValue(OptionField.sport.getValue());
+            if (null != securePort) {
+                this.securePort = Integer.parseInt(securePort);
             }
         }
 
