@@ -50,7 +50,7 @@ public class Server {
         NormalSocketListener normalSocketListener = new NormalSocketListener();
         normalSocketListener.start();
 
-        SecureSocketListener secureSocketListener = new SecureSocketListener(args[1],args[2]);
+        SecureSocketListener secureSocketListener = new SecureSocketListener(args[0],args[1]);
         secureSocketListener.start();
 
         try {

@@ -30,11 +30,10 @@ public class HandlerList {
         rwlock.writeLock().unlock();
     }
 
-    public void notify(Resource resource){
+    public void notify(Resource resource, boolean direct){
         rwlock.readLock().lock();
         for (SubscribeHandler handler : list){
-            // TODO trigger all
-
+            handler.notify(resource,direct);
         }
         rwlock.readLock().unlock();
     }

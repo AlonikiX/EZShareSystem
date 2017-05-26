@@ -12,6 +12,7 @@ import java.util.Date;
 public abstract class Setting {
     protected String host;
     protected int port;
+    protected int securePort;
     protected int timeout;
     protected boolean isDebugModel;
     protected SimpleDateFormat dateFormat;
@@ -19,6 +20,7 @@ public abstract class Setting {
     protected Setting() {
         this.host = "sunrise.cis.unimelb.edu.au";
         this.port = 3781;
+        this.securePort = 40001;
         this.timeout = 12000;
         this.isDebugModel = false;
         this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
@@ -71,5 +73,13 @@ public abstract class Setting {
     public String getTime(){
         String currentTime = dateFormat.format(new Date());
         return currentTime;
+    }
+
+    public int getSecurePort(){
+        return this.securePort;
+    }
+
+    public void setSecurePort(int sport){
+        this.securePort = sport;
     }
 }

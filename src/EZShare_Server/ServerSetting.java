@@ -3,6 +3,7 @@ package EZShare_Server;
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.DataStructure.HandlerList;
+import CommonLibs.DataStructure.Resource;
 import CommonLibs.Setting.Setting;
 import EZShare_Server.Handler.SubscribeHandler;
 
@@ -22,10 +23,9 @@ public class ServerSetting extends Setting {
     private String advertisedHostName;
     private int connectionIntervalLimit;
     private int exchangeInterval;
-    private int securePort;
 
     private HandlerList relay;
-    private HandlerList nonRealy;
+    private HandlerList direct;
 
     private ServerSetting() {
         this.hosts = new ArrayList<>();
@@ -39,7 +39,7 @@ public class ServerSetting extends Setting {
         this.exchangeInterval = 10000;
         this.securePort = 4001;
         this.relay = new HandlerList();
-        this.nonRealy = new HandlerList();
+        this.direct = new HandlerList();
     }
 
     public static ServerSetting sharedSetting(){
@@ -124,12 +124,20 @@ public class ServerSetting extends Setting {
         relay.remove(handler);
     }
 
-    public void addNonRelay (SubscribeHandler handler){
-        nonRealy.add(handler);
+    public void notifyRelay(Resource resource){
+        relay.notify(resource,false);
     }
 
-    public void removeNonRelay (SubscribeHandler handler){
-        nonRealy.remove(handler);
+    public void addDirect(SubscribeHandler handler){
+        direct.add(handler);
+    }
+
+    public void removeDirect(SubscribeHandler handler){
+        direct.remove(handler);
+    }
+
+    public void notifyDirect(Resource resource){
+        direct.notify(resource,true);
     }
 
     private String generateSecret(){
@@ -141,15 +149,4 @@ public class ServerSetting extends Setting {
         }
         return result;
     }
-
-    public int getSecurePort(){
-        return this.securePort;
-    }
-
-    public void setSecurePort(int sport){
-        this.securePort = sport;
-    }
-
-
-
 }
