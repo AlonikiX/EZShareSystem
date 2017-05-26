@@ -31,11 +31,12 @@ public class HandlerList {
     }
 
     public void notify(Resource resource){
+        rwlock.readLock().lock();
+        for (SubscribeHandler handler : list){
+            // TODO trigger all
 
-
-        // notify everyone!
-
-
+        }
+        rwlock.readLock().unlock();
     }
 
 }
