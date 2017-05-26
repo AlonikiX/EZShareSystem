@@ -66,6 +66,8 @@ public enum OptionField {
     missingTemplate("missing resourceTemplate"),
 //    missingResourceTemplate("missingResourceTemplate"),
 
+    missingID("missing ID"),
+    invalidID("invalid ID"),
     // subscription
     id("id"),
 
