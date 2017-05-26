@@ -3,6 +3,7 @@ package EZShare_Server.Handler;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.PublishCommand;
+import CommonLibs.DataStructure.HandlerListManager;
 import CommonLibs.DataStructure.Resource;
 import EZShare_Server.ServerSetting;
 import org.json.JSONObject;
@@ -52,8 +53,7 @@ public class PublishHandler extends Handler{
 
         if (handleResult){
             obj.put(OptionField.response.getValue(), OptionField.success.getValue());
-            ServerSetting.sharedSetting().notifyDirect(resource);
-            ServerSetting.sharedSetting().notifyRelay(resource);
+            HandlerListManager.sharedHanderListManager().notify(resource,true);
         } else {
             obj.put(OptionField.response.getValue(), OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(), "cannot publish resource");
