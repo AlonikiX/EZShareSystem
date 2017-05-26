@@ -149,8 +149,6 @@ public class SubscribeHandler extends Handler {
      * @param resource the new resource
      */
     private void snedResource(Resource resource){
-        rwlock.writeLock().lock();
-        hits ++;
         JSONObject obj = new JSONObject();
         obj.put(OptionField.name.getValue(), resource.getName());
         obj.put(OptionField.description.getValue(), resource.getDescription());
@@ -166,11 +164,12 @@ public class SubscribeHandler extends Handler {
                 ServerSetting.sharedSetting().getAdvertisedHostName():resource.getEzserver());
 
         String msg = obj.toString();
+        rwlock.writeLock().lock();
         communicator.writeData(msg);
-        printLog(msg);
-
-        // TODO Debug Mode
         rwlock.writeLock().unlock();
+        printLog(msg);
+        hits ++;
+        // TODO Debug Mode
     }
 
     private boolean isSubscribed(Resource resource, boolean direct){
