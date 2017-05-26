@@ -52,7 +52,7 @@ public abstract class Handler {
             case "EXCHANGE":
                 return new ExchangeHandler(cmd);
             case "SUBSCRIBE":
-                return new SubscribeHandler(cmd);
+
         }
         return new UndefinedHandler(cmd);
     }

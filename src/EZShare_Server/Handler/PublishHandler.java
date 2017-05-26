@@ -55,21 +55,7 @@ public class PublishHandler extends Handler{
 
 
             // TODO also notify all subscription users
-            // call server -> server check resource, and notify proper handler thread
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            //
 
 
         } else {

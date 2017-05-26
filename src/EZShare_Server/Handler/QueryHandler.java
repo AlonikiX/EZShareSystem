@@ -148,7 +148,6 @@ public class QueryHandler extends Handler{
 //                                //TODO terminate this thread
 //                            }
                         }
-
                     }
                 };
 
