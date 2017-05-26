@@ -7,6 +7,7 @@ import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.IPAddress;
 import CommonLibs.DataStructure.Resource;
 import CommonLibs.DataStructure.ServerListManager;
+import CommonLibs.Setting.SecurityMode;
 import EZShare_Server.ServerSetting;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -87,12 +88,13 @@ public class QueryHandler extends Handler{
             QueryCommand relayCommand = ((QueryCommand)command).relayClone();
             String jsonMessage = relayCommand.toJSON();
             ArrayList<IPAddress> addressList = ServerListManager.sharedServerListManager().cloneServerList(this.securityMode);
-
+            SecurityMode securityMode = this.securityMode;
             ArrayList<Thread> threads = new ArrayList<Thread>();
             for (IPAddress address:addressList){
                 Thread thread = new Thread() {
                     public void run(){
                         Communicator queryCommunicator = new Communicator(ServerSetting.sharedSetting());
+                        queryCommunicator.setSecureMode(securityMode);
                         if (communicator.isLocalHost(address)) {
                             return;
                         }
