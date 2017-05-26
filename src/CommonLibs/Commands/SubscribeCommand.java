@@ -22,8 +22,6 @@ public class SubscribeCommand extends ResourceCommand {
 
     public SubscribeCommand(CliManager cli) {
         this.commandType = CommandType.SUBSCRIBE;
-        this.id = cli.hasOption(OptionField.id.getValue()) ?
-                (cli.getOptionValue(OptionField.id.getValue())): null;
         this.relay = cli.hasOption(OptionField.relay.getValue()) ?
                 (Boolean.parseBoolean(cli.getOptionValue(OptionField.relay.getValue()))) : true;
         this.toResource(cli);

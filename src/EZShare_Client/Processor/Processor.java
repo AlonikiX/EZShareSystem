@@ -42,6 +42,8 @@ public abstract class Processor {
                 return new FetchProcessor(command);
             case EXCHANGE:
                 return new ExchangeProcessor(command);
+            case SUBSCRIBE:
+                return new SubscribeProcessor(command);
         } throw new UndefinedCommandException();
     }
 

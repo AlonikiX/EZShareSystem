@@ -42,6 +42,9 @@ public abstract class Command {
         if (cli.hasOption(OptionField.exchange.getValue())) {
             return new ExchangeCommand(cli);
         }
+        if (cli.hasOption(OptionField.subscribe.getValue())){
+            return new SubscribeCommand(cli);
+        }
         return null;
     }
 

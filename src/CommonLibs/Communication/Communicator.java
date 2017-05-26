@@ -279,6 +279,11 @@ public class Communicator {
 
         return chunkSize;
     }
+
+    public Socket getSocket(){
+        return this.socket;
+    }
+
 }
 
 //{"command": "QUERY","relay": true,"resourceTemplate": {"name": "","tags": [],"description": "","uri": "","channel": "","owner": "","ezserver": null}}

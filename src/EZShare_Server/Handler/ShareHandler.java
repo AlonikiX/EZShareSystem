@@ -74,7 +74,6 @@ public class ShareHandler extends Handler{
             // if the secret is incorrect, directly generate error message
             obj.put(OptionField.response.getValue(), OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(),"incorrect secret");
-
         }
 
         String msg = obj.toString();

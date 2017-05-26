@@ -5,7 +5,7 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 
-class IPFetcher {
+public class IPFetcher {
     public static String getPublicIpAddress(Socket socket) {
         try {
             URL whatismyip = new URL("http://checkip.amazonaws.com");

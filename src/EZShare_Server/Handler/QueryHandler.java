@@ -112,7 +112,7 @@ public class QueryHandler extends Handler{
                                         relayReceiveLog(queryCommunicator,jsonMessage);
                                         JSONObject object = new JSONObject(data);
 
-                                        // in these cases, the other server will nt reply with resources
+                                        // in these cases, the other server will not reply with resources
                                         if (!object.has(OptionField.response.getValue())
                                                 || (0 != object.getString(OptionField.response.getValue())
                                                 .compareTo(OptionField.success.getValue()))
