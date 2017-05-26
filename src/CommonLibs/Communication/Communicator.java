@@ -1,6 +1,7 @@
 package CommonLibs.Communication;
 
 import CommonLibs.DataStructure.IPAddress;
+import CommonLibs.Setting.SecurityMode;
 import CommonLibs.Setting.Setting;
 import EZShare_Server.Dispatcher;
 import EZShare_Server.ServerSetting;
@@ -14,6 +15,8 @@ import java.net.Socket;
 import java.util.Arrays;
 
 import javax.net.ServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 /**
  * Created by apple on 16/04/2017.
@@ -27,8 +30,14 @@ public class Communicator {
     private DataInputStream input;
     private DataOutputStream output;
 
+    private SecurityMode securityMode;
+
     public Communicator(Setting setting) {
         this.setting = setting;
+    }
+
+    public void setSecureMode(SecurityMode secureMode){
+        this.securityMode = secureMode;
     }
 
     public void establishConnection(Socket socket) {
@@ -59,21 +68,33 @@ public class Communicator {
     }
 
     public boolean connectToServer() {
-
-        // TODO how about just write:
-//        return connectToServer(setting.getHost(),setting.getPort());
-
-
+        if (SecurityMode.inSecure == this.securityMode){
             //new socket
             this.socket = new Socket();
             try {
-                this.socket.connect(new InetSocketAddress(setting.getHost(),setting.getPort()), setting.getTimeout());
+                this.socket.connect(new InetSocketAddress(
+                        setting.getHost(),setting.getPort()), setting.getTimeout());
             } catch (Exception e) {
-//            e.printStackTrace();
+//                e.printStackTrace();
                 System.out.println("Connect timed out\n\n\n\n\n\n\n\n");
                 return false;
             }
-            //create data input and output stream
+        }else {
+            //Create SSL socket and connect it to the remote server
+            SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            try {
+                this.socket = sslsocketfactory.createSocket(setting.getHost(),setting.getPort());
+//                this.socket.connect(new InetSocketAddress(
+//                        setting.getHost(), setting.getSecurePort()), setting.getTimeout());
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Connect timed out");
+
+                return false;
+            }
+        }
+
+        //create data input and output stream
         try {
             this.input = new DataInputStream(this.socket.getInputStream());
             this.output = new DataOutputStream(this.socket.getOutputStream());
@@ -87,17 +108,32 @@ public class Communicator {
     }
 
     public boolean connectToServer(String host, int port){
-        this.socket = new Socket();
-        try {
-            //new socket
-            this.socket.connect(new InetSocketAddress(host, port), setting.getTimeout());
-        } catch (Exception e) {
+        if (SecurityMode.inSecure == this.securityMode){
+            this.socket = new Socket();
+            try {
+                //new socket
+                this.socket.connect(new InetSocketAddress(host, port), setting.getTimeout());
+            } catch (Exception e) {
 //            e.printStackTrace();
-            System.out.println("Connect timed out");
+                System.out.println("Connect timed out");
 
-            return false;
+                return false;
+            }
+        }else {
+            //Create SSL socket and connect it to the remote server
+            SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            try {
+                this.socket = sslsocketfactory.createSocket(host,port);
+//                this.socket.connect(new InetSocketAddress(host, port), setting.getTimeout());
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Connect timed out");
+
+                return false;
+            }
         }
-            //create data input and output stream
+
+        //create data input and output stream
         try {
             this.input = new DataInputStream(this.socket.getInputStream());
             this.output = new DataOutputStream(this.socket.getOutputStream());
@@ -106,7 +142,7 @@ public class Communicator {
             return false;
         }
 
-            return true;
+        return true;
 
     }
 

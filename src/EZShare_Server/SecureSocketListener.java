@@ -27,17 +27,17 @@ public class SecureSocketListener extends Thread {
     public void run() {
         //Location of the Java keystore file containing the collection of
         //certificates trusted by this application (trust store).
-        System.setProperty("javax.net.ssl.trustStore", "Certificates/rootCA.jks");
+        System.setProperty("javax.net.ssl.trustStore", "Certificates/"+this.trust);
         System.setProperty("javax.net.ssl.trustStorePassword", "penis123");
 
         //Specify the keystore details (this can be specified as VM arguments as well)
         //the keystore file contains an application's own certificate and private key
-        System.setProperty("javax.net.ssl.keyStore", "Certificates/server0.jks");
+        System.setProperty("javax.net.ssl.keyStore", "Certificates/"+this.key);
         //Password to access the private key from the keystore file
         System.setProperty("javax.net.ssl.keyStorePassword","penis123");
 
         // Enable debugging to view the handshake and communication which happens between the SSLClient and the SSLServer
-        System.setProperty("javax.net.debug","all");
+//        System.setProperty("javax.net.debug","all");
 
         //initial server list manager
         ServerListManager serverListManager = ServerListManager.sharedServerListManager();

@@ -23,7 +23,6 @@ public class ServerSetting extends Setting {
     private String advertisedHostName;
     private int connectionIntervalLimit;
     private int exchangeInterval;
-    private int securePort;
 
     private HandlerList relay;
     private HandlerList direct;
@@ -149,13 +148,5 @@ public class ServerSetting extends Setting {
             result += base[rdm.nextInt(base.length)];
         }
         return result;
-    }
-
-    public int getSecurePort(){
-        return this.securePort;
-    }
-
-    public void setSecurePort(int sport){
-        this.securePort = sport;
     }
 }
