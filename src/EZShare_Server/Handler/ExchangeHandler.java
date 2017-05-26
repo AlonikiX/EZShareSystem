@@ -3,18 +3,11 @@ package EZShare_Server.Handler;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.ExchangeCommand;
-import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.IPAddress;
-import CommonLibs.DataStructure.Resource;
 import CommonLibs.DataStructure.ServerListManager;
 import EZShare_Server.ServerSetting;
 import org.json.JSONObject;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.util.ArrayList;
 
 /**
@@ -22,14 +15,14 @@ import java.util.ArrayList;
  */
 public class ExchangeHandler extends Handler{
 
-    ServerListManager serverlist;
+    ServerListManager serverlistManager;
 
     private static final String serverMissingOrInvalidError = "missing or invalid server list";
     private static final String serverInvalidError = "one or more servers is/are invalid/inaccessible";
 
     public ExchangeHandler(Command cmd){
         super(cmd);
-        serverlist = ServerListManager.sharedServerListManager();
+        serverlistManager = ServerListManager.sharedServerListManager();
     }
 
     /**
@@ -71,8 +64,7 @@ public class ExchangeHandler extends Handler{
 
         //handle successfully
         ExchangeCommand cmd = (ExchangeCommand)command;
-        cmd.getServerList();
-        serverlist.updateServerList(cmd.getServerList());
+        serverlistManager.updateServerList(this.securityMode, cmd.getServerList());
 
         obj.put(OptionField.response.getValue(), OptionField.success.getValue());
         String msg = obj.toString();

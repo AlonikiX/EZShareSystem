@@ -86,7 +86,7 @@ public class QueryHandler extends Handler{
 
             QueryCommand relayCommand = ((QueryCommand)command).relayClone();
             String jsonMessage = relayCommand.toJSON();
-            ArrayList<IPAddress> addressList = ServerListManager.sharedServerListManager().cloneServerList();
+            ArrayList<IPAddress> addressList = ServerListManager.sharedServerListManager().cloneServerList(this.securityMode);
 
             ArrayList<Thread> threads = new ArrayList<Thread>();
             for (IPAddress address:addressList){

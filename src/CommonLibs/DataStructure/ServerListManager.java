@@ -4,6 +4,7 @@ import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.ExchangeCommand;
 import CommonLibs.Communication.Communicator;
+import CommonLibs.Setting.SecurityMode;
 import EZShare_Server.ServerSetting;
 import org.json.JSONObject;
 
@@ -16,40 +17,59 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Created by apple on 20/04/2017.
  */
 public class ServerListManager {
-    private static ServerListManager severListManager;
+    private static ServerListManager serverListManager;
     private int exchangeInterval;
 
     private ArrayList<IPAddress> insecureServerList;
     private ArrayList<IPAddress> secureServerList;
     private ReadWriteLock rwlock;
+    private ReadWriteLock srwlock;
 
     private ServerListManager() {
         this.insecureServerList = new ArrayList<IPAddress>();
+        this.secureServerList = new ArrayList<IPAddress>();
         this.rwlock = new ReentrantReadWriteLock();
+        this.srwlock = new ReentrantReadWriteLock();
         this.exchangeInterval = 12000;
 
         new Thread((Runnable) ()-> {
-            runAutoExchange();
+            runAutoExchange(SecurityMode.inSecure);
+        }).start();
+
+        new Thread((Runnable) ()-> {
+            runAutoExchange(SecurityMode.secure);
         }).start();
 
     }
 
     public static ServerListManager sharedServerListManager() {
-        if (null == severListManager) {
-            severListManager = new ServerListManager();
+        if (null == serverListManager) {
+            serverListManager = new ServerListManager();
         }
-        return severListManager;
+        return serverListManager;
     }
 
     public ArrayList<IPAddress> getInsecureServerList() {
         return this.insecureServerList;
+    }
+    public ArrayList<IPAddress> getSecureServerList() {
+        return this.secureServerList;
     }
 
     /**
      * @description randomly choose a server and exchange server list with it automatically
      * @interval the exchanging interval time is based on server setting
      */
-    private void runAutoExchange(){
+    private void runAutoExchange(SecurityMode securityMode){
+        ArrayList<IPAddress> originList;
+        ReadWriteLock lock;
+        if (SecurityMode.inSecure == securityMode){
+            originList = this.insecureServerList;
+            lock = this.rwlock;
+        }else {
+            originList = this.secureServerList;
+            lock = this.srwlock;
+        }
         while (true) {
             //interval
             try {
@@ -58,8 +78,8 @@ public class ServerListManager {
                 e.printStackTrace();
             }
 
-            this.rwlock.readLock().lock();
-            int size = this.insecureServerList.size();
+            lock.readLock().lock();
+            int size = originList.size();
             if (0 != size) {
                 //randomly choose a server to exchange
                 IPAddress ipAddress;
@@ -67,15 +87,16 @@ public class ServerListManager {
                 do {
                     Random random = new Random();
                     index = random.nextInt(size);
-                    ipAddress = this.insecureServerList.get(index);
-                }while (isLocalHost(ipAddress));
+                    ipAddress = originList.get(index);
+                }while (isLocalHost(securityMode, ipAddress));
 
-                Command command = new ExchangeCommand(this.insecureServerList);
+                Command command = new ExchangeCommand(originList);
 
-                this.rwlock.readLock().unlock();
+                lock.readLock().unlock();
 
                 //send exchange command to the chosen server
                 Communicator communicator = new Communicator(ServerSetting.sharedSetting());
+                communicator.setSecureMode(securityMode);
                 if (communicator.connectToServer(ipAddress.hostname, ipAddress.port)) {//can connect to the chosen server
                     //send the server list to the chosen server
                     communicator.writeData(command.toJSON());
@@ -97,38 +118,61 @@ public class ServerListManager {
                         }
                     }
                 } else {//fail to connect to the chosen server, remove it from the server list
-                    this.rwlock.writeLock().lock();
-                    this.insecureServerList.remove(index);
-                    this.rwlock.writeLock().unlock();
+                    lock.writeLock().lock();
+                    originList.remove(index);
+                    lock.writeLock().unlock();
                 }
             }else {
-                this.rwlock.readLock().unlock();
+                lock.readLock().unlock();
             }
         }
     }
 
 
-    public boolean isLocalHost(IPAddress ipAddress) {
-        if (ServerSetting.sharedSetting().getPort() == ipAddress.port) {
-            if (ServerSetting.sharedSetting().getHosts().contains(ipAddress.hostname)) {
-                return true;
+    private boolean isLocalHost(SecurityMode securityMode, IPAddress ipAddress) {
+        if (SecurityMode.inSecure == securityMode) {
+            if (ServerSetting.sharedSetting().getPort() == ipAddress.port) {
+                if (ServerSetting.sharedSetting().getHosts().contains(ipAddress.hostname)) {
+                    return true;
+                }
+            }
+        } else {
+            if (ServerSetting.sharedSetting().getSecurePort() == ipAddress.port) {
+                if (ServerSetting.sharedSetting().getHosts().contains(ipAddress.hostname)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    public void updateServerList(ArrayList<IPAddress> serverList) {
-        this.rwlock.writeLock().lock();
+    public void updateServerList(SecurityMode securityMode, ArrayList<IPAddress> serverList) {
+        ArrayList<IPAddress> originList;
+        ReadWriteLock lock;
+        if (SecurityMode.inSecure == securityMode) {
+            originList = this.insecureServerList;
+            lock = this.rwlock;
+        }else {
+            originList = this.secureServerList;
+            lock = this.srwlock;
+        }
+        lock.writeLock().lock();
         for (IPAddress server : serverList) {
-            if (false == checkExists(server)) {
-                this.insecureServerList.add(server);
+            if (!checkExists(securityMode, server)) {
+                originList.add(server);
             }
         }
-        this.rwlock.writeLock().unlock();
+        lock.writeLock().unlock();
     }
 
-    public boolean checkExists(IPAddress ipAddress) {
-        for (IPAddress server : insecureServerList) {
+    private boolean checkExists(SecurityMode securityMode, IPAddress ipAddress) {
+        ArrayList<IPAddress> originList;
+        if (SecurityMode.inSecure == securityMode){
+            originList = this.insecureServerList;
+        }else {
+            originList = this.secureServerList;
+        }
+        for (IPAddress server : originList) {
             if (server.port == ipAddress.port) {
                 if (0 == server.hostname.compareTo(ipAddress.hostname)) {
                     return true;
@@ -138,11 +182,22 @@ public class ServerListManager {
         return false;
     }
 
-    public ArrayList<IPAddress> cloneServerList(){
-        ArrayList<IPAddress> list = new ArrayList<IPAddress>();
-        this.rwlock.readLock().lock();
-        list.addAll(insecureServerList);
-        this.rwlock.readLock().unlock();
-        return list;
+    public ArrayList<IPAddress> cloneServerList(SecurityMode securityMode){
+        ArrayList<IPAddress> originList;
+        ReadWriteLock lock;
+        if (SecurityMode.inSecure == securityMode) {
+            originList = this.insecureServerList;
+            lock = this.rwlock;
+        }else {
+            originList = this.secureServerList;
+            lock = this.srwlock;
+        }
+
+        ArrayList<IPAddress> copyList = new ArrayList<IPAddress>();
+        lock.readLock().lock();
+        copyList.addAll(originList);
+        lock.readLock().unlock();
+
+        return copyList;
     }
 }
