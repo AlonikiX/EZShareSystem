@@ -63,37 +63,63 @@ public class Communicator {
         // TODO how about just write:
 //        return connectToServer(setting.getHost(),setting.getPort());
 
-        try {
+
             //new socket
             this.socket = new Socket();
-            this.socket.connect(new InetSocketAddress(setting.getHost(),setting.getPort()), setting.getTimeout());
+            try {
+                this.socket.connect(new InetSocketAddress(setting.getHost(),setting.getPort()), setting.getTimeout());
+            } catch (Exception e) {
+//            e.printStackTrace();
+                System.out.println("Connect timed out\n\n\n\n\n\n\n\n");
+                return false;
+            }
             //create data input and output stream
+        try {
             this.input = new DataInputStream(this.socket.getInputStream());
             this.output = new DataOutputStream(this.socket.getOutputStream());
-
-            return true;
         } catch (IOException e) {
-//            e.printStackTrace();
-            System.out.println("Connect timed out");
+            e.printStackTrace();
             return false;
         }
+
+            return true;
+
     }
 
     public boolean connectToServer(String host, int port){
+        this.socket = new Socket();
         try {
             //new socket
-            this.socket = new Socket();
             this.socket.connect(new InetSocketAddress(host, port), setting.getTimeout());
-            //create data input and output stream
-            this.input = new DataInputStream(this.socket.getInputStream());
-            this.output = new DataOutputStream(this.socket.getOutputStream());
-
-            return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
 //            e.printStackTrace();
             System.out.println("Connect timed out");
 
             return false;
+        }
+            //create data input and output stream
+        try {
+            this.input = new DataInputStream(this.socket.getInputStream());
+            this.output = new DataOutputStream(this.socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+            return true;
+
+    }
+
+    public void distory(){
+        try {
+            this.socket.shutdownInput();
+            this.socket.shutdownOutput();
+            this.socket.close();
+            this.socket = new Socket();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("socket close error!");
         }
     }
 
@@ -114,19 +140,26 @@ public class Communicator {
 //            System.out.println("Receive:");
 //            System.out.println(data);
             return data;
+        } catch (EOFException e){
+            e.printStackTrace();
+            System.out.print("EOF ERROR!!!!!!\n\n\n");
+            return null;
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.print("IO ERROR!!!!!\n\n\n");
+            return null;
         }
-        return null;
     }
 
     public int readableData() {
-        try {
-            return this.input.available();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return -1;
+        return 1;
+
+//        try {
+//            return this.input.available();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return -1;
     }
 
     public void downloadFile(long fileSize, String fileName) {

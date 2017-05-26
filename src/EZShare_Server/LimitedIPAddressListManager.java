@@ -57,7 +57,7 @@ public class LimitedIPAddressListManager {
             readWriteLock.readLock().lock();
             //calculate the remain limit time for each IP address
             for (String ipAddress : clientList.keySet()) {
-                int interval = (Integer)clientList.get(ipAddress) - rate;
+                int interval = clientList.get(ipAddress) - rate;
                 clientList.replace(ipAddress, interval);
                 if (interval <= 0) {
                     temp.add(ipAddress);

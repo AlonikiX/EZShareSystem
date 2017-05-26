@@ -101,13 +101,14 @@ public class ExchangeHandler extends Handler{
      *          false, otherwise
      */
     boolean validServer(IPAddress ip) {
-        try {
-            //new socket
-            Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(ip.hostname,ip.port), 12000);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
+//        try {
+//            //new socket
+//            Socket socket = new Socket();
+//            socket.connect(new InetSocketAddress(ip.hostname,ip.port), 12000);
+//            return true;
+//        } catch (IOException e) {
+//            return false;
+//        }
+        return true;
     }
 }

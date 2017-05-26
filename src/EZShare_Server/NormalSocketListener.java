@@ -30,16 +30,18 @@ public class NormalSocketListener extends Thread {
                 Communicator communicator = new Communicator(ServerSetting.sharedSetting());
                 communicator.establishConnection(serverSocket.accept());
 
-                String host = communicator.getClientAddress();
-                System.out.println("Server Information:");
-                System.out.println("connected with IP address:" + host);
-                if (limitedIPAddressListManager.limitConnection(host)) {
-                    System.out.println("Server Information:");
-                    System.out.println("connection too frequent");
-                    limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
-                    continue;
-                }
-                limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
+//                String host = communicator.getClientAddress();
+//                System.out.println("Server Information:");
+//                System.out.println("connected with IP address:" + host);
+//                if (limitedIPAddressListManager.limitConnection(host)) {
+//                    System.out.println("Server Information:");
+//                    System.out.println("connection too frequent");
+//                    limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
+////                    communicator.writeData("too frequent, try again");
+//                    communicator.distory();
+//                    continue;
+//                }
+//                limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
 
                 //new dispatching thread
                 Dispatcher dispatcher = new Dispatcher();
