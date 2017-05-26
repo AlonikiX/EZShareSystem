@@ -27,13 +27,6 @@ public class SubscribeHandler extends Handler {
 
     public void handle() {
 
-        // TODO validate query - [JiaCheng]
-        // check syntax
-        // check id
-        // check template
-        // check others??
-        // TODO Debug Mode
-
         JSONObject obj = new JSONObject();
         Resource template = ((SubscribeCommand)command).getResource();
 
@@ -79,7 +72,6 @@ public class SubscribeHandler extends Handler {
             return;
         }
 
-
         // initialize
         // register the first template
         templates.put(id,template);
@@ -91,8 +83,6 @@ public class SubscribeHandler extends Handler {
         } else {
             ServerSetting.sharedSetting().addDirect(this);
         }
-
-        // TODO subscribe successful message - [JiaCheng]
 
         obj.put(OptionField.response.getValue(),OptionField.success.getValue());
         obj.put(OptionField.id.getValue(),id);
@@ -124,12 +114,10 @@ public class SubscribeHandler extends Handler {
 
 
                 // here it is assumed that Client will never subscribe more than one resources
+                // so subscription from the same thread is all secure or unsecure
                 rwlock.writeLock().lock();
                 templates.put(idsub,templatesub);
                 rwlock.writeLock().unlock();
-
-
-                // TODO subscribe successful message - [JiaCheng]
 
                 obj = new JSONObject();
                 obj.put(OptionField.response.getValue(),OptionField.success.getValue());
@@ -153,10 +141,6 @@ public class SubscribeHandler extends Handler {
                 templates.remove(idunsub);
                 rwlock.writeLock().unlock();
 
-
-                // TODO subscribe successful message - [JiaCheng]
-                // TODO debug mode?
-
                 obj = new JSONObject();
                 obj.put(OptionField.response.getValue(),OptionField.success.getValue());
                 obj.put(OptionField.id.getValue(),idunsub);
@@ -164,15 +148,11 @@ public class SubscribeHandler extends Handler {
                 communicator.writeData(msg);
                 printLog(msg);
 
-
             } // ignore any other cases
 
         }
 
-        // TODO terminates - [JiaCheng]
-        // print unsubscription message
         // print hits counts
-
         obj = new JSONObject();
         obj.put(OptionField.resultSize.getValue(),hits);
         String resultSize = obj.toString();
