@@ -2,8 +2,11 @@ package EZShare_Server;
 
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
+import CommonLibs.DataStructure.HandlerList;
 import CommonLibs.DataStructure.IPAddress;
 import CommonLibs.Setting.Setting;
+import EZShare_Server.Handler.Handler;
+import EZShare_Server.Handler.SubscribeHandler;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -15,13 +18,15 @@ import java.util.Random;
  * Created by Anson Chen on 2017/4/24.
  */
 public class ServerSetting extends Setting {
-    private int securePort;
     private ArrayList<String> hosts;
     private static ServerSetting setting;
     private String secret;
     private String advertisedHostName;
     private int connectionIntervalLimit;
     private int exchangeInterval;
+
+    private HandlerList relay;
+    private HandlerList nonRealy;
 
     private ServerSetting() {
         this.hosts = new ArrayList<>();
@@ -33,7 +38,8 @@ public class ServerSetting extends Setting {
         }
         this.connectionIntervalLimit = 1000;
         this.exchangeInterval = 10000;
-        this.securePort = 3999;
+        this.relay = new HandlerList();
+        this.nonRealy = new HandlerList();
     }
 
     public static ServerSetting sharedSetting(){
@@ -81,12 +87,6 @@ public class ServerSetting extends Setting {
                 this.exchangeInterval = Integer.parseInt(exchangeInterval);
             }
         }
-        if (cli.hasOption(OptionField.sport.getValue())) {
-            String securePort = cli.getOptionValue(OptionField.sport.getValue());
-            if (null != securePort) {
-                this.securePort = Integer.parseInt(securePort);
-            }
-        }
 
     }
 
@@ -110,6 +110,22 @@ public class ServerSetting extends Setting {
         return exchangeInterval;
     }
 
+    public void addRelay (SubscribeHandler handler){
+        relay.add(handler);
+    }
+
+    public void removeRelay (SubscribeHandler handler){
+        relay.remove(handler);
+    }
+
+    public void addNonRelay (SubscribeHandler handler){
+        nonRealy.add(handler);
+    }
+
+    public void removeNonRelay (SubscribeHandler handler){
+        nonRealy.remove(handler);
+    }
+
     private String generateSecret(){
         char[] base = "1234567890abcdefghijklmnopqrstuvwxyz".toCharArray();
         String result = "";
@@ -120,11 +136,6 @@ public class ServerSetting extends Setting {
         return result;
     }
 
-    public int getSecurePort() {
-        return securePort;
-    }
 
-    public void setSecurePort(int securePort) {
-        this.securePort = securePort;
-    }
+
 }

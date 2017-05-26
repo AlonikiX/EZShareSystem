@@ -51,6 +51,13 @@ public class PublishHandler extends Handler{
 
         if (handleResult){
             obj.put(OptionField.response.getValue(), OptionField.success.getValue());
+
+
+
+            // TODO also notify all subscription users
+            //
+
+
         } else {
             obj.put(OptionField.response.getValue(), OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(), "cannot publish resource");

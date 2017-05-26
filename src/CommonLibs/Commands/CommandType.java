@@ -9,7 +9,9 @@ public enum CommandType {
     REMOVE("REMOVE"),
     SHARE("SHARE"),
     FETCH("FETCH"),
-    EXCHANGE("EXCHANGE"),;
+    EXCHANGE("EXCHANGE"),
+    SUBSCRIBE("SUBSCRIBE"),
+    UNSUBSCRIBE("UNSUBSCRIBE");
 
     private String value;
 
