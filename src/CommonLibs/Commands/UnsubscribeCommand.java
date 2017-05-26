@@ -18,13 +18,13 @@ public class UnsubscribeCommand extends Command{
     }
 
     public UnsubscribeCommand(CliManager cli) {
-        this.commandType = CommandType.SUBSCRIBE;
+        this.commandType = CommandType.UNSUBSCRIBE;
         this.id = cli.hasOption(OptionField.id.getValue()) ?
                 (cli.getOptionValue(OptionField.id.getValue())): null;
     }
 
     public UnsubscribeCommand(JSONObject obj) {
-        this.commandType = CommandType.SUBSCRIBE;
+        this.commandType = CommandType.UNSUBSCRIBE;
         this.id = obj.has(OptionField.id.getValue()) ?
                 (obj.getString(OptionField.id.getValue())): null;
     }
