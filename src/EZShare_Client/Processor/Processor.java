@@ -3,6 +3,7 @@ package EZShare_Client.Processor;
 import CommonLibs.Commands.Command;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.Exception.UndefinedCommandException;
+import CommonLibs.Setting.SecurityMode;
 import EZShare_Client.ClientSetting;
 
 /**
@@ -11,10 +12,17 @@ import EZShare_Client.ClientSetting;
 public abstract class Processor {
     protected Command command;
     protected Communicator communicator;
+    protected SecurityMode securityMode;
+
+    public void setSecurityMode(SecurityMode securityMode) {
+        this.securityMode = securityMode;
+        this.communicator.setSecureMode(this.securityMode);
+    }
 
     protected Processor(Command command){
         this.command = command;
         this.communicator = new Communicator(ClientSetting.sharedSetting());
+        this.securityMode = SecurityMode.inSecure;
     }
 
     public static Processor processorFactory(Command command) throws UndefinedCommandException{

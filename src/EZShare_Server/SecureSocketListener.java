@@ -62,16 +62,16 @@ public class SecureSocketListener extends Thread {
                 Communicator communicator = new Communicator(ServerSetting.sharedSetting());
                 communicator.establishConnection(sslserversocket.accept());
 
-                String host = communicator.getClientAddress();
-                System.out.println("Server Information:");
-                System.out.println("connected with IP address:" + host);
-                if (limitedIPAddressListManager.limitConnection(host)) {
-                    System.out.println("Server Information:");
-                    System.out.println("connection too frequent");
-                    limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
-                    continue;
-                }
-                limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
+//                String host = communicator.getClientAddress();
+//                System.out.println("Server Information:");
+//                System.out.println("connected with IP address:" + host);
+//                if (limitedIPAddressListManager.limitConnection(host)) {
+//                    System.out.println("Server Information:");
+//                    System.out.println("connection too frequent");
+//                    limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
+//                    continue;
+//                }
+//                limitedIPAddressListManager.addIntervalLimitedIPAddress(host);
 
                 //new dispatching thread
                 Dispatcher dispatcher = new Dispatcher();

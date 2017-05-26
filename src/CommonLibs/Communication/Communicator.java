@@ -34,6 +34,7 @@ public class Communicator {
 
     public Communicator(Setting setting) {
         this.setting = setting;
+        this.securityMode = SecurityMode.inSecure;
     }
 
     public void setSecureMode(SecurityMode secureMode){

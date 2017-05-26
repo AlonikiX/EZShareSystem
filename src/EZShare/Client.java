@@ -3,6 +3,7 @@ import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Exception.UndefinedCommandException;
+import CommonLibs.Setting.SecurityMode;
 import EZShare_Client.ClientSetting;
 import EZShare_Client.Processor.Processor;
 import org.apache.commons.cli.ParseException;
@@ -41,6 +42,7 @@ public class Client {
 
 //        Communicator client = new Communicator();
             Processor processor = Processor.processorFactory(command);
+            processor.setSecurityMode(ClientSetting.sharedSetting().getSecurityMode());
             processor.process();
             //connect to the server and start communication
 //        client.connectToServer();
