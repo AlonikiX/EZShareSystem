@@ -3,9 +3,7 @@ package EZShare_Server;
 import CommonLibs.CommandLine.CliManager;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.DataStructure.HandlerList;
-import CommonLibs.DataStructure.IPAddress;
 import CommonLibs.Setting.Setting;
-import EZShare_Server.Handler.Handler;
 import EZShare_Server.Handler.SubscribeHandler;
 
 import java.net.InetAddress;
@@ -24,6 +22,7 @@ public class ServerSetting extends Setting {
     private String advertisedHostName;
     private int connectionIntervalLimit;
     private int exchangeInterval;
+    private int securePort;
 
     private HandlerList relay;
     private HandlerList nonRealy;
@@ -134,6 +133,14 @@ public class ServerSetting extends Setting {
             result += base[rdm.nextInt(base.length)];
         }
         return result;
+    }
+
+    public int getSecurePort(){
+        return this.securePort;
+    }
+
+    public void setSecurePort(int sport){
+        this.securePort = sport;
     }
 
 
