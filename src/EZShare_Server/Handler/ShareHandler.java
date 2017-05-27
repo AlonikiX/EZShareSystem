@@ -64,7 +64,7 @@ public class ShareHandler extends Handler{
             // generate message
             if (handleResult){
                 obj.put(OptionField.response.getValue(), OptionField.success.getValue());
-                HandlerListManager.sharedHanderListManager().notify(resource,true);
+                HandlerListManager.sharedHanderListManager().notifyAll();
             } else {
                 obj.put(OptionField.response.getValue(), OptionField.error.getValue());
                 obj.put(OptionField.errorMessage.getValue(), "cannot share resource");

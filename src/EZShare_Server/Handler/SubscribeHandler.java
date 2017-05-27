@@ -4,6 +4,7 @@ import CommonLibs.Commands.Command;
 import CommonLibs.Commands.SubscribeCommand;
 import CommonLibs.DataStructure.HandlerListManager;
 import CommonLibs.DataStructure.Resource;
+import CommonLibs.Setting.SecurityMode;
 import EZShare_Server.ServerSetting;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -79,11 +80,8 @@ public class SubscribeHandler extends Handler {
         size = 1;
 
         // self register in server
-        if (((SubscribeCommand)command).relay()){
-            HandlerListManager.sharedHanderListManager().add(this, true);
-        } else {
-            HandlerListManager.sharedHanderListManager().add(this, false);
-        }
+        HandlerListManager.sharedHanderListManager().add(this,
+                ((SubscribeCommand)command).relay(), this.securityMode == SecurityMode.secure);
 
         obj.put(OptionField.response.getValue(),OptionField.success.getValue());
         obj.put(OptionField.id.getValue(),id);
@@ -163,11 +161,8 @@ public class SubscribeHandler extends Handler {
         // TODO debug mode?
 
         // self unregister
-        if (((SubscribeCommand)command).relay()){
-            HandlerListManager.sharedHanderListManager().remove(this, true);
-        } else {
-            HandlerListManager.sharedHanderListManager().remove(this, false);
-        }
+        HandlerListManager.sharedHanderListManager().remove(this,
+                ((SubscribeCommand)command).relay(), this.securityMode == SecurityMode.secure);
         // TODO debug mode?
 
     }
