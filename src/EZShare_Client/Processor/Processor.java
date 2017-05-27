@@ -59,7 +59,6 @@ public abstract class Processor {
                 System.out.println("SENT:" + msg);
             }
 
-
         }else {
             System.out.println(ClientSetting.sharedSetting().getTime() +
                     " - [EZShare.Client.Connection] - [Failed]");
