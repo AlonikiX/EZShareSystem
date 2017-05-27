@@ -51,7 +51,7 @@ public class SubscribeProcessor extends Processor{
                 UnsubscribeCommand cmd = ((SubscribeCommand)command).cancleCommand();
                 String unsub = cmd.toJSON();
                 while (listen){
-                    if (enter == ""){
+                    if (0 == enter.compareTo("")){
                         communicator.writeData(unsub);
                         break;
                     }
