@@ -84,7 +84,6 @@ public class SubscribeHandler extends Handler {
         // self register in server
         HandlerListManager.sharedHanderListManager().add(this,
                 relay, this.securityMode == SecurityMode.secure);
-
         obj.put(OptionField.response.getValue(),OptionField.success.getValue());
         obj.put(OptionField.id.getValue(),id);
         String msg = obj.toString();
@@ -93,8 +92,6 @@ public class SubscribeHandler extends Handler {
 
         // TODO Debug Mode
 
-
-        // TODO if relay() create new threads with relay off
         // need to check secure or not
         if (relay){
             ArrayList<IPAddress> addressList = ServerListManager.sharedServerListManager().cloneServerList(securityMode);
@@ -292,5 +289,13 @@ public class SubscribeHandler extends Handler {
         return false;
     }
 
-
+    public void subscribeFrom(IPAddress address){
+        // again, we only care the initial command, not all subscription in the list
+        // because only client (single subscription) would be relayed
+        SubscribeCommand cmd = ((SubscribeCommand) command).relayClone();
+        String message = cmd.toJSON();
+        Connection connection = ConnectionListManager.sharedConnectionListManager().connect(address,
+                securityMode == SecurityMode.secure);
+        connection.writeData(message);
+    }
 }

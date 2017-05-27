@@ -1,5 +1,6 @@
 package CommonLibs.DataStructure;
 
+import CommonLibs.Commands.SubscribeCommand;
 import EZShare.Server;
 import EZShare_Server.Handler.Handler;
 import EZShare_Server.Handler.SubscribeHandler;
@@ -102,7 +103,6 @@ public class HandlerListManager {
         }
     }
 
-
     /**
      * This is just used in indirect notification, and only direct requests are notified
      * @param resource the new resource
@@ -121,4 +121,10 @@ public class HandlerListManager {
         }
     }
 
+    public void subscribeFrom (IPAddress address, boolean secure){
+        ArrayList<SubscribeHandler> list = (secure) ? (this.secDirectList) : (this.directList);
+        for (SubscribeHandler handler: list){
+            handler.subscribeFrom(address);
+        }
+    }
 }

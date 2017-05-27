@@ -3,10 +3,13 @@ package EZShare_Server.Handler;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.ExchangeCommand;
+import CommonLibs.DataStructure.HandlerListManager;
 import CommonLibs.DataStructure.IPAddress;
 import CommonLibs.DataStructure.ServerListManager;
+import CommonLibs.Setting.SecurityMode;
 import EZShare_Server.ServerSetting;
 import org.json.JSONObject;
+import sun.net.www.http.Hurryable;
 
 import java.util.ArrayList;
 
@@ -53,6 +56,7 @@ public class ExchangeHandler extends Handler{
                 break;
             }
         }
+
         if (!allValid){
             obj.put(OptionField.response.getValue(),OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(),serverInvalidError);
@@ -64,7 +68,13 @@ public class ExchangeHandler extends Handler{
 
         //handle successfully
         ExchangeCommand cmd = (ExchangeCommand)command;
-        serverlistManager.updateServerList(this.securityMode, cmd.getServerList());
+
+        // notify handlers to extend subscriptions
+        ArrayList<IPAddress> toInform = serverlistManager.updateServerList(this.securityMode, cmd.getServerList());
+        for (IPAddress address:toInform){
+            HandlerListManager.sharedHanderListManager().subscribeFrom(address,
+                    securityMode == SecurityMode.secure);
+        }
 
         obj.put(OptionField.response.getValue(), OptionField.success.getValue());
         String msg = obj.toString();

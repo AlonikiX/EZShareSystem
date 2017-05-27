@@ -146,9 +146,35 @@ public class ServerListManager {
         return false;
     }
 
-    public void updateServerList(SecurityMode securityMode, ArrayList<IPAddress> serverList) {
+//    public void updateServerList(SecurityMode securityMode, ArrayList<IPAddress> serverList) {
+//        ArrayList<IPAddress> originList;
+//        ReadWriteLock lock;
+//        if (SecurityMode.inSecure == securityMode) {
+//            originList = this.insecureServerList;
+//            lock = this.rwlock;
+//        }else {
+//            originList = this.secureServerList;
+//            lock = this.srwlock;
+//        }
+//        lock.writeLock().lock();
+//        for (IPAddress server : serverList) {
+//            if (!checkExists(securityMode, server)) {
+//                originList.add(server);
+//            }
+//        }
+//        lock.writeLock().unlock();
+//    }
+
+    /**
+     * update the server list
+     * @param securityMode whether this update is through a secure mode
+     * @param serverList the list containing the candidate addresses
+     * @return the addresses really updated
+     */
+    public ArrayList<IPAddress> updateServerList(SecurityMode securityMode, ArrayList<IPAddress> serverList) {
         ArrayList<IPAddress> originList;
         ReadWriteLock lock;
+        ArrayList<IPAddress> newAdded = new ArrayList<IPAddress>();
         if (SecurityMode.inSecure == securityMode) {
             originList = this.insecureServerList;
             lock = this.rwlock;
@@ -160,10 +186,13 @@ public class ServerListManager {
         for (IPAddress server : serverList) {
             if (!checkExists(securityMode, server)) {
                 originList.add(server);
+                newAdded.add(server);
             }
         }
         lock.writeLock().unlock();
+        return newAdded;
     }
+
 
     private boolean checkExists(SecurityMode securityMode, IPAddress ipAddress) {
         ArrayList<IPAddress> originList;
