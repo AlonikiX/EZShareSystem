@@ -136,7 +136,7 @@ public class SubscribeHandler extends Handler {
                 // Still not quite necessary
                 // TODO debug mode?
 
-                String idunsub = ((SubscribeCommand)command).getId();
+                String idunsub = ((UnsubscribeCommand)command).getId();
 
                 this.remove(idunsub);
 
