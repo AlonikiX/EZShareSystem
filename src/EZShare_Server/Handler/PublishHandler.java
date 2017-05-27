@@ -53,7 +53,7 @@ public class PublishHandler extends Handler{
 
         if (handleResult){
             obj.put(OptionField.response.getValue(), OptionField.success.getValue());
-            HandlerListManager.sharedHanderListManager().notifyAll();
+            HandlerListManager.sharedHanderListManager().notifyAll(resource);
         } else {
             obj.put(OptionField.response.getValue(), OptionField.error.getValue());
             obj.put(OptionField.errorMessage.getValue(), "cannot publish resource");

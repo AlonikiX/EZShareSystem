@@ -45,6 +45,14 @@ public class Connection implements Runnable {
             String data = communicator.readData();
             JSONObject obj = new JSONObject(data);
 
+            if (obj.has(OptionField.errorMessage.getValue())){
+                break;
+            }
+
+            if (obj.has(OptionField.resultSize.getValue())){
+                break;
+            }
+
             Resource resource = new Resource();
             // well format assumed
             try {
@@ -58,10 +66,9 @@ public class Connection implements Runnable {
                 for (int i = 0; i < arr.length(); i++) {
                     resource.getTags().add(arr.getString(i).toLowerCase());
                 }
-            } catch (Exception e) {
+            } catch (NullPointerException e) {
                 continue;
             }
-
             // notify problems
             HandlerListManager.sharedHanderListManager().notify(resource,
                     this.securityMode == SecurityMode.secure);

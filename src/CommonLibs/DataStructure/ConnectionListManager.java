@@ -45,6 +45,8 @@ public class ConnectionListManager {
                 srwlock.writeLock().lock();
                 connection = new Connection(address,true);
                 secureConList.put(key,connection);
+                Thread thread =  new Thread(connection);
+                thread.run();
                 srwlock.writeLock().unlock();
             }
             srwlock.readLock().unlock();
@@ -57,6 +59,8 @@ public class ConnectionListManager {
                 rwlock.writeLock().lock();
                 connection = new Connection(address,false);
                 connectionList.put(key,connection);
+                Thread thread =  new Thread(connection);
+                thread.run();
                 rwlock.writeLock().unlock();
             }
             rwlock.readLock().unlock();
