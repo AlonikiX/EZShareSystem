@@ -44,11 +44,13 @@ public class ConnectionListManager {
                 connection = secureConList.get(key);
             } else {
                 srwlock.writeLock().lock();
-                if (secureConList.containsKey(key)){
+                if (!secureConList.containsKey(key)){
                     connection = new Connection(address,SecurityMode.secure);
                     secureConList.put(key,connection);
                     Thread thread =  new Thread(connection);
                     thread.run();
+                } else {
+                    connection = secureConList.get(key);
                 }
                 srwlock.writeLock().unlock();
             }
@@ -56,15 +58,17 @@ public class ConnectionListManager {
             return connection;
         } else {
             rwlock.readLock().lock();
-            if (connectionList.containsKey(key)){
+            if (!connectionList.containsKey(key)){
                 connection = connectionList.get(key);
             } else {
                 rwlock.writeLock().lock();
-                if (secureConList.containsKey(key)){
+                if (connectionList.containsKey(key)){
                     connection = new Connection(address,SecurityMode.inSecure);
                     connectionList.put(key,connection);
                     Thread thread =  new Thread(connection);
                     thread.run();
+                } else {
+                    connection = connectionList.get(key);
                 }
                 rwlock.writeLock().unlock();
             }
