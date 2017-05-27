@@ -55,7 +55,6 @@ public class ShareHandler extends Handler{
             return;
         }
 
-
         if (0 == ((ShareCommand)command).getSecret().compareTo(ServerSetting.sharedSetting().getSecret())){
 
             // if the secret is correct, attempt to share the resource

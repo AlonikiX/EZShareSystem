@@ -117,26 +117,26 @@ public class Resource {
         return clone;
     }
 
-    /**
-     * This method is mainly used to compare <b>resource template<b/>, instead of a concrete resource.
-     * This method will be used for subscription, in the case that more than one clients subscribe the same
-     * resource template from one server with relay on, then the same template is passed only once.
-     * @param r the input resource template
-     * @return ture, if the two templates are exactly the same
-     *          false, otherwise
-     */
-    public boolean equals(Resource r){
-
-        if (this.name.compareTo(r.getName())!=0) return false;
-        if (this.description.compareTo(r.getDescription())!=0) return false;
-        if (this.uri.compareTo(r.getUri())!=0) return false;
-        if (this.owner.compareTo(r.getOwner())!=0) return false;
-        if (this.channel.compareTo(r.getChannel())!=0) return false;
-        if (this.tags.size() != r.getTags().size()) return false;
-        // TODO we need to pay attention to duplicated tags
-        for (int i=0; i<this.tags.size(); i++){
-            if (!r.getTags().contains(this.tags.get(i))) return false;
-        }
-        return true;
-    }
+//    /**
+//     * This method is mainly used to compare <b>resource template<b/>, instead of a concrete resource.
+//     * This method will be used for subscription, in the case that more than one clients subscribe the same
+//     * resource template from one server with relay on, then the same template is passed only once.
+//     * @param r the input resource template
+//     * @return ture, if the two templates are exactly the same
+//     *          false, otherwise
+//     */
+//    public boolean equals(Resource r){
+//
+//        if (this.name.compareTo(r.getName())!=0) return false;
+//        if (this.description.compareTo(r.getDescription())!=0) return false;
+//        if (this.uri.compareTo(r.getUri())!=0) return false;
+//        if (this.owner.compareTo(r.getOwner())!=0) return false;
+//        if (this.channel.compareTo(r.getChannel())!=0) return false;
+//        if (this.tags.size() != r.getTags().size()) return false;
+//        // TODO we need to pay attention to duplicated tags
+//        for (int i=0; i<this.tags.size(); i++){
+//            if (!r.getTags().contains(this.tags.get(i))) return false;
+//        }
+//        return true;
+//    }
 }
