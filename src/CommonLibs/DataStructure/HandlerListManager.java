@@ -53,8 +53,8 @@ public class HandlerListManager implements ISubscriber{
         this.subscribeFrom(securityMode, address);
     }
 
-    public void add(SubscribeHandler handler, boolean direct, boolean secure){
-        if (direct && secure){
+    public void add(SubscribeHandler handler, boolean direct, SecurityMode securityMode){
+        if (direct && SecurityMode.secure == securityMode){
             sdrwlock.writeLock().lock();
             secDirectList.add(handler);
             sdrwlock.writeLock().unlock();
@@ -62,7 +62,7 @@ public class HandlerListManager implements ISubscriber{
             drwlock.writeLock().lock();
             directList.add(handler);
             drwlock.writeLock().unlock();
-        } else if (secure){
+        } else if (SecurityMode.secure == securityMode){
             sirwlock.writeLock().lock();
             secIndirectList.add(handler);
             sirwlock.writeLock().unlock();
@@ -73,8 +73,8 @@ public class HandlerListManager implements ISubscriber{
         }
     }
 
-    public void remove(SubscribeHandler handler,boolean direct, boolean secure){
-        if (direct && secure){
+    public void remove(SubscribeHandler handler,boolean direct, SecurityMode securityMode){
+        if (direct && SecurityMode.secure == securityMode){
             sdrwlock.writeLock().lock();
             secDirectList.remove(handler);
             sdrwlock.writeLock().unlock();
@@ -82,7 +82,7 @@ public class HandlerListManager implements ISubscriber{
             drwlock.writeLock().lock();
             directList.remove(handler);
             drwlock.writeLock().unlock();
-        } else if (secure) {
+        } else if (SecurityMode.secure == securityMode) {
             sirwlock.writeLock().lock();
             secIndirectList.add(handler);
             sirwlock.writeLock().unlock();
@@ -116,9 +116,9 @@ public class HandlerListManager implements ISubscriber{
      * @param resource the new resource
      * @param secure whether this resource comes via a secure link
      */
-    public void notify(Resource resource, boolean secure){
+    public void notify(Resource resource, SecurityMode securityMode){
 
-        if (secure) {
+        if (SecurityMode.secure == securityMode) {
             for (SubscribeHandler handler:secDirectList){
                 handler.notify(resource, true);
             }

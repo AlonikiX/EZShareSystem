@@ -83,7 +83,7 @@ public class SubscribeHandler extends Handler {
 
         // self register in server
         HandlerListManager.sharedHanderListManager().add(this,
-                relay, this.securityMode == SecurityMode.secure);
+                relay, this.securityMode);
         obj.put(OptionField.response.getValue(),OptionField.success.getValue());
         obj.put(OptionField.id.getValue(),id);
         String msg = obj.toString();
@@ -163,7 +163,7 @@ public class SubscribeHandler extends Handler {
 
         // self unregister
         HandlerListManager.sharedHanderListManager().remove(this, relay,
-                this.securityMode == SecurityMode.secure);
+                this.securityMode);
         // TODO debug mode?
 
     }

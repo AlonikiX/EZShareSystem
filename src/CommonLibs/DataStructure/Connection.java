@@ -68,7 +68,7 @@ public class Connection implements Runnable {
                 }
                 // notify problems
                 HandlerListManager.sharedHanderListManager().notify(resource,
-                        this.securityMode == SecurityMode.secure);
+                        this.securityMode);
             }
         }
 
