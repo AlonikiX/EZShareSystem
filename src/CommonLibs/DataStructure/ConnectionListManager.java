@@ -43,10 +43,12 @@ public class ConnectionListManager {
                 connection = secureConList.get(key);
             } else {
                 srwlock.writeLock().lock();
-                connection = new Connection(address,true);
-                secureConList.put(key,connection);
-                Thread thread =  new Thread(connection);
-                thread.run();
+                if (secureConList.containsKey(key)){
+                    connection = new Connection(address,true);
+                    secureConList.put(key,connection);
+                    Thread thread =  new Thread(connection);
+                    thread.run();
+                }
                 srwlock.writeLock().unlock();
             }
             srwlock.readLock().unlock();
