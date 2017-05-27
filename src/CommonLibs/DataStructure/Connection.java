@@ -23,21 +23,17 @@ public class Connection implements Runnable {
     private ReentrantReadWriteLock rwlock;
     private int subSize;
 
-    public Connection(IPAddress address, boolean secure){
-        if (secure){
-            this.securityMode = SecurityMode.secure;
-        } else {
-            this.securityMode = SecurityMode.inSecure;
-        }
+    public Connection(IPAddress address, SecurityMode securityMode){
+        this.securityMode = securityMode;
         this.address = address;
         this.communicator = new Communicator(ServerSetting.sharedSetting());
-        communicator.setSecureMode(this.securityMode);
+        communicator.setSecureMode(securityMode);
         communicator.connectToServer(address.hostname,address.port);
         rwlock = new ReentrantReadWriteLock();
     }
 
-    public Connection(String ip, int port, boolean secure){
-        this(new IPAddress(ip,port), secure);
+    public Connection(String ip, int port, SecurityMode securityMode){
+        this(new IPAddress(ip,port), securityMode);
     }
 
     public void run(){
@@ -78,7 +74,7 @@ public class Connection implements Runnable {
 
         // unregister self
         ConnectionListManager.sharedConnectionListManager().disconnect(address,
-                securityMode == SecurityMode.secure);
+                securityMode);
     }
 
     public void writeData(String s){

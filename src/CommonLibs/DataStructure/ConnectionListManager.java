@@ -1,6 +1,7 @@
 package CommonLibs.DataStructure;
 
 import CommonLibs.Communication.Communicator;
+import CommonLibs.Setting.SecurityMode;
 
 import java.util.HashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -34,17 +35,17 @@ public class ConnectionListManager {
         return connectionListManager;
     }
 
-    public Connection connect(IPAddress address, boolean secure){
+    public Connection connect(IPAddress address, SecurityMode securityMode){
         String key = address.toString();
         Connection connection = null;
-        if (secure){
+        if (SecurityMode.secure == securityMode){
             srwlock.readLock().lock();
             if (secureConList.containsKey(key)){
                 connection = secureConList.get(key);
             } else {
                 srwlock.writeLock().lock();
                 if (secureConList.containsKey(key)){
-                    connection = new Connection(address,true);
+                    connection = new Connection(address,SecurityMode.secure);
                     secureConList.put(key,connection);
                     Thread thread =  new Thread(connection);
                     thread.run();
@@ -60,7 +61,7 @@ public class ConnectionListManager {
             } else {
                 rwlock.writeLock().lock();
                 if (secureConList.containsKey(key)){
-                    connection = new Connection(address,false);
+                    connection = new Connection(address,SecurityMode.inSecure);
                     connectionList.put(key,connection);
                     Thread thread =  new Thread(connection);
                     thread.run();
@@ -72,8 +73,8 @@ public class ConnectionListManager {
         }
     }
 
-    public void disconnectAll(boolean secure){
-        if (secure){
+    public void disconnectAll(SecurityMode securityMode){
+        if (SecurityMode.secure == securityMode){
             srwlock.writeLock().lock();
             secureConList.clear();
             srwlock.writeLock().unlock();
@@ -84,8 +85,8 @@ public class ConnectionListManager {
         }
     }
 
-    public void disconnect(String key, boolean secure){
-        if (secure){
+    public void disconnect(String key, SecurityMode securityMode){
+        if (SecurityMode.secure == securityMode){
             srwlock.writeLock().lock();
             secureConList.remove(key);
             srwlock.writeLock().unlock();
@@ -96,8 +97,8 @@ public class ConnectionListManager {
         }
     }
 
-    public void disconnect(IPAddress address, boolean secure){
+    public void disconnect(IPAddress address, SecurityMode securityMode){
         String key = address.hostname + address.port;
-        disconnect(key, secure);
+        disconnect(key, securityMode);
     }
 }
