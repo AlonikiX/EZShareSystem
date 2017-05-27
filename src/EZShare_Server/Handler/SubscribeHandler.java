@@ -3,6 +3,7 @@ import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.SubscribeCommand;
 import CommonLibs.Commands.UnsubscribeCommand;
+import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.*;
 import CommonLibs.Setting.SecurityMode;
 import EZShare_Server.ServerSetting;
@@ -90,8 +91,6 @@ public class SubscribeHandler extends Handler {
         communicator.writeData(msg);
         printLog(msg);
 
-        // TODO Debug Mode
-
         // need to check secure or not
         if (relay){
             ArrayList<IPAddress> addressList = ServerListManager.sharedServerListManager().cloneServerList(securityMode);
@@ -100,6 +99,9 @@ public class SubscribeHandler extends Handler {
             for (IPAddress address : addressList){
                 Connection connection = ConnectionListManager.sharedConnectionListManager().connect(address,
                         securityMode == SecurityMode.secure);
+
+
+
                 connection.writeData(message);
             }
         }
@@ -298,4 +300,5 @@ public class SubscribeHandler extends Handler {
                 securityMode == SecurityMode.secure);
         connection.writeData(message);
     }
+
 }
