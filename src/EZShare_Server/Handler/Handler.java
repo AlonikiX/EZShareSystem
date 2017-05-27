@@ -55,7 +55,7 @@ public abstract class Handler {
             case "EXCHANGE":
                 return new ExchangeHandler(cmd);
             case "SUBSCRIBE":
-
+                return new SubscribeHandler(cmd);
         }
         return new UndefinedHandler(cmd);
     }
@@ -74,6 +74,8 @@ public abstract class Handler {
                 return new FetchHandler(cmd);
             case "EXCHANGE":
                 return new SecureExchangeHandler(cmd);
+            case "SUBSCRIBE":
+                return new SecureSubscribeHandler(cmd);
         }
         return new UndefinedHandler(cmd);
     }
