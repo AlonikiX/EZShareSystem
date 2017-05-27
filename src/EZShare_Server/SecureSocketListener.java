@@ -6,6 +6,7 @@ import CommonLibs.DataStructure.ServerListManager;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import java.io.IOException;
+import java.io.InputStream;
 
 import CommonLibs.Setting.SecurityMode;
 
@@ -28,11 +29,13 @@ public class SecureSocketListener extends Thread {
         //Location of the Java keystore file containing the collection of
         //certificates trusted by this application (trust store).
         System.setProperty("javax.net.ssl.trustStore", "Certificates/"+this.trust);
+//        System.setProperty("javax.net.ssl.trustStore", this.trust);
         System.setProperty("javax.net.ssl.trustStorePassword", "penis123");
 
         //Specify the keystore details (this can be specified as VM arguments as well)
         //the keystore file contains an application's own certificate and private key
         System.setProperty("javax.net.ssl.keyStore","Certificates/"+this.key);
+//        System.setProperty("javax.net.ssl.keyStore",this.key);
         //Password to access the private key from the keystore file
         System.setProperty("javax.net.ssl.keyStorePassword","penis123");
 
