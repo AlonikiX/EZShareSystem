@@ -286,4 +286,4 @@ public class Communicator {
 
 }
 
-//{"command": "QUERY","relay": true,"resourceTemplate": {"name": "","tags": [],"description": "","uri": "","channel": "","owner": "","ezserver": null}}
+//{"command": "QUERY","getRelay": true,"resourceTemplate": {"name": "","tags": [],"description": "","uri": "","channel": "","owner": "","ezserver": null}}

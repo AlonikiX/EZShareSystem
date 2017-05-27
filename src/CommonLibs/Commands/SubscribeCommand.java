@@ -53,7 +53,7 @@ public class SubscribeCommand extends ResourceCommand {
 
     /**
      * To clone this command for relied query only
-     * @return a cloned query, with, however, owner and channel set to "", and with relay off
+     * @return a cloned query, with, however, owner and channel set to "", and with getRelay off
      */
     public SubscribeCommand relayClone(){
         SubscribeCommand clone = new SubscribeCommand();
@@ -76,7 +76,7 @@ public class SubscribeCommand extends ResourceCommand {
         return command;
     }
 
-    public boolean relay(){
+    public boolean getRelay(){
         return relay;
     }
 

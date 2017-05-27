@@ -42,37 +42,39 @@ public class ConnectionListManager {
             srwlock.readLock().lock();
             if (secureConList.containsKey(key)){
                 connection = secureConList.get(key);
+                srwlock.readLock().unlock();
             } else {
+                srwlock.readLock().unlock();
                 srwlock.writeLock().lock();
                 if (!secureConList.containsKey(key)){
                     connection = new Connection(address,SecurityMode.secure);
                     secureConList.put(key,connection);
                     Thread thread =  new Thread(connection);
-                    thread.run();
+                    thread.start();
                 } else {
                     connection = secureConList.get(key);
                 }
                 srwlock.writeLock().unlock();
             }
-            srwlock.readLock().unlock();
             return connection;
         } else {
             rwlock.readLock().lock();
-            if (!connectionList.containsKey(key)){
+            if (connectionList.containsKey(key)){
                 connection = connectionList.get(key);
+                rwlock.readLock().unlock();
             } else {
+                rwlock.readLock().unlock();
                 rwlock.writeLock().lock();
-                if (connectionList.containsKey(key)){
+                if (!connectionList.containsKey(key)){
                     connection = new Connection(address,SecurityMode.inSecure);
                     connectionList.put(key,connection);
                     Thread thread =  new Thread(connection);
-                    thread.run();
+                    thread.start();
                 } else {
                     connection = connectionList.get(key);
                 }
                 rwlock.writeLock().unlock();
             }
-            rwlock.readLock().unlock();
             return connection;
         }
     }

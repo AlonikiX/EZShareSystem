@@ -46,7 +46,7 @@ public class CliManager {
             options.addOption(OptionField.channel.getValue(),true,"channel");
             options.addOption(OptionField.secret.getValue(),true, "secret of the server");
             options.addOption(OptionField.servers.getValue(),true, "server list");
-            options.addOption(OptionField.relay.getValue(), true, "relay");
+            options.addOption(OptionField.relay.getValue(), true, "getRelay");
         }else if (ROLE == "SERVER") {
             options.addOption(OptionField.debug.getValue(),false, "print debug information");
             options.addOption(OptionField.port.getValue(),true,"server port, an integer");

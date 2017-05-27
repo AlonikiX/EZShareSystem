@@ -52,7 +52,7 @@ public class QueryCommand extends ResourceCommand {
 
     /**
      * To clone this command for relied query only
-     * @return a cloned query, with, however, owner and channel set to "", and with relay off
+     * @return a cloned query, with, however, owner and channel set to "", and with getRelay off
      */
     public QueryCommand relayClone(){
         QueryCommand clone = new QueryCommand();

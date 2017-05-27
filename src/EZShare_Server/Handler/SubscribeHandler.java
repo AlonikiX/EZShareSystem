@@ -4,7 +4,6 @@ import CommonLibs.Commands.Command;
 import CommonLibs.Commands.SubscribeCommand;
 import CommonLibs.Commands.UnsubscribeCommand;
 import CommonLibs.DataStructure.*;
-import CommonLibs.Setting.SecurityMode;
 import EZShare_Server.ServerSetting;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,14 +18,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class SubscribeHandler extends Handler {
 
     int hits = 0;
-    int size = 1;
+    int size = 0;
     HashMap<String,Resource> templates = new HashMap<String,Resource>();
     private ReentrantReadWriteLock rwlock = new ReentrantReadWriteLock();
-    boolean relay = false;
+    boolean relay = true;
 
     public SubscribeHandler(Command cmd){
         super(cmd);
-        this.relay = ((SubscribeCommand)command).relay();
+        this.relay = ((SubscribeCommand)command).getRelay();
     }
 
     public void handle() {
@@ -79,7 +78,7 @@ public class SubscribeHandler extends Handler {
         // initialize
         // register the first template
         templates.put(id,template);
-        size = 1;
+        ++size;
 
         // self register in server
         HandlerListManager.sharedHanderListManager().add(this,
@@ -103,7 +102,7 @@ public class SubscribeHandler extends Handler {
         }
 
         // listen to further commands
-        while (!isEmpty()){
+        while (!isNoSubscriber()){
 
             String data = communicator.readData();
             printLog(data);
@@ -172,7 +171,7 @@ public class SubscribeHandler extends Handler {
         rwlock.writeLock().lock();
         templates.put(id,template);
         size ++;
-        // check relay
+        // check getRelay
         // not needed in this project, because, using add means gain subscription from server, which must be non-relayed
         rwlock.writeLock().unlock();
     }
@@ -249,7 +248,7 @@ public class SubscribeHandler extends Handler {
         return b;
     }
 
-    private boolean isEmpty (){
+    private boolean isNoSubscriber(){
         rwlock.readLock().lock();
         boolean b = size == 0;
         rwlock.readLock().unlock();

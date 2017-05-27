@@ -114,7 +114,7 @@ public class HandlerListManager implements ISubscriber{
     /**
      * This is just used in indirect notification, and only direct requests are notified
      * @param resource the new resource
-     * @param secure whether this resource comes via a secure link
+     * @param securityMode whether this resource comes via a secure link
      */
     public void notify(Resource resource, SecurityMode securityMode){
 

@@ -120,7 +120,7 @@ public class Resource {
 //    /**
 //     * This method is mainly used to compare <b>resource template<b/>, instead of a concrete resource.
 //     * This method will be used for subscription, in the case that more than one clients subscribe the same
-//     * resource template from one server with relay on, then the same template is passed only once.
+//     * resource template from one server with getRelay on, then the same template is passed only once.
 //     * @param r the input resource template
 //     * @return ture, if the two templates are exactly the same
 //     *          false, otherwise
