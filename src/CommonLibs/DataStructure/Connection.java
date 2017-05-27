@@ -45,33 +45,35 @@ public class Connection implements Runnable {
             String data = communicator.readData();
             JSONObject obj = new JSONObject(data);
 
-            if (obj.has(OptionField.errorMessage.getValue())){
-                break;
-            }
+            if (obj.has(OptionField.id.getValue())){
 
-            if (obj.has(OptionField.resultSize.getValue())){
+            } else if (obj.has(OptionField.errorMessage.getValue())){
                 break;
-            }
-
-            Resource resource = new Resource();
-            // well format assumed
-            try {
-                resource.setName(obj.getString(OptionField.name.getValue()));
-                resource.setDescription(obj.getString(OptionField.description.getValue()));
-                resource.setOwner(obj.getString(OptionField.owner.getValue()));
-                resource.setUri(obj.getString(OptionField.uri.getValue()));
-                resource.setChannel(obj.getString(OptionField.channel.getValue()));
-                resource.setEzserver(obj.getString(OptionField.ezserver.getValue()));
-                JSONArray arr = obj.getJSONArray(OptionField.tags.getValue());
-                for (int i = 0; i < arr.length(); i++) {
-                    resource.getTags().add(arr.getString(i).toLowerCase());
+            } else if (obj.has(OptionField.resultSize.getValue())){
+                break;
+            } else {
+                Resource resource = new Resource();
+                // well format assumed
+                try {
+                    resource.setName(obj.getString(OptionField.name.getValue()));
+                    resource.setDescription(obj.getString(OptionField.description.getValue()));
+                    resource.setOwner(obj.getString(OptionField.owner.getValue()));
+                    resource.setUri(obj.getString(OptionField.uri.getValue()));
+                    resource.setChannel(obj.getString(OptionField.channel.getValue()));
+                    resource.setEzserver(obj.getString(OptionField.ezserver.getValue()));
+                    JSONArray arr = obj.getJSONArray(OptionField.tags.getValue());
+                    for (int i = 0; i < arr.length(); i++) {
+                        resource.getTags().add(arr.getString(i).toLowerCase());
+                    }
+                } catch (NullPointerException e) {
+                    continue;
                 }
-            } catch (NullPointerException e) {
-                continue;
+                // notify problems
+                HandlerListManager.sharedHanderListManager().notify(resource,
+                        this.securityMode == SecurityMode.secure);
             }
-            // notify problems
-            HandlerListManager.sharedHanderListManager().notify(resource,
-                    this.securityMode == SecurityMode.secure);
+
+
         }
     }
 
