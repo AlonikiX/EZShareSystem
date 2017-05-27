@@ -106,6 +106,7 @@ public class SubscribeHandler extends Handler {
         while (!isEmpty()){
 
             String data = communicator.readData();
+            printLog(data);
             Command cmd = Command.commandFactory(data);
             if (cmd.getCommandType().getValue().compareTo("SUBSCRIBE") == 0){
 
@@ -159,8 +160,6 @@ public class SubscribeHandler extends Handler {
         String resultSize = obj.toString();
         communicator.writeData(resultSize);
         printLog(resultSize);
-
-        // TODO debug mode?
 
         // self unregister
         HandlerListManager.sharedHanderListManager().remove(this, relay,
