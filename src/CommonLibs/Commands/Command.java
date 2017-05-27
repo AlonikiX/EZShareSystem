@@ -65,6 +65,8 @@ public abstract class Command {
                     return new FetchCommand(obj);
                 case EXCHANGE:
                     return new ExchangeCommand(obj);
+                case SUBSCRIBE:
+                    return new SubscribeCommand(obj);
             }
         }
         return null;
