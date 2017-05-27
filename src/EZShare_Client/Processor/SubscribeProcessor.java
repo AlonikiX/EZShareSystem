@@ -48,8 +48,7 @@ public class SubscribeProcessor extends Processor{
                 // listen to "enter"
                 Scanner input = new Scanner(System.in);
                 String enter = input.nextLine();
-                UnsubscribeCommand cmd = new UnsubscribeCommand();
-                cmd.setId(id);
+                UnsubscribeCommand cmd = ((SubscribeCommand)command).cancleCommand();
                 String unsub = cmd.toJSON();
                 while (listen){
                     if (enter == ""){

@@ -2,8 +2,8 @@ package EZShare_Server.Handler;
 import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.SubscribeCommand;
-import CommonLibs.DataStructure.HandlerListManager;
-import CommonLibs.DataStructure.Resource;
+import CommonLibs.Commands.UnsubscribeCommand;
+import CommonLibs.DataStructure.*;
 import CommonLibs.Setting.SecurityMode;
 import EZShare_Server.ServerSetting;
 import org.json.JSONArray;
@@ -22,9 +22,11 @@ public class SubscribeHandler extends Handler {
     int size = 1;
     HashMap<String,Resource> templates = new HashMap<String,Resource>();
     private ReentrantReadWriteLock rwlock = new ReentrantReadWriteLock();
+    boolean relay = false;
 
     public SubscribeHandler(Command cmd){
         super(cmd);
+        this.relay = ((SubscribeCommand)command).relay();
     }
 
     public void handle() {
@@ -81,7 +83,7 @@ public class SubscribeHandler extends Handler {
 
         // self register in server
         HandlerListManager.sharedHanderListManager().add(this,
-                ((SubscribeCommand)command).relay(), this.securityMode == SecurityMode.secure);
+                relay, this.securityMode == SecurityMode.secure);
 
         obj.put(OptionField.response.getValue(),OptionField.success.getValue());
         obj.put(OptionField.id.getValue(),id);
@@ -94,7 +96,16 @@ public class SubscribeHandler extends Handler {
 
         // TODO if relay() create new threads with relay off
         // need to check secure or not
-
+        if (relay){
+            ArrayList<IPAddress> addressList = ServerListManager.sharedServerListManager().cloneServerList(securityMode);
+            SubscribeCommand cmd = ((SubscribeCommand) command).relayClone();
+            String message = cmd.toJSON();
+            for (IPAddress address : addressList){
+                Connection connection = ConnectionListManager.sharedConnectionListManager().connect(address,
+                        securityMode == SecurityMode.secure);
+                connection.writeData(message);
+            }
+        }
 
         // listen to further commands
         while (!isEmpty()){
@@ -114,9 +125,7 @@ public class SubscribeHandler extends Handler {
 
                 // here it is assumed that Client will never subscribe more than one resources
                 // so subscription from the same thread is all secure or unsecure
-                rwlock.writeLock().lock();
-                templates.put(idsub,templatesub);
-                rwlock.writeLock().unlock();
+                this.add(idsub,templatesub);
 
                 obj = new JSONObject();
                 obj.put(OptionField.response.getValue(),OptionField.success.getValue());
@@ -136,9 +145,7 @@ public class SubscribeHandler extends Handler {
 
                 String idunsub = ((SubscribeCommand)command).getId();
 
-                rwlock.writeLock().lock();
-                templates.remove(idunsub);
-                rwlock.writeLock().unlock();
+                this.remove(idunsub);
 
                 obj = new JSONObject();
                 obj.put(OptionField.response.getValue(),OptionField.success.getValue());
@@ -161,8 +168,8 @@ public class SubscribeHandler extends Handler {
         // TODO debug mode?
 
         // self unregister
-        HandlerListManager.sharedHanderListManager().remove(this,
-                ((SubscribeCommand)command).relay(), this.securityMode == SecurityMode.secure);
+        HandlerListManager.sharedHanderListManager().remove(this, relay,
+                this.securityMode == SecurityMode.secure);
         // TODO debug mode?
 
     }
@@ -171,11 +178,23 @@ public class SubscribeHandler extends Handler {
         rwlock.writeLock().lock();
         templates.put(id,template);
         size ++;
+        // check relay
+        // not needed in this project, because, using add means gain subscription from server, which must be non-relayed
         rwlock.writeLock().unlock();
     }
 
     private void remove(String id){
         rwlock.writeLock().lock();
+        if (relay){
+            ArrayList<IPAddress> addressList = ServerListManager.sharedServerListManager().cloneServerList(securityMode);
+            UnsubscribeCommand cmd = ((SubscribeCommand)command).cancleCommand();
+            String message = cmd.toJSON();
+            for (IPAddress address : addressList){
+                Connection connection = ConnectionListManager.sharedConnectionListManager().connect(address,
+                        securityMode == SecurityMode.secure);
+                connection.writeData(message);
+            }
+        }
         templates.remove(id);
         size --;
         rwlock.writeLock().unlock();

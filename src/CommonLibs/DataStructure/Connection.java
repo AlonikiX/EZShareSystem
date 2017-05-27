@@ -1,6 +1,7 @@
 package CommonLibs.DataStructure;
 
 import CommonLibs.CommandLine.OptionField;
+import CommonLibs.Commands.UnsubscribeCommand;
 import CommonLibs.Communication.Communicator;
 import CommonLibs.Setting.SecurityMode;
 import EZShare_Server.ServerSetting;
@@ -72,9 +73,11 @@ public class Connection implements Runnable {
                 HandlerListManager.sharedHanderListManager().notify(resource,
                         this.securityMode == SecurityMode.secure);
             }
-
-
         }
+
+        // unregister self
+        ConnectionListManager.sharedConnectionListManager().disconnect(address,
+                securityMode == SecurityMode.secure);
     }
 
     public void writeData(String s){

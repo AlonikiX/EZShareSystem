@@ -57,13 +57,23 @@ public class SubscribeCommand extends ResourceCommand {
      */
     public SubscribeCommand relayClone(){
         SubscribeCommand clone = new SubscribeCommand();
-        clone.commandType = CommandType.SUBSCRIBE;
+//        clone.commandType = CommandType.SUBSCRIBE;
         clone.relay = false;
         clone.id = this.id;
         clone.resource = this.resource.clone();
         clone.resource.setOwner("");
         clone.resource.setChannel("");
         return clone;
+    }
+
+    /**
+     * generates the corresponding command to cancel this subscription
+     * @return the corresponding command to cancel this subscription
+     */
+    public UnsubscribeCommand cancleCommand(){
+        UnsubscribeCommand command = new UnsubscribeCommand();
+        command.setId(this.id);
+        return command;
     }
 
     public boolean relay(){
