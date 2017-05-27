@@ -43,7 +43,7 @@ public class ConnectionListManager {
                 connection = secureConList.get(key);
             } else {
                 srwlock.writeLock().lock();
-                connection = new Connection(address);
+                connection = new Connection(address,true);
                 secureConList.put(key,connection);
                 srwlock.writeLock().unlock();
             }
@@ -55,7 +55,7 @@ public class ConnectionListManager {
                 connection = connectionList.get(key);
             } else {
                 rwlock.writeLock().lock();
-                connection = new Connection(address);
+                connection = new Connection(address,false);
                 connectionList.put(key,connection);
                 rwlock.writeLock().unlock();
             }
