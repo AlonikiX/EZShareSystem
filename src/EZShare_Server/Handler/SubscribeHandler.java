@@ -98,9 +98,6 @@ public class SubscribeHandler extends Handler {
             for (IPAddress address : addressList){
                 Connection connection = ConnectionListManager.sharedConnectionListManager().connect(address,
                         securityMode == SecurityMode.secure);
-
-
-
                 connection.writeData(message);
             }
         }
@@ -299,5 +296,4 @@ public class SubscribeHandler extends Handler {
                 securityMode == SecurityMode.secure);
         connection.writeData(message);
     }
-
 }
