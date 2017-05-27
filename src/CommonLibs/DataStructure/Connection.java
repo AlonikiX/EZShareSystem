@@ -31,6 +31,7 @@ public class Connection implements Runnable {
         }
         this.address = address;
         this.communicator = new Communicator(ServerSetting.sharedSetting());
+        communicator.setSecureMode(this.securityMode);
         communicator.connectToServer(address.hostname,address.port);
         rwlock = new ReentrantReadWriteLock();
     }

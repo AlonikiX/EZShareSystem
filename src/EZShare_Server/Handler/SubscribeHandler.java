@@ -3,7 +3,6 @@ import CommonLibs.CommandLine.OptionField;
 import CommonLibs.Commands.Command;
 import CommonLibs.Commands.SubscribeCommand;
 import CommonLibs.Commands.UnsubscribeCommand;
-import CommonLibs.Communication.Communicator;
 import CommonLibs.DataStructure.*;
 import CommonLibs.Setting.SecurityMode;
 import EZShare_Server.ServerSetting;
@@ -210,14 +209,14 @@ public class SubscribeHandler extends Handler {
      * @param resource the new resource
      */
     public void notify(Resource resource, boolean direct){
-        if (isSubscribed(resource,direct)) snedResource(resource);
+        if (isSubscribed(resource,direct)) sendResource(resource);
     }
 
     /**
      * Send a resource to client
      * @param resource the new resource
      */
-    private void snedResource(Resource resource){
+    private void sendResource(Resource resource){
         JSONObject obj = new JSONObject();
         obj.put(OptionField.name.getValue(), resource.getName());
         obj.put(OptionField.description.getValue(), resource.getDescription());

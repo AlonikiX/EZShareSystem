@@ -20,12 +20,18 @@ public class ServerListManager {
     private static ServerListManager serverListManager;
     private int exchangeInterval;
 
+    private ArrayList<ISubscriber> subscriberList;
+    private ReadWriteLock rsslock;
+
     private ArrayList<IPAddress> insecureServerList;
     private ArrayList<IPAddress> secureServerList;
     private ReadWriteLock rwlock;
     private ReadWriteLock srwlock;
 
     private ServerListManager() {
+        this.subscriberList = new ArrayList<>();
+        this.rsslock = new ReentrantReadWriteLock();
+
         this.insecureServerList = new ArrayList<IPAddress>();
         this.secureServerList = new ArrayList<IPAddress>();
         this.rwlock = new ReentrantReadWriteLock();
@@ -171,10 +177,9 @@ public class ServerListManager {
      * @param serverList the list containing the candidate addresses
      * @return the addresses really updated
      */
-    public ArrayList<IPAddress> updateServerList(SecurityMode securityMode, ArrayList<IPAddress> serverList) {
+    public void updateServerList(SecurityMode securityMode, ArrayList<IPAddress> serverList) {
         ArrayList<IPAddress> originList;
         ReadWriteLock lock;
-        ArrayList<IPAddress> newAdded = new ArrayList<IPAddress>();
         if (SecurityMode.inSecure == securityMode) {
             originList = this.insecureServerList;
             lock = this.rwlock;
@@ -186,11 +191,22 @@ public class ServerListManager {
         for (IPAddress server : serverList) {
             if (!checkExists(securityMode, server)) {
                 originList.add(server);
-                newAdded.add(server);
+                push(securityMode, server);
             }
         }
         lock.writeLock().unlock();
-        return newAdded;
+    }
+
+    public void register(ISubscriber subscriber){
+        this.rsslock.writeLock().lock();
+        this.subscriberList.add(subscriber);
+        this.rsslock.writeLock().unlock();
+    }
+
+    private void push(SecurityMode securityMode, IPAddress address){
+        for (ISubscriber subscriber : this.subscriberList){
+            subscriber.pull(securityMode, address);
+        }
     }
 
 

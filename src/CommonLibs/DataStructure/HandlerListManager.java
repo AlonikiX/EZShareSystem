@@ -1,6 +1,7 @@
 package CommonLibs.DataStructure;
 
 import CommonLibs.Commands.SubscribeCommand;
+import CommonLibs.Setting.SecurityMode;
 import EZShare.Server;
 import EZShare_Server.Handler.Handler;
 import EZShare_Server.Handler.SubscribeHandler;
@@ -11,7 +12,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * Created by Anson Chen on 2017/5/26.
  */
-public class HandlerListManager {
+public class HandlerListManager implements ISubscriber{
 
     private static HandlerListManager handlerListManager;
 
@@ -33,6 +34,8 @@ public class HandlerListManager {
         irwlock = new ReentrantReadWriteLock();
         sdrwlock = new ReentrantReadWriteLock();
         sirwlock = new ReentrantReadWriteLock();
+
+        ServerListManager.sharedServerListManager().register(this);
     }
 
     public static HandlerListManager sharedHanderListManager() {
@@ -43,6 +46,11 @@ public class HandlerListManager {
             }
         }
         return handlerListManager;
+    }
+
+    @Override
+    public void pull(SecurityMode securityMode, IPAddress address) {
+        this.subscribeFrom(securityMode, address);
     }
 
     public void add(SubscribeHandler handler, boolean direct, boolean secure){
@@ -121,8 +129,9 @@ public class HandlerListManager {
         }
     }
 
-    public void subscribeFrom (IPAddress address, boolean secure){
-        ArrayList<SubscribeHandler> list = (secure) ? (this.secDirectList) : (this.directList);
+    public void subscribeFrom (SecurityMode securityMode, IPAddress address){
+        ArrayList<SubscribeHandler> list = SecurityMode.secure == securityMode ?
+                (this.secDirectList) : (this.directList);
         for (SubscribeHandler handler: list){
             handler.subscribeFrom(address);
         }

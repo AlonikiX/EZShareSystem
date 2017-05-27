@@ -70,11 +70,14 @@ public class ExchangeHandler extends Handler{
         ExchangeCommand cmd = (ExchangeCommand)command;
 
         // notify handlers to extend subscriptions
-        ArrayList<IPAddress> toInform = serverlistManager.updateServerList(this.securityMode, cmd.getServerList());
-        for (IPAddress address:toInform){
-            HandlerListManager.sharedHanderListManager().subscribeFrom(address,
-                    securityMode == SecurityMode.secure);
-        }
+//        ArrayList<IPAddress> toInform = serverlistManager.updateServerList(this.securityMode, cmd.getServerList());
+//        for (IPAddress address:toInform){
+//            HandlerListManager.sharedHanderListManager().subscribeFrom(address,
+//                    securityMode == SecurityMode.secure);
+//        }
+
+        //update server list
+        serverlistManager.updateServerList(this.securityMode, cmd.getServerList());
 
         obj.put(OptionField.response.getValue(), OptionField.success.getValue());
         String msg = obj.toString();
