@@ -21,7 +21,7 @@ public class Connection implements Runnable {
     private IPAddress address;
     private Communicator communicator;
     private SecurityMode securityMode;
-    private ReentrantReadWriteLock rwlock;
+//    private ReentrantReadWriteLock rwlock;
     private int subSize;
 
     public Connection(IPAddress address, SecurityMode securityMode){
@@ -30,7 +30,7 @@ public class Connection implements Runnable {
         this.communicator = new Communicator(ServerSetting.sharedSetting());
         communicator.setSecureMode(securityMode);
         communicator.connectToServer(address.hostname,address.port);
-        rwlock = new ReentrantReadWriteLock();
+//        rwlock = new ReentrantReadWriteLock();
     }
 
     public Connection(String ip, int port, SecurityMode securityMode){

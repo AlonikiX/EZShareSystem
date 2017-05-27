@@ -4,6 +4,7 @@ import CommonLibs.Commands.Command;
 import CommonLibs.Commands.SubscribeCommand;
 import CommonLibs.Commands.UnsubscribeCommand;
 import CommonLibs.DataStructure.*;
+import EZShare.Server;
 import EZShare_Server.ServerSetting;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -96,9 +97,15 @@ public class SubscribeHandler extends Handler {
             SubscribeCommand cmd = ((SubscribeCommand) command).relayClone();
             String message = cmd.toJSON();
             for (IPAddress address : addressList){
-                Connection connection = ConnectionListManager.sharedConnectionListManager().connect(address,
-                        securityMode);
-                connection.writeData(message);
+                if (address.hostname.compareTo(ServerSetting.sharedSetting().getHost())==0
+                        && address.port==ServerSetting.sharedSetting().getPort()){
+
+                } else {
+                    Connection connection = ConnectionListManager.sharedConnectionListManager().connect(address,
+                            securityMode);
+                    connection.writeData(message);
+                }
+
             }
         }
 
