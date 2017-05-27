@@ -97,7 +97,7 @@ public class SubscribeHandler extends Handler {
             String message = cmd.toJSON();
             for (IPAddress address : addressList){
                 Connection connection = ConnectionListManager.sharedConnectionListManager().connect(address,
-                        securityMode == SecurityMode.secure);
+                        securityMode);
                 connection.writeData(message);
             }
         }
@@ -186,7 +186,7 @@ public class SubscribeHandler extends Handler {
             String message = cmd.toJSON();
             for (IPAddress address : addressList){
                 Connection connection = ConnectionListManager.sharedConnectionListManager().connect(address,
-                        securityMode == SecurityMode.secure);
+                        securityMode);
                 connection.writeData(message);
             }
         }
@@ -293,7 +293,7 @@ public class SubscribeHandler extends Handler {
         SubscribeCommand cmd = ((SubscribeCommand) command).relayClone();
         String message = cmd.toJSON();
         Connection connection = ConnectionListManager.sharedConnectionListManager().connect(address,
-                securityMode == SecurityMode.secure);
+                securityMode);
         connection.writeData(message);
     }
 }
