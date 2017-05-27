@@ -91,6 +91,7 @@ public class SubscribeHandler extends Handler {
 
         // need to check secure or not
         if (relay){
+
             ArrayList<IPAddress> addressList = ServerListManager.sharedServerListManager().cloneServerList(securityMode);
             SubscribeCommand cmd = ((SubscribeCommand) command).relayClone();
             String message = cmd.toJSON();
@@ -187,6 +188,12 @@ public class SubscribeHandler extends Handler {
                         securityMode);
                 connection.writeData(message);
             }
+
+
+            System.err.println("Send message to Server: " + message);
+
+
+
         }
         templates.remove(id);
         size --;
@@ -204,6 +211,16 @@ public class SubscribeHandler extends Handler {
      * @param resource the new resource
      */
     public void notify(Resource resource, boolean direct){
+
+
+
+
+        System.err.println("Is notified by: " + resource.toString());
+        System.err.println("and the template matches? " + isSubscribed(resource,direct));
+
+
+
+
         if (isSubscribed(resource,direct)) sendResource(resource);
     }
 
@@ -227,9 +244,9 @@ public class SubscribeHandler extends Handler {
                 ServerSetting.sharedSetting().getAdvertisedHostName():resource.getEzserver());
 
         String msg = obj.toString();
-        rwlock.writeLock().lock();
+//        rwlock.writeLock().lock();
         communicator.writeData(msg);
-        rwlock.writeLock().unlock();
+//        rwlock.writeLock().unlock();
         printLog(msg);
         hits ++;
         // TODO Debug Mode

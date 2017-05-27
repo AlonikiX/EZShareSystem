@@ -32,7 +32,7 @@ public class SecureSocketListener extends Thread {
 
         //Specify the keystore details (this can be specified as VM arguments as well)
         //the keystore file contains an application's own certificate and private key
-        System.setProperty("javax.net.ssl.keyStore", "Certificates/"+this.key);
+        System.setProperty("javax.net.ssl.keyStore","Certificates/"+this.key);
         //Password to access the private key from the keystore file
         System.setProperty("javax.net.ssl.keyStorePassword","penis123");
 

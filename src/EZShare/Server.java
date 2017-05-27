@@ -50,12 +50,12 @@ public class Server {
         NormalSocketListener normalSocketListener = new NormalSocketListener();
         normalSocketListener.start();
 
-        SecureSocketListener secureSocketListener = new SecureSocketListener(args[0],args[1]);
-        secureSocketListener.start();
+//        SecureSocketListener secureSocketListener = new SecureSocketListener(args[0],args[1]);
+//        secureSocketListener.start();
 
         try {
             normalSocketListener.join();
-            secureSocketListener.join();
+//            secureSocketListener.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
             System.out.println("lisenter error!!\n\n\n");

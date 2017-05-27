@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import javax.naming.Name;
 import java.security.Security;
+import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
@@ -49,10 +50,12 @@ public class Connection implements Runnable {
                 break;
             } else if (obj.has(OptionField.resultSize.getValue())){
                 break;
-            } else {
+            } else if (obj.has(OptionField.uri.getValue())){
+
                 Resource resource = new Resource();
                 // well format assumed
-                try {
+
+//                try {
                     resource.setName(obj.getString(OptionField.name.getValue()));
                     resource.setDescription(obj.getString(OptionField.description.getValue()));
                     resource.setOwner(obj.getString(OptionField.owner.getValue()));
@@ -60,16 +63,18 @@ public class Connection implements Runnable {
                     resource.setChannel(obj.getString(OptionField.channel.getValue()));
                     resource.setEzserver(obj.getString(OptionField.ezserver.getValue()));
                     JSONArray arr = obj.getJSONArray(OptionField.tags.getValue());
+                    ArrayList<String> tags = new ArrayList<String>();
                     for (int i = 0; i < arr.length(); i++) {
-                        resource.getTags().add(arr.getString(i).toLowerCase());
+                        tags.add(arr.getString(i));
                     }
-                } catch (NullPointerException e) {
-                    continue;
-                }
-                // notify problems
+                    resource.setTags(tags);
+
+//                } catch (NullPointerException e) {
+//                    continue;
+//                }
                 HandlerListManager.sharedHanderListManager().notify(resource,
                         this.securityMode);
-            }
+            } // ignore other cases
         }
 
         // unregister self
@@ -78,15 +83,15 @@ public class Connection implements Runnable {
     }
 
     public void writeData(String s){
-        rwlock.writeLock().lock();
+//        rwlock.writeLock().lock();
         communicator.writeData(s);
-        rwlock.writeLock().unlock();
+//        rwlock.writeLock().unlock();
     }
 
     public String readData(){
-        rwlock.readLock().lock();
+//        rwlock.readLock().lock();
         String s = communicator.readData();
-        rwlock.readLock().unlock();
+//        rwlock.readLock().unlock();
         return s;
     }
 
