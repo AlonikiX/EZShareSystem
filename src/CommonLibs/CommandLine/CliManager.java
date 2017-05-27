@@ -34,6 +34,9 @@ public class CliManager {
             options.addOption(OptionField.share.getValue(),false, "share command");
             options.addOption(OptionField.fetch.getValue(),false, "fetch shared file");
             options.addOption(OptionField.exchange.getValue(),false, "exchange server list");
+            options.addOption(OptionField.subscribe.getValue(),false, "subscribe a resource template");
+            options.addOption(OptionField.unsubscribe.getValue(),false,"unsubscribe a resource template");
+
             //command fields
             options.addOption(OptionField.name.getValue(),true, "name of the resource");
             options.addOption(OptionField.description.getValue(),true, "describe the client");

@@ -67,6 +67,8 @@ public abstract class Command {
                     return new ExchangeCommand(obj);
                 case SUBSCRIBE:
                     return new SubscribeCommand(obj);
+                case UNSUBSCRIBE:
+                    return new UnsubscribeCommand(obj);
             }
         }
         return null;

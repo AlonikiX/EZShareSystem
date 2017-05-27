@@ -37,6 +37,10 @@ public enum CommandType {
                 return FETCH;
             case "EXCHANGE":
                 return EXCHANGE;
+            case "SUBSCRIBE":
+                return SUBSCRIBE;
+            case "UNSUBSCRIBE":
+                return UNSUBSCRIBE;
         }
         return null;
     }
