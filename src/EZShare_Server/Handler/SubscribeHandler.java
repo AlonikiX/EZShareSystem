@@ -130,9 +130,6 @@ public class SubscribeHandler extends Handler {
                 communicator.writeData(msg);
                 printLog(msg);
 
-
-                // TODO debug mode?
-
             } else if (cmd.getCommandType().getValue().compareTo("UNSUBSCRIBE") == 0){
 
                 // TODO Validations here? [JiaCheng]
@@ -184,16 +181,14 @@ public class SubscribeHandler extends Handler {
             UnsubscribeCommand cmd = ((SubscribeCommand)command).cancleCommand();
             String message = cmd.toJSON();
             for (IPAddress address : addressList){
-                Connection connection = ConnectionListManager.sharedConnectionListManager().connect(address,
-                        securityMode);
-                connection.writeData(message);
+                if ((0 == address.hostname.compareTo(ServerSetting.sharedSetting().getHost()))
+                        && address.port == ServerSetting.sharedSetting().getPort()){
+                } else {
+                    Connection connection = ConnectionListManager.sharedConnectionListManager().connect(address,
+                            securityMode);
+                    connection.writeData(message);
+                }
             }
-
-
-            System.err.println("Send message to Server: " + message);
-
-
-
         }
         templates.remove(id);
         size --;
@@ -211,16 +206,6 @@ public class SubscribeHandler extends Handler {
      * @param resource the new resource
      */
     public void notify(Resource resource, boolean direct){
-
-
-
-
-        System.err.println("Is notified by: " + resource.toString());
-        System.err.println("and the template matches? " + isSubscribed(resource,direct));
-
-
-
-
         if (isSubscribed(resource,direct)) sendResource(resource);
     }
 
